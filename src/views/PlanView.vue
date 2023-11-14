@@ -27,9 +27,10 @@ import RightBox from "../components/plan/right/RightBox.vue";
 #plan-container {
   display: flex;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #c8c8c8;
+  border-radius: 0.9125rem;
+  border: 1.8px solid #eeeeee;
   width: 87.375rem;
+  box-shadow: 2px 2px 2px #c8c8c8;
 }
 #map {
   /* width: 42.4375rem; */

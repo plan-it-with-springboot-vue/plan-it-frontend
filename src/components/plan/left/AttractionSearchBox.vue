@@ -154,6 +154,7 @@ const attraction = ref([
   },
 ]);
 
+// 없어도 됨
 const attractionStore = useAttractionStore();
 
 const showModal = (attractionItem) => {

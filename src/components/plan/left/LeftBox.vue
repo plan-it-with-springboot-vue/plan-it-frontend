@@ -3,21 +3,52 @@
     <h3>장소 고르기</h3>
     <div id="menu-container">
       <div id="menu-btn-container">
-        <div class="menu-btn"><p>관광지 검색</p></div>
-        <div class="menu-btn"><p>찜 목록</p></div>
+        <div
+          @click="selectMenu(1)"
+          :class="{ 'menu-btn': true, selected: selectedMenu === 1 }"
+        >
+          <p>관광지 검색</p>
+        </div>
+        <div
+          @click="selectMenu(2)"
+          :class="{ 'menu-btn': true, selected: selectedMenu === 2 }"
+        >
+          <p>찜 목록</p>
+        </div>
       </div>
       <div id="attraction-search">
-        <input type="text" /><SearchIcon class="svg" />
+        <input
+          type="text"
+          :disabled="selectedMenu === 2"
+          :style="{
+            'border-bottom':
+              selectedMenu === 2
+                ? '0.0625rem solid #c8c8c8'
+                : '0.0625rem solid #000',
+          }"
+        /><SearchIcon class="svg" v-if="selectedMenu === 1" /><BlockSearchIcon
+          v-else
+        />
       </div>
     </div>
 
-    <AttractionSearchBox />
+    <AttractionSearchBox v-if="selectedMenu === 1" />
+    <LikeBox v-else />
   </div>
 </template>
 
 <script setup>
 import SearchIcon from "../../../assets/svg/SearchIcon.vue";
 import AttractionSearchBox from "./AttractionSearchBox.vue";
+import BlockSearchIcon from "../../../assets/svg/BlockSearchIcon.vue";
+import LikeBox from "./LikeBox.vue";
+import { ref } from "vue";
+
+const selectedMenu = ref(1);
+
+const selectMenu = (menu) => {
+  selectedMenu.value = menu;
+};
 </script>
 
 <style scoped>
@@ -41,6 +72,7 @@ input {
   box-sizing: border-box;
   width: 6.1875rem;
   height: 1.25rem;
+  background-color: white;
 }
 #left-box-container {
   display: flex;
@@ -63,11 +95,16 @@ input {
   width: 7.925rem;
   height: 1.4525rem;
   border-radius: 0.75rem;
-  background-color: #f29561;
   font-size: 0.75rem;
-  color: white;
-  border: 0.5px solid #f29561;
+  color: #c8c8c8;
+  border: 0.5px solid #c8c8c8;
   cursor: pointer;
+}
+
+.selected {
+  background-color: #f29561;
+  border: 0.5px solid #f29561;
+  color: white;
 }
 #attraction-search {
   display: flex;
