@@ -1,5 +1,25 @@
 <template>
-  <h3>일정 세우기</h3>
+  <div id="input-container">
+    <input type="text" placeholder="제목을 입력해주세요" />
+    <div id="check-svg">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M20 6L9 17L4 12"
+          stroke="black"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+  </div>
+
   <div class="date date-container" v-if="!isSelect">
     <div class="svg">
       <svg
@@ -178,6 +198,29 @@ export default defineComponent({
 </script>
 
 <style scoped>
+input {
+  width: 100%;
+  padding: 1.2rem;
+  border: none;
+  border-bottom: 0.0625rem solid #e6e3e3;
+  outline: none;
+  font-size: 1rem;
+  box-sizing: border-box;
+  width: 13rem;
+  height: 1.25rem;
+  background-color: white;
+  margin: 2.23rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+
+  text-align: center;
+}
+#input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 p {
   text-align: center;
   margin: 0;
@@ -233,5 +276,8 @@ span {
 }
 .svg {
   margin-right: 0.2rem;
+}
+#check-svg {
+  cursor: pointer;
 }
 </style>
