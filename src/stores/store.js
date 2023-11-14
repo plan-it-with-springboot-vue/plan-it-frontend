@@ -54,4 +54,45 @@ const useCategoryStore = defineStore("category", {
   },
 });
 
-export { useAttractionStore, useMapStore, useCategoryStore };
+const usePlan = defineStore("plan", {
+  state: () => ({
+    plan: {
+      title: "",
+      start_schedule: "",
+      end_schedule: "",
+      user_id: "",
+    },
+  }),
+  actions: {
+    addPlan(plan) {
+      this.plan = {
+        title: plan.title,
+        start_schedule: plan.start_schedule,
+        end_schedule: plan.end_schedule,
+        user_id: plan.user_id,
+      };
+    },
+  },
+});
+
+const usePlanDetail = defineStore("planDetail", {
+  state: () => ({
+    planDetail: [],
+  }),
+  actions: {
+    addPlan(planDetails) {
+      this.planDetail = planDetails.map((planDetailItem) => ({
+        content_id: planDetailItem.content_id,
+        day: planDetailItem.day,
+      }));
+    },
+  },
+});
+
+export {
+  useAttractionStore,
+  useMapStore,
+  useCategoryStore,
+  usePlan,
+  usePlanDetail,
+};
