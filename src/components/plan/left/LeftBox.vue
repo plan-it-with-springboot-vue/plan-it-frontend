@@ -60,7 +60,7 @@ p {
 h3 {
   text-align: center;
   font-size: 1.25rem;
-  color: #6499e9;
+  /* color: #6499e9; */
 }
 input {
   width: 100%;

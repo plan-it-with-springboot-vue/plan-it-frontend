@@ -25,18 +25,8 @@
               }}</span>
             </div>
           </div>
-          <div class="line">
-            <LikeVue
-              class="like-svg"
-              v-if="!attractionItem.isLike"
-              @click="toggleLike(attractionItem)"
-            />
-            <LikeRedVue
-              class="like-svg"
-              v-else
-              @click="toggleLike(attractionItem)"
-            />
-            <span class="like-number">{{ attractionItem.like }}</span>
+          <div class="line" id="plus-svg">
+            <div><PlusIconVue /></div>
           </div>
         </div>
       </div>
@@ -49,6 +39,7 @@
 import { ref, watch } from "vue";
 import LikeVue from "../../../assets/svg/Like.vue";
 import LikeRedVue from "../../../assets/svg/LikeRed.vue";
+import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
 import {
   useAttractionStore,
   useCategoryStore,
@@ -56,6 +47,18 @@ import {
 } from "../../../stores/store";
 
 const attraction = ref([
+  {
+    content_id: 125266,
+    content_type_id: 12,
+    title: "국립 청태산자연휴양림",
+    addr1: "강원도 횡성군 둔내면",
+    first_image:
+      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
+    latitude: 38.51112664,
+    longitude: 128.4191502,
+    like: 12,
+    isLike: false, // 로그인된 정보로 동작하게 바꿔야함
+  },
   {
     content_id: 125677,
     content_type_id: 12,
@@ -66,7 +69,7 @@ const attraction = ref([
     latitude: 38.47884469,
     longitude: 128.4391216,
     like: 8,
-    isLike: true,
+    isLike: false,
   },
   {
     content_id: 125782,
@@ -78,34 +81,11 @@ const attraction = ref([
     latitude: 38.44084943,
     longitude: 128.4547464,
     like: 5,
-    isLike: true,
-  },
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/83/1070183_image2_1.jpg",
-    latitude: 38.34028704,
-    longitude: 128.4999566,
-    like: 22,
-    isLike: true,
-  },
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-    latitude: 38.51112664,
-    longitude: 128.4191502,
-    like: 12,
-    isLike: true, // 로그인된 정보로 동작하게 바꿔야함
+    isLike: false,
   },
 ]);
 
+// 없어도 됨
 const attractionStore = useAttractionStore();
 
 const showModal = (attractionItem) => {
@@ -123,7 +103,6 @@ const toggleLike = (attractionItem) => {
   }
 };
 
-// 없어도 됨
 const mapStore = useMapStore();
 mapStore.addAttractionList(attraction.value);
 
@@ -147,7 +126,12 @@ watch(
 }
 .line {
   display: flex;
-  align-items: center;
+}
+#plus-svg {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0.5rem;
+  cursor: pointer;
 }
 .attraction-card-title {
   font-size: 1.1rem;
@@ -160,6 +144,7 @@ watch(
   flex-direction: column;
   justify-content: space-between;
   height: 4.5rem;
+  width: 20.8125rem;
 }
 .like-svg {
   margin-right: 0.25rem;
