@@ -1,6 +1,6 @@
 <template>
   <h3>일정 세우기</h3>
-  <div class="date date-container">
+  <div class="date date-container" v-if="!isSelect">
     <div class="svg">
       <svg
         width="16"
@@ -39,10 +39,10 @@
       @focus="setOldValue($event.target.value)"
       @update:modelValue="validateFromTo('to', 'dp2From', 'dp2To')"
     />
-    <div id="confirm-btn"><p>선택</p></div>
+    <div id="confirm-btn" @click="toggleIsSelect"><p>선택</p></div>
   </div>
 
-  <div>
+  <div v-else>
     <div id="calender">
       <div id="day-cnt"><p>Day1</p></div>
       <div class="date-container">
@@ -96,16 +96,9 @@ export default defineComponent({
 
     // dp2
     const now = new Date();
-    const dp2 = ref(new Date());
+    let dp2 = ref(new Date());
     const dp2From = ref(new Date(now.setDate(now.getDate() - 7)));
     const dp2To = ref(new Date(now.setDate(now.getDate() + 14)));
-
-    // 출력을 위한 것
-    watch(dp2, (newDp2) => {
-      console.log(newDp2);
-      // console.log(dp2From);
-      // console.log(dp2To);
-    });
 
     // [from, to]'s value before changing value
     let oldVal = "";
@@ -132,6 +125,10 @@ export default defineComponent({
         const dpTo = inputs[refTo].value;
         //// 요기!!!! From To!!!!
         console.log(dpFrom.input + " ~ " + dpTo.input);
+
+        // 기간 저장!!!!
+        duration.value.from = dpFrom.input;
+        duration.value.to = dpTo.input;
 
         if (dpFrom.input > dpTo.input) {
           alert("Validation Error!!");
@@ -161,6 +158,24 @@ export default defineComponent({
       return date > new Date();
     };
 
+    let isSelect = ref(false);
+    let duration = ref({ from: "", to: "" });
+
+    const toggleIsSelect = () => {
+      isSelect.value = !isSelect.value;
+
+      // day1 날짜 설정
+      dp2.value = new Date(duration.value.from);
+      console.log(dp2);
+    };
+
+    // 출력을 위한 것
+    watch(dp2, (newDp2) => {
+      console.log(newDp2);
+      // console.log(dp2From);
+      // console.log(dp2To);
+    });
+
     return {
       picked,
       locale,
@@ -173,6 +188,8 @@ export default defineComponent({
       setOldValue,
       validateFromTo,
       isTodayOver,
+      toggleIsSelect,
+      isSelect,
     };
   },
 });
