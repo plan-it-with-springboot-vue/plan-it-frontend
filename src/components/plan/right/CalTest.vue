@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%">
+  <div>
     <!-- <p>1. Basic usage</p>
     <div class="date">
       <font-awesome-icon
