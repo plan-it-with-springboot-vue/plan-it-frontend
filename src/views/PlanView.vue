@@ -3,10 +3,11 @@
   <div class="flex-box">
     <div id="plan-container">
       <LeftBox />
-      <div id="map"><PlanKakaoMap /></div>
+      <!-- <div id="map"><PlanKakaoMap /></div> -->
       <RightBox />
     </div>
   </div>
+  <CalTest />
 </template>
 
 <script setup>
@@ -14,6 +15,7 @@ import TheHeaderVue from "../components/layout/TheHeader.vue";
 import LeftBox from "../components/plan/left/LeftBox.vue";
 import PlanKakaoMap from "../components/plan/PlanKakaoMap.vue";
 import RightBox from "../components/plan/right/RightBox.vue";
+import CalTest from "../components/plan/right/CalTest.vue";
 </script>
 
 <style scoped>
