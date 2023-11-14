@@ -1,16 +1,14 @@
 <template>
-  <div id="left-box-container">
-    <h3>계획 세우기</h3>
-    <div id="menu-btn-container">
-      <div class="menu-btn"><p>관광지 검색</p></div>
-      <div class="menu-btn"><p>찜 목록</p></div>
-    </div>
-    <AttractionSearchBox />
+  <div id="right-box-container">
+    <h3>Day1</h3>
+    <p>2023.11.11~2023.11.16</p>
+    <div><p id="calender">달력</p></div>
+    <AttractionPlanBoxVue />
   </div>
 </template>
 
 <script setup>
-import AttractionSearchBox from "../left/AttractionSearchBox.vue";
+import AttractionPlanBoxVue from "./AttractionPlanBox.vue";
 </script>
 
 <style scoped>
@@ -18,24 +16,16 @@ p {
   text-align: center;
   margin: 0;
   padding: 0;
+  font-size: 0.75rem;
 }
 h3 {
   text-align: center;
   font-size: 1.25rem;
   color: #6499e9;
+  margin: 0.5rem 0rem;
+  padding: 0;
 }
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: none;
-  border-bottom: 0.0625rem solid #000;
-  outline: none;
-  font-size: 1rem;
-  box-sizing: border-box;
-  width: 7.1875rem;
-  height: 1.25rem;
-}
-#left-box-container {
+#right-box-container {
   display: flex;
   flex-direction: column;
   width: 21.75rem;
@@ -45,27 +35,9 @@ input {
   display: flex;
   justify-content: space-between;
 }
-.menu-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 8.125rem;
-  height: 1.3125rem;
-  border-radius: 0.75rem;
-  background-color: #c8c8c8;
-  font-size: 0.75rem;
-  color: white;
-  border: 0.5px solid #c8c8c8;
-  cursor: pointer;
-}
-#attraction-search {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 1.25rem;
-}
-.svg {
-  cursor: pointer;
+#calender {
+  width: 15.75rem;
+  height: 10.75rem;
+  background-color: #6499e9;
 }
 </style>
