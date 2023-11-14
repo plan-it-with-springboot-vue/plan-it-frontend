@@ -1,27 +1,36 @@
 <template>
   <TheHeaderVue />
-  <div id="plan-container">
-    <CalenderDurationVue />
-    <div id="map"><PlanKakaoMap /></div>
+  <div class="flex-box">
+    <div id="plan-container">
+      <LeftBox />
+      <div id="map"><PlanKakaoMap /></div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import TheHeaderVue from "../components/layout/TheHeader.vue";
-import CalenderDurationVue from "../components/plan/CalenderDuration.vue";
+import LeftBox from "../components/plan/left/LeftBox.vue";
 import PlanKakaoMap from "../components/plan/PlanKakaoMap.vue";
 </script>
 
 <style scoped>
+.flex-box {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5.8rem;
+}
 #plan-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 3.75rem;
+
+  border-radius: 0.3125rem;
+  border: 1px solid #c8c8c8;
+  width: 87.375rem;
 }
 #map {
-  height: 500px;
-  width: 800px;
+  width: 42.4375rem;
+  height: 40.4375rem;
 }
 </style>
