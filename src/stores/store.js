@@ -80,11 +80,22 @@ const usePlanDetail = defineStore("planDetail", {
     planDetail: [],
   }),
   actions: {
-    addPlan(planDetails) {
+    addPlanDetail(planDetails) {
       this.planDetail = planDetails.map((planDetailItem) => ({
         content_id: planDetailItem.content_id,
         day: planDetailItem.day,
       }));
+    },
+  },
+});
+
+const useDate = defineStore("date", {
+  state: () => ({
+    date: "",
+  }),
+  actions: {
+    selectedDate(date) {
+      this.date = date;
     },
   },
 });
@@ -95,4 +106,5 @@ export {
   useCategoryStore,
   usePlan,
   usePlanDetail,
+  useDate,
 };
