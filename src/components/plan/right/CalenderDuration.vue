@@ -44,7 +44,7 @@
 
   <div v-else>
     <div id="calender">
-      <div id="day-cnt"><p>Day1</p></div>
+      <!-- <div id="day-cnt"><p>Day1</p></div> -->
       <div class="date-container">
         <div class="svg">
           <svg
@@ -82,6 +82,7 @@ import { defineRefs } from "../../../utils/helper";
 import { ref, reactive, defineComponent, watch } from "vue";
 import Datepicker from "vue3-datepicker";
 import { ko } from "date-fns/locale";
+import { format } from "date-fns";
 
 export default defineComponent({
   name: "App",
@@ -129,29 +130,6 @@ export default defineComponent({
         // 기간 저장!!!!
         duration.value.from = dpFrom.input;
         duration.value.to = dpTo.input;
-
-        if (dpFrom.input > dpTo.input) {
-          alert("Validation Error!!");
-
-          //새로운 날짜 계산?
-          let date = null;
-          if (oldVal) {
-            const arrOldVal = oldVal.split("-");
-            date = new Date(
-              Number(arrOldVal[0]),
-              Number(arrOldVal[1]) - 1,
-              Number(arrOldVal[2])
-            );
-          }
-          //   console.log(date);
-
-          if (target === "from") {
-            dp2From.value = date;
-          } else if (target === "to") {
-            dp2To.value = date;
-          }
-          return;
-        }
       }, 10);
     };
     const isTodayOver = (date) => {
@@ -162,16 +140,20 @@ export default defineComponent({
     let duration = ref({ from: "", to: "" });
 
     const toggleIsSelect = () => {
-      isSelect.value = !isSelect.value;
-
+      if (duration.value.from > duration.value.to) {
+        alert("Validation Error!!");
+      }
       // day1 날짜 설정
-      dp2.value = new Date(duration.value.from);
-      console.log(dp2);
+      else {
+        isSelect.value = !isSelect.value;
+        dp2.value = new Date(duration.value.from);
+      }
     };
 
     // 출력을 위한 것
     watch(dp2, (newDp2) => {
-      console.log(newDp2);
+      const formattedDate = format(newDp2, "yyyy-MM-dd");
+      console.log(formattedDate);
       // console.log(dp2From);
       // console.log(dp2To);
     });
@@ -205,6 +187,7 @@ p {
   font-weight: bold;
   color: #f29561;
   font-size: 0.75rem;
+  padding: 0 0 0 1rem;
 }
 #confirm-btn {
   color: white;
@@ -235,7 +218,7 @@ span {
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  padding: 0 1rem;
+  /* padding: 0 1rem; */
   /* margin-top: 0.2rem; */
   /* height: 10.75rem; */
   /* height: 5rem; */
