@@ -5,9 +5,9 @@
       <div class="attraction-card">
         <div>
           <!-- <img
-              :src="`/src/assets/image/${attractionItem.first_image}.png`"
-              alt=""
-            /> -->
+            :src="`/src/assets/image/${attractionItem.first_image}.png`"
+            alt=""
+          /> -->
           <img :src="`${attractionItem.first_image}`" alt="" />
         </div>
         <div class="attraction-card-content">
@@ -25,18 +25,8 @@
               }}</span>
             </div>
           </div>
-          <div class="line">
-            <LikeVue
-              class="like-svg"
-              v-if="!attractionItem.isLike"
-              @click="toggleLike(attractionItem)"
-            />
-            <LikeRedVue
-              class="like-svg"
-              v-else
-              @click="toggleLike(attractionItem)"
-            />
-            <span class="like-number">{{ attractionItem.like }}</span>
+          <div class="line" id="plus-svg">
+            <div><TrashIconVue /></div>
           </div>
         </div>
       </div>
@@ -49,6 +39,8 @@
 import { ref, watch } from "vue";
 import LikeVue from "../../../assets/svg/Like.vue";
 import LikeRedVue from "../../../assets/svg/LikeRed.vue";
+import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
+import TrashIconVue from "../../../assets/svg/TrashIcon.vue";
 import {
   useAttractionStore,
   useCategoryStore,
@@ -194,7 +186,12 @@ watch(
 }
 .line {
   display: flex;
-  align-items: center;
+}
+#plus-svg {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0.5rem;
+  cursor: pointer;
 }
 .attraction-card-title {
   font-size: 1.1rem;
@@ -207,6 +204,7 @@ watch(
   flex-direction: column;
   justify-content: space-between;
   height: 4.5rem;
+  width: 20.8125rem;
 }
 .like-svg {
   margin-right: 0.25rem;
