@@ -44,9 +44,6 @@ input {
   flex-direction: column;
   width: 21.75rem;
   height: 40.4375rem;
-  margin-left: 1.19rem;
-  /* border-radius: 0.3125rem;
-  border: 1px solid #c8c8c8; */
 }
 #menu-btn-container {
   display: flex;
