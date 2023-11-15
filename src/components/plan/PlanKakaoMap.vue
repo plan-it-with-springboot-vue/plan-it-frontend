@@ -9,6 +9,7 @@ import { toRaw, ref, onMounted, watch } from "vue";
 import { useLocation, useMapStore } from "../../stores/store";
 
 const locationStore = useLocation();
+const mapStore = useMapStore();
 
 //생성한 map정보를 담을 곳(반응형 아니어도 된다는데....우선 반응형으로 만들었음)
 const map = ref(null);
@@ -34,8 +35,6 @@ const markers = ref([]);
 const infowindow = ref(null);
 
 //카카오map을 생성해서 화면에 반영하기 위한 initMap 메소드
-
-const positions = ref([]);
 // const location = locationStore.location;
 const options = ref({});
 
@@ -58,50 +57,56 @@ function initMap() {
   map.value = new kakao.maps.Map(container, options.value);
 
   // Create the positions array by mapping over selectedLocation
-  // const positions = selectedLocation.map((location) => ({
+  const positions = [
+    ...mapStore.selectedLocation.map((location) => ({
+      content: `<div>test</div>`,
+      latlng: new kakao.maps.LatLng(location.latitude, location.longitude),
+    })),
+    {
+      content: "<div>test</div>",
+      latlng: new kakao.maps.LatLng(
+        locationStore.location.latitude,
+        locationStore.location.longitude
+      ),
+    },
+  ];
+
+  // const positions = {
   //   content: `<div>${location.title}</div>`,
   //   latlng: new kakao.maps.LatLng(
   //     locationStore.location.latitude,
   //     locationStore.location.longitude
   //   ),
-  // }));
+  // };
 
-  const positions = {
-    content: `<div>${location.title}</div>`,
-    latlng: new kakao.maps.LatLng(
-      locationStore.location.latitude,
-      locationStore.location.longitude
-    ),
-  };
+  for (var i = 0; i < positions.length; i++) {
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+      map: map.value, // 마커를 표시할 지도
+      // position: positions[i].latlng, // 마커의 위치
+      position: positions[i].latlng, // 마커의 위치
+    });
 
-  // for (var i = 0; i < positions.value.length; i++) {
-  // 마커를 생성합니다
-  var marker = new kakao.maps.Marker({
-    map: map.value, // 마커를 표시할 지도
-    // position: positions[i].latlng, // 마커의 위치
-    position: positions.latlng, // 마커의 위치
-  });
+    // 마커에 표시할 인포윈도우를 생성합니다
+    infowindow.value = new kakao.maps.InfoWindow({
+      // content: positions[i].content, // 인포윈도우에 표시할 내용
+      content: positions[i].content, // 인포윈도우에 표시할 내용
+    });
 
-  // 마커에 표시할 인포윈도우를 생성합니다
-  infowindow.value = new kakao.maps.InfoWindow({
-    // content: positions[i].content, // 인포윈도우에 표시할 내용
-    content: positions.content, // 인포윈도우에 표시할 내용
-  });
-
-  // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-  // 이벤트 리스너로는 클로저를 만들어 등록합니다
-  // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-  kakao.maps.event.addListener(
-    marker,
-    "mouseover",
-    makeOverListener(map.value, marker, infowindow.value)
-  );
-  kakao.maps.event.addListener(
-    marker,
-    "mouseout",
-    makeOutListener(infowindow.value)
-  );
-  // }
+    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+    // 이벤트 리스너로는 클로저를 만들어 등록합니다
+    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+    kakao.maps.event.addListener(
+      marker,
+      "mouseover",
+      makeOverListener(map.value, marker, infowindow.value)
+    );
+    kakao.maps.event.addListener(
+      marker,
+      "mouseout",
+      makeOutListener(infowindow.value)
+    );
+  }
 
   // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
   function makeOverListener(map, marker, infowindow) {
@@ -123,15 +128,15 @@ watch(
   (newLocation) => {
     console.log(newLocation);
     initMap();
-    // options.value = {
-    //   center: new kakao.maps.LatLng(
-    //     newLocation.latitude,
-    //     newLocation.longitude
-    //     // 38.47884469,
-    //     // 128.4391216
-    //   ), // 지도의 중심좌표
-    //   level: 8, // 지도의 확대 레벨
-    // };
+  },
+  { deep: true }
+);
+
+watch(
+  () => mapStore.selectedLocation,
+  (newLocation) => {
+    console.log(newLocation);
+    initMap();
   },
   { deep: true }
 );

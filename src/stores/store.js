@@ -23,7 +23,7 @@ const useMapStore = defineStore("map", {
       {
         title: "임시 데이터",
         addr1: "임시 주소",
-        latitude: 38.47884469,
+        latitude: 36.87884469,
         longitude: 128.4391216,
       },
     ],
