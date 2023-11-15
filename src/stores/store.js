@@ -19,7 +19,14 @@ const useAttractionStore = defineStore("attraction", {
 
 const useMapStore = defineStore("map", {
   state: () => ({
-    selectedLocation: [],
+    selectedLocation: [
+      {
+        title: "임시 데이터",
+        addr1: "임시 주소",
+        latitude: 36.87884469,
+        longitude: 128.4391216,
+      },
+    ],
   }),
   actions: {
     addAttractionList(attractionList) {
@@ -31,6 +38,27 @@ const useMapStore = defineStore("map", {
       }));
 
       this.selectedLocation = locations;
+    },
+  },
+});
+
+const useLocation = defineStore("location", {
+  state: () => ({
+    location: {
+      title: "임시 데이터",
+      addr1: "임시 주소",
+      latitude: 36.87884469,
+      longitude: 128.4391216,
+    },
+  }),
+  actions: {
+    selectLocation(attraction) {
+      this.location = {
+        title: attraction.title,
+        addr1: attraction.addr1,
+        latitude: attraction.latitude,
+        longitude: attraction.longitude,
+      };
     },
   },
 });
@@ -54,4 +82,69 @@ const useCategoryStore = defineStore("category", {
   },
 });
 
-export { useAttractionStore, useMapStore, useCategoryStore };
+const usePlanStore = defineStore("plan", {
+  state: () => ({
+    plan: {
+      title: "",
+      startSchedule: "",
+      endSchedule: "",
+      userId: "",
+      planDetail: [],
+    },
+  }),
+  actions: {
+    addPlan(plan) {
+      this.plan = {
+        title: plan.title,
+        startSchedule: plan.startSchedule,
+        endSchedule: plan.endSchedule,
+        userId: plan.userId,
+        planDetail: plan.planDetail.map((detailItem) => ({
+          contentId: detailItem.contentId,
+          planDate: detailItem.planDate,
+          time: detailItem.time,
+        })),
+      };
+    },
+
+    addPlanDetail(contentId, planDate, time) {
+      // plan의 planDetail에서 planDate를 찾아서 planDetail에 contentId 추가
+      this.plan.planDetail.push({
+        contentId,
+        planDate,
+        time: time,
+      });
+    },
+
+    deletePlanDetail(contentId, planDate) {
+      // plan의 planDetail에서 planDate를 찾아서 plandDetail에 contentId 삭제
+      const existingDetailIndex = this.plan.planDetail.findIndex(
+        (detailItem) => detailItem.planDate === planDate
+      );
+
+      if (existingDetailIndex !== -1) {
+        this.plan.planDetail.splice(existingDetailIndex, 1);
+      }
+    },
+  },
+});
+
+const useDateStore = defineStore("date", {
+  state: () => ({
+    date: "",
+  }),
+  actions: {
+    selectDate(date) {
+      this.date = date;
+    },
+  },
+});
+
+export {
+  useAttractionStore,
+  useMapStore,
+  useCategoryStore,
+  usePlanStore,
+  useDateStore,
+  useLocation,
+};

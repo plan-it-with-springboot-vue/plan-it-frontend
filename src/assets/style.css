@@ -1,0 +1,15 @@
+input.datepicker {
+  width: 4.2rem;
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  box-sizing: border-box;
+  /* margin: 0.2rem; */
+  border: none;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+:root {
+  --vdp-selected-bg-color: #6499e9;
+  --vdp-hover-bg-color: #6499e9;
+}
