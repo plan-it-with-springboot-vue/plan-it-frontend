@@ -14,7 +14,7 @@
           <div>
             <div
               class="attraction-card-title line"
-              @click="showModal(attractionItem)"
+              @click="showLocation(attractionItem)"
             >
               {{ attractionItem.title }}
             </div>
@@ -25,7 +25,11 @@
               }}</span>
             </div>
           </div>
-          <div class="line" id="plus-svg">
+          <div
+            class="line"
+            id="plus-svg"
+            @click="clickPlusIcon(attractionItem.content_id)"
+          >
             <div><PlusIconVue /></div>
           </div>
         </div>
@@ -37,13 +41,12 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import LikeVue from "../../../assets/svg/Like.vue";
-import LikeRedVue from "../../../assets/svg/LikeRed.vue";
 import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
 import {
-  useAttractionStore,
-  useCategoryStore,
+  useDateStore,
   useMapStore,
+  usePlanStore,
+  useLocation,
 } from "../../../stores/store";
 
 const attraction = ref([
@@ -71,48 +74,38 @@ const attraction = ref([
     like: 8,
     isLike: false,
   },
-  {
-    content_id: 125782,
-    content_type_id: 12,
-    title: "고석정국민관광지",
-    addr1: "강원도 철원군",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/62/219162_image2_1.jpg",
-    latitude: 38.44084943,
-    longitude: 128.4547464,
-    like: 5,
-    isLike: false,
-  },
 ]);
 
-// 없어도 됨
-const attractionStore = useAttractionStore();
-
-const showModal = (attractionItem) => {
-  console.log("click");
-  attractionStore.showModal(attractionItem);
-};
-
-const toggleLike = (attractionItem) => {
-  attractionItem.isLike = !attractionItem.isLike;
-
-  if (attractionItem.isLike) {
-    attractionItem.like++;
-  } else {
-    attractionItem.like--;
-  }
-};
-
 const mapStore = useMapStore();
-mapStore.addAttractionList(attraction.value);
+const locationStore = useLocation();
 
-const categoryStore = useCategoryStore();
-watch(
-  () => categoryStore.selectedCategory,
-  (newVal) => {
-    console.log("Selected Category changed:", newVal);
-  }
-);
+const showLocation = (attractionItem) => {
+  locationStore.selectLocation(attractionItem);
+  // console.log("search vox");
+  // console.log(locationStore.location);
+};
+
+// 계획
+const planStore = usePlanStore();
+const dateStore = useDateStore();
+
+const clickPlusIcon = (contentId) => {
+  const planDate = dateStore.date;
+  const time = null;
+
+  planStore.addPlanDetail(contentId, planDate, time);
+
+  // console.log("attratSearhBox : ");
+  // console.log(planStore.plan);
+
+  // 지도 마커를 위해 저장
+  mapStore.addAttractionList([
+    ...mapStore.selectedLocation,
+    attraction.value[2],
+  ]);
+  // console.log("map att plan : ");
+  // console.log(mapStore.selectedLocation);
+};
 </script>
 
 <style scoped>
