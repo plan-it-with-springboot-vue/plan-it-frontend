@@ -56,21 +56,56 @@ const useCategoryStore = defineStore("category", {
 
 const usePlan = defineStore("plan", {
   state: () => ({
-    plan: [],
+    plan: {
+      title: "",
+      startSchedule: "",
+      endSchedule: "",
+      userId: "",
+      planDetail: [],
+    },
   }),
   actions: {
-    addPlanDetail(plans) {
-      this.plan = plans.map((planItem) => ({
-        title: planItem.title,
-        startSchedule: planItem.start_schedule,
-        endSchedule: planItem.end_schedule,
-        userId: planItem.user_id,
-        planDetail: planItem.plan_detail.map((detailItem) => ({
-          contentId: detailItem.content_id,
-          planDate: detailItem.plan_date,
-          sequence: detailItem.sequence,
+    addPlanList(plan) {
+      this.plan = {
+        title: plan.title,
+        startSchedule: plan.startSchedule,
+        endSchedule: plan.endSchedule,
+        userId: plan.user_id,
+        planDetail: plan.planDetail.map((detailItem) => ({
+          contentId: detailItem.contentId,
+          planDate: detailItem.planDate,
+          time: detailItem.time,
         })),
-      }));
+      };
+    },
+
+    addPlanDetail(contentId, planDate, time) {
+      // plan의 planDetail에서 planDate를 찾아서 planDetail에 contentId 추가
+      // planDate가 없으면 새로운 객체 생성
+      const existingDetailIndex = this.plan.planDetail.findIndex(
+        (detailItem) => detailItem.planDate === planDate
+      );
+
+      if (existingDetailIndex !== -1) {
+        this.plan.planDetail[existingDetailIndex].contentId = contentId;
+      } else {
+        this.plan.planDetail.push({
+          contentId,
+          planDate,
+          time: time,
+        });
+      }
+    },
+
+    deletePlanDetail(contentId, planDate) {
+      // plan의 planDetail에서 planDate를 찾아서 plandDetail에 contentId 삭제
+      const existingDetailIndex = this.plan.planDetail.findIndex(
+        (detailItem) => detailItem.planDate === planDate
+      );
+
+      if (existingDetailIndex !== -1) {
+        this.plan.planDetail.splice(existingDetailIndex, 1);
+      }
     },
   },
 });
@@ -86,11 +121,4 @@ const useDate = defineStore("date", {
   },
 });
 
-export {
-  useAttractionStore,
-  useMapStore,
-  useCategoryStore,
-  usePlan,
-  usePlanDetail,
-  useDate,
-};
+export { useAttractionStore, useMapStore, useCategoryStore, usePlan, useDate };
