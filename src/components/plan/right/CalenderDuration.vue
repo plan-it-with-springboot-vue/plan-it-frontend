@@ -1,7 +1,7 @@
 <template>
   <div id="input-container">
-    <input type="text" placeholder="제목을 입력해주세요" />
-    <div id="check-svg">
+    <input type="text" placeholder="제목을 입력해주세요" v-model="planTitle" />
+    <!-- <div id="check-svg">
       <svg
         width="24"
         height="24"
@@ -17,7 +17,7 @@
           stroke-linejoin="round"
         />
       </svg>
-    </div>
+    </div> -->
   </div>
 
   <div class="date date-container" v-if="!isSelect">
@@ -59,7 +59,7 @@
       @focus="setOldValue($event.target.value)"
       @update:modelValue="validateFromTo('to', 'dp2From', 'dp2To')"
     />
-    <div id="confirm-btn" @click="toggleIsSelect"><p>선택</p></div>
+    <div id="confirm-btn" @click="addPlan"><p>선택</p></div>
   </div>
 
   <div v-else>
@@ -103,6 +103,7 @@ import { ref, reactive, defineComponent, watch } from "vue";
 import Datepicker from "vue3-datepicker";
 import { ko } from "date-fns/locale";
 import { format } from "date-fns";
+import { usePlanStore } from "../../../stores/store";
 
 export default defineComponent({
   name: "App",
@@ -158,15 +159,29 @@ export default defineComponent({
 
     let isSelect = ref(false);
     let duration = ref({ from: "", to: "" });
+    const planTitle = ref("");
+    const planStore = usePlanStore();
 
-    const toggleIsSelect = () => {
+    const addPlan = () => {
       if (duration.value.from > duration.value.to) {
         alert("Validation Error!!");
       }
       // day1 날짜 설정
       else {
         isSelect.value = !isSelect.value;
-        dp2.value = new Date(duration.value.from);
+        dp2.value = new Date(duration.value.from); // 시작 날짜로 picker 설정
+
+        // plan store 저장
+        const plan = {
+          title: planTitle.value,
+          startSchedule: duration.value.from,
+          endSchedule: duration.value.to,
+          userId: "ssafy",
+          planDetail: [],
+        };
+        planStore.addPlan(plan);
+
+        console.log(planStore.plan);
       }
     };
 
@@ -190,8 +205,9 @@ export default defineComponent({
       setOldValue,
       validateFromTo,
       isTodayOver,
-      toggleIsSelect,
+      addPlan,
       isSelect,
+      planTitle,
     };
   },
 });
