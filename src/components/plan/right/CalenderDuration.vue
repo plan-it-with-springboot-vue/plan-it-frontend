@@ -103,7 +103,7 @@ import { ref, reactive, defineComponent, watch } from "vue";
 import Datepicker from "vue3-datepicker";
 import { ko } from "date-fns/locale";
 import { format } from "date-fns";
-import { usePlanStore } from "../../../stores/store";
+import { usePlanStore, useDateStore } from "../../../stores/store";
 
 export default defineComponent({
   name: "App",
@@ -186,9 +186,11 @@ export default defineComponent({
     };
 
     // 출력을 위한 것
+    const dateStore = useDateStore();
     watch(dp2, (newDp2) => {
       const formattedDate = format(newDp2, "yyyy-MM-dd");
-      console.log(formattedDate);
+      dateStore.selectDate(formattedDate);
+      console.log("store 저장 : " + dateStore.date);
       // console.log(dp2From);
       // console.log(dp2To);
     });

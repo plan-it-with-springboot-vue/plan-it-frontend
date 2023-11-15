@@ -25,7 +25,11 @@
               }}</span>
             </div>
           </div>
-          <div class="line" id="plus-svg">
+          <div
+            class="line"
+            id="plus-svg"
+            @click="addAttractionToPlanDetail(attractionItem.content_id)"
+          >
             <div><PlusIconVue /></div>
           </div>
         </div>
@@ -37,13 +41,12 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import LikeVue from "../../../assets/svg/Like.vue";
-import LikeRedVue from "../../../assets/svg/LikeRed.vue";
 import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
 import {
   useAttractionStore,
-  useCategoryStore,
+  useDateStore,
   useMapStore,
+  usePlanStore,
 } from "../../../stores/store";
 
 const attraction = ref([
@@ -153,26 +156,22 @@ const showModal = (attractionItem) => {
   attractionStore.showModal(attractionItem);
 };
 
-const toggleLike = (attractionItem) => {
-  attractionItem.isLike = !attractionItem.isLike;
-
-  if (attractionItem.isLike) {
-    attractionItem.like++;
-  } else {
-    attractionItem.like--;
-  }
-};
-
 const mapStore = useMapStore();
 mapStore.addAttractionList(attraction.value);
 
-const categoryStore = useCategoryStore();
-watch(
-  () => categoryStore.selectedCategory,
-  (newVal) => {
-    console.log("Selected Category changed:", newVal);
-  }
-);
+// 계획
+const planStore = usePlanStore();
+const dateStore = useDateStore();
+
+const addAttractionToPlanDetail = (contentId) => {
+  const planDate = dateStore.date;
+  const time = null;
+
+  planStore.addPlanDetail(contentId, planDate, time);
+
+  // console.log("attratSearhBox : ");
+  // console.log(planStore.plan);
+};
 </script>
 
 <style scoped>

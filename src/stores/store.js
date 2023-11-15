@@ -81,20 +81,11 @@ const usePlanStore = defineStore("plan", {
 
     addPlanDetail(contentId, planDate, time) {
       // plan의 planDetail에서 planDate를 찾아서 planDetail에 contentId 추가
-      // planDate가 없으면 새로운 객체 생성
-      const existingDetailIndex = this.plan.planDetail.findIndex(
-        (detailItem) => detailItem.planDate === planDate
-      );
-
-      if (existingDetailIndex !== -1) {
-        this.plan.planDetail[existingDetailIndex].contentId = contentId;
-      } else {
-        this.plan.planDetail.push({
-          contentId,
-          planDate,
-          time: time,
-        });
-      }
+      this.plan.planDetail.push({
+        contentId,
+        planDate,
+        time: time,
+      });
     },
 
     deletePlanDetail(contentId, planDate) {
@@ -110,12 +101,12 @@ const usePlanStore = defineStore("plan", {
   },
 });
 
-const useDate = defineStore("date", {
+const useDateStore = defineStore("date", {
   state: () => ({
     date: "",
   }),
   actions: {
-    selectedDate(date) {
+    selectDate(date) {
       this.date = date;
     },
   },
@@ -126,5 +117,5 @@ export {
   useMapStore,
   useCategoryStore,
   usePlanStore,
-  useDate,
+  useDateStore,
 };
