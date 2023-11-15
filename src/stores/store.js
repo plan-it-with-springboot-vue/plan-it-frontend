@@ -19,7 +19,14 @@ const useAttractionStore = defineStore("attraction", {
 
 const useMapStore = defineStore("map", {
   state: () => ({
-    selectedLocation: [],
+    selectedLocation: [
+      {
+        title: "임시 데이터",
+        addr1: "임시 주소",
+        latitude: 38.47884469,
+        longitude: 128.4391216,
+      },
+    ],
   }),
   actions: {
     addAttractionList(attractionList) {
@@ -31,6 +38,27 @@ const useMapStore = defineStore("map", {
       }));
 
       this.selectedLocation = locations;
+    },
+  },
+});
+
+const useLocation = defineStore("location", {
+  state: () => ({
+    location: {
+      title: "임시 데이터",
+      addr1: "임시 주소",
+      latitude: 36.87884469,
+      longitude: 128.4391216,
+    },
+  }),
+  actions: {
+    selectLocation(attraction) {
+      this.location = {
+        title: attraction.title,
+        addr1: attraction.addr1,
+        latitude: attraction.latitude,
+        longitude: attraction.longitude,
+      };
     },
   },
 });
@@ -118,4 +146,5 @@ export {
   useCategoryStore,
   usePlanStore,
   useDateStore,
+  useLocation,
 };

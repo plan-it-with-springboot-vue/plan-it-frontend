@@ -14,7 +14,7 @@
           <div>
             <div
               class="attraction-card-title line"
-              @click="showModal(attractionItem)"
+              @click="showLocation(attractionItem)"
             >
               {{ attractionItem.title }}
             </div>
@@ -28,7 +28,7 @@
           <div
             class="line"
             id="plus-svg"
-            @click="addAttractionToPlanDetail(attractionItem.content_id)"
+            @click="clickPlusIcon(attractionItem.content_id)"
           >
             <div><PlusIconVue /></div>
           </div>
@@ -43,10 +43,10 @@
 import { ref, watch } from "vue";
 import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
 import {
-  useAttractionStore,
   useDateStore,
   useMapStore,
   usePlanStore,
+  useLocation,
 } from "../../../stores/store";
 
 const attraction = ref([
@@ -148,22 +148,20 @@ const attraction = ref([
   },
 ]);
 
-// 없어도 됨
-const attractionStore = useAttractionStore();
-
-const showModal = (attractionItem) => {
-  console.log("click");
-  attractionStore.showModal(attractionItem);
-};
-
 const mapStore = useMapStore();
-mapStore.addAttractionList(attraction.value);
+const locationStore = useLocation();
+
+const showLocation = (attractionItem) => {
+  locationStore.selectLocation(attractionItem);
+  // console.log("search vox");
+  // console.log(locationStore.location);
+};
 
 // 계획
 const planStore = usePlanStore();
 const dateStore = useDateStore();
 
-const addAttractionToPlanDetail = (contentId) => {
+const clickPlusIcon = (contentId) => {
   const planDate = dateStore.date;
   const time = null;
 
@@ -171,6 +169,14 @@ const addAttractionToPlanDetail = (contentId) => {
 
   // console.log("attratSearhBox : ");
   // console.log(planStore.plan);
+
+  // 지도 마커를 위해 저장
+  mapStore.addAttractionList([
+    ...mapStore.selectedLocation,
+    attraction.value[2],
+  ]);
+  // console.log("map att plan : ");
+  // console.log(mapStore.selectedLocation);
 };
 </script>
 

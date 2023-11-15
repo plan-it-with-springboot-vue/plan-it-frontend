@@ -84,8 +84,8 @@ watch(
     );
 
     currentDatePlanDetail.value = [...matchingAttractions];
-    console.log("attract plan box : ");
-    console.log(currentDatePlanDetail.value);
+    // console.log("attract plan box : ");
+    // console.log(currentDatePlanDetail.value);
   },
   // watch는 shallow임!! deep으로 해주기
   { deep: true }
