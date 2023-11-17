@@ -26,17 +26,29 @@
             </div>
           </div>
           <div class="line">
-            <!-- <LikeVue
-              class="like-svg"
-              v-if="!attractionItem.isLike"
-              @click="toggleLike(attractionItem)"
-            />
-            <LikeRedVue
-              class="like-svg"
-              v-else
-              @click="toggleLike(attractionItem)"
-            />
-            <span class="like-number">{{ attractionItem.like }}</span> -->
+            <div
+              v-if="!favoritesStore || favoritesStore.favorites.length === 0"
+            >
+              <LikeVue class="like-svg" @click="toggleLike(attractionItem)" />
+            </div>
+            <template v-else>
+              <div
+                v-if="
+                  favoritesStore.favorites.find(
+                    (item) => item.contentId === attractionItem.contentId
+                  )
+                "
+              >
+                <LikeRedVue
+                  class="like-svg"
+                  @click="toggleLike(attractionItem)"
+                />
+              </div>
+              <div v-else>
+                <LikeVue class="like-svg" @click="toggleLike(attractionItem)" />
+              </div>
+            </template>
+            <!-- <span class="like-number">{{ attractionItem.like }}</span> -->
           </div>
         </div>
       </div>
@@ -53,6 +65,7 @@ import axios from "axios";
 import {
   useAttractionStore,
   useCategoryStore,
+  useFavoriteStores,
   useLocation,
   useMapStore,
 } from "../../../stores/store";
@@ -151,8 +164,23 @@ watch(
         },
       })
       .then((response) => {
-        // console.log("API Response:", response.data);
-        attraction.value = response.data;
+        console.log("API Response:", response.data);
+        if (Array.isArray(response.data) && response.data.length === 0) {
+          attraction.value = [
+            {
+              contentId: 125266,
+              contentTypeId: 12,
+              title: "검색 결과 없음",
+              addr1: "",
+              firstImage: "",
+              latitude: 38.51112664,
+              longitude: 128.4191502,
+            },
+          ];
+          console.log("gdsags");
+        } else {
+          attraction.value = response.data;
+        }
         mapStore.addAttractionList(attraction.value);
       })
       .catch((error) => {
@@ -160,6 +188,8 @@ watch(
       });
   }
 );
+
+const favoritesStore = useFavoriteStores();
 </script>
 
 <style scoped>
@@ -219,8 +249,8 @@ img {
   height: auto;
   overflow-y: auto;
   /* height: 34.5rem; */
-  height: 80vw;
-  width: 20vw;
+  /* height: 80vw; */
+  /* width: 20vw; */
   overflow-x: hidden;
 }
 .scrollable-container::-webkit-scrollbar {
