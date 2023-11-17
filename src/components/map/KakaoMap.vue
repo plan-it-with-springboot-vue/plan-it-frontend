@@ -52,8 +52,8 @@ function initMap() {
   } else {
     options = {
       center: new kakao.maps.LatLng(
-        selectedLocation[2].latitude,
-        selectedLocation[2].longitude
+        selectedLocation[0].latitude,
+        selectedLocation[0].longitude
       ), // 지도의 중심좌표
       level: 12, // 지도의 확대 레벨
     };
