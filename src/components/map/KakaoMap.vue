@@ -129,6 +129,25 @@ function initMap() {
       infowindow.close();
     };
   }
+
+  let selectedMarker = null;
+  const attractionStore = useAttractionStore();
+  const locationStore = useLocation();
+  kakao.maps.event.addListener(marker, "click", function () {
+    // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
+    // 마커의 이미지를 클릭 이미지로 변경합니다
+
+    if (!selectedMarker || selectedMarker !== marker) {
+      // 클릭된 마커 객체가 null이 아니면
+      // 클릭된 마커의 이미지를 기본 이미지로 변경하고
+      // !!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+      // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+      // marker.setImage(clickImage);
+    }
+
+    // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+    selectedMarker = marker;
+  });
 }
 
 // const categoryStore = useCategoryStore();
