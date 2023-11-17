@@ -96,7 +96,7 @@ img {
 #img-des {
   display: flex;
   flex-direction: column;
-  height: 24rem;
+  height: 22.9rem;
   justify-content: center;
   align-content: center;
 }
@@ -112,7 +112,6 @@ img {
 }
 
 #review {
-  margin-top: 2rem;
   font-size: 1.25rem;
   font-weight: 700;
   color: #6499e9;
