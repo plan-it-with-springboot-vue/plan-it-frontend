@@ -1,5 +1,5 @@
 <template>
-  <div class="black-bg" v-if="attractionStore.modalVisible" @click="closeModal">
+  <div class="black-bg">
     <div class="white-bg" @click.stop>
       <div class="close-button" @click="closeModal"><CloseButton /></div>
       <ModalDetail />
@@ -34,7 +34,7 @@ div {
   padding-top: 3.75rem;
 }
 .white-bg {
-  width: 28.8125rem;
+  width: 23.8125rem;
   /* height: 56rem; */
   /* background: white; */
   /* border-radius: 8px; */
