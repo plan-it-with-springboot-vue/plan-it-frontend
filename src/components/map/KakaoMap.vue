@@ -120,29 +120,15 @@ function initMap() {
       makeOutListener(infowindow.value)
     );
 
-    let selectedMarker = null;
-    const attractionStore = useAttractionStore();
+    let selectedMarker = ref();
+
     const locationStore = useLocation();
-    kakao.maps.event.addListener(marker, "click", function () {
-      // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
-      // 마커의 이미지를 클릭 이미지로 변경합니다
 
-      if (!selectedMarker || selectedMarker !== marker) {
-        // 클릭된 마커 객체가 null이 아니면
-        // 클릭된 마커의 이미지를 기본 이미지로 변경하고
-        // !!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
-        // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-        // marker.setImage(clickImage);
-
-        console.log(i);
-        console.log(selectedLocation);
-      }
-
-      // attractionStore.showModal(selectedLocation);
-
-      // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
-      selectedMarker = marker;
-    });
+    kakao.maps.event.addListener(
+      marker,
+      "click",
+      makeClickListener(selectedMarker, marker, i)
+    );
   }
 
   // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
@@ -158,6 +144,20 @@ function initMap() {
       infowindow.close();
     };
   }
+
+  function makeClickListener(selectedMarker, marker, index) {
+    return function () {
+      const attractionStore = useAttractionStore();
+      // console.log(i);
+
+      //if (selectedMarker && selectedMarker === marker) {
+      console.log(index);
+      console.log(selectedLocation[index]);
+      attractionStore.showModal(selectedLocation[index]);
+      // }
+      selectedMarker = marker;
+    };
+  }
 }
 
 // const categoryStore = useCategoryStore();
@@ -165,7 +165,7 @@ const locationStore = useLocation();
 watch(
   () => mapStore.selectedLocation,
   (newMap) => {
-    console.log(newMap);
+    // console.log(newMap);
     initMap();
   },
   { deep: true }

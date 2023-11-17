@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 const useAttractionStore = defineStore("attraction", {
   state: () => ({
     modalVisible: false,
-    selectedAttraction: null,
+    selectedAttraction: [],
   }),
   actions: {
     showModal(attractionItem) {
@@ -32,18 +32,24 @@ const useMapStore = defineStore("map", {
   state: () => ({
     selectedLocation: [
       {
-        title: "임시 데이터",
-        addr1: "임시 주소",
-        latitude: 36.87884469,
-        longitude: 128.4391216,
+        contentId: 125266,
+        contentTypeId: 12,
+        title: "",
+        addr1: "",
+        firstImage: "",
+        latitude: 38.51112664,
+        longitude: 128.4191502,
       },
     ],
   }),
   actions: {
     addAttractionList(attractionList) {
       const locations = attractionList.map((attractionItem) => ({
+        contentId: attractionItem.contentId,
+        contentTypeId: attractionItem.contentTypeId,
         title: attractionItem.title,
         addr1: attractionItem.addr1,
+        firstImage: attractionItem.firstImage,
         latitude: attractionItem.latitude,
         longitude: attractionItem.longitude,
       }));
@@ -56,17 +62,23 @@ const useMapStore = defineStore("map", {
 const useLocation = defineStore("location", {
   state: () => ({
     location: {
-      title: "임시 데이터",
-      addr1: "임시 주소",
-      latitude: 36.87884469,
-      longitude: 128.4391216,
+      contentId: 125266,
+      contentTypeId: 12,
+      title: "",
+      addr1: "",
+      firstImage: "",
+      latitude: 38.51112664,
+      longitude: 128.4191502,
     },
   }),
   actions: {
     selectLocation(attraction) {
       this.location = {
+        contentId: attraction.contentId,
+        contentTypeId: attraction.contentTypeId,
         title: attraction.title,
         addr1: attraction.addr1,
+        firstImage: attraction.firstImage,
         latitude: attraction.latitude,
         longitude: attraction.longitude,
       };
