@@ -7,6 +7,7 @@
       <CategorySelectVue />
     </div>
   </div>
+  <hr />
 </template>
 
 <script setup>
@@ -16,6 +17,12 @@ import CategorySelectVue from "./CategorySelect.vue";
 </script>
 
 <style scoped>
+hr {
+  height: 0.03125rem;
+  background-color: #c8c8c8;
+  border: 0;
+  margin: 0;
+}
 h3 {
   text-align: center;
   font-size: 1.25rem;
