@@ -29,7 +29,10 @@
             <div
               v-if="!favoritesStore || favoritesStore.favorites.length === 0"
             >
-              <LikeVue class="like-svg" @click="toggleLike(attractionItem)" />
+              <LikeVue
+                class="like-svg"
+                @click="likeAttraction(attractionItem)"
+              />
             </div>
             <template v-else>
               <div
@@ -41,11 +44,14 @@
               >
                 <LikeRedVue
                   class="like-svg"
-                  @click="toggleLike(attractionItem)"
+                  @click="deleteLike(attractionItem)"
                 />
               </div>
               <div v-else>
-                <LikeVue class="like-svg" @click="toggleLike(attractionItem)" />
+                <LikeVue
+                  class="like-svg"
+                  @click="likeAttraction(attractionItem)"
+                />
               </div>
             </template>
             <!-- <span class="like-number">{{ attractionItem.like }}</span> -->
@@ -140,6 +146,47 @@ watch(
 );
 
 const favoritesStore = useFavoriteStores();
+
+const likeAttraction = async (attractionItem) => {
+  try {
+    const response = await axios.post("/attraction/like", {
+      userId: "ssafy",
+      contentId: attractionItem.contentId,
+    });
+
+    favoritesStore.favorites.push({
+      userId: "ssafy",
+      contentId: attractionItem.contentId,
+    });
+    // console.log(favoritesStore.favorites);
+  } catch (error) {
+    console.error("Error while liking the attraction:", error);
+  }
+};
+
+const deleteLike = async (attractionItem) => {
+  try {
+    const response = await axios
+      .delete(`/attraction/like`, {
+        params: {
+          userId: "ssafy",
+          contentId: attractionItem.contentId,
+        },
+      })
+      .then((response) => {
+        favoritesStore.favorites = favoritesStore.favorites.filter(
+          (item) => item.contentId !== attractionItem.contentId
+        );
+
+        // console.log(favoritesStore.favorites);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+  } catch (error) {
+    console.error("Error while liking the attraction:", error);
+  }
+};
 </script>
 
 <style scoped>
