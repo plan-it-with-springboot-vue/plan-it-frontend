@@ -55,7 +55,12 @@ const useMapStore = defineStore("map", {
 
 const useLocation = defineStore("location", {
   state: () => ({
-    location: null,
+    location: {
+      title: "임시 데이터",
+      addr1: "임시 주소",
+      latitude: 36.87884469,
+      longitude: 128.4391216,
+    },
   }),
   actions: {
     selectLocation(attraction) {

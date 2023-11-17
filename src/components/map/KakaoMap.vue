@@ -6,7 +6,11 @@
 
 <script setup>
 import { toRaw, ref, onMounted, watch } from "vue";
-import { useLocation, useMapStore } from "../../stores/store";
+import {
+  useAttractionStore,
+  useLocation,
+  useMapStore,
+} from "../../stores/store";
 
 const mapStore = useMapStore();
 
@@ -89,6 +93,7 @@ function initMap() {
     latlng: new kakao.maps.LatLng(location.latitude, location.longitude),
   }));
 
+  // console.log(selectedLocation);
   for (var i = 0; i < positions.length; i++) {
     // 마커를 생성합니다
     var marker = new kakao.maps.Marker({
@@ -114,6 +119,30 @@ function initMap() {
       "mouseout",
       makeOutListener(infowindow.value)
     );
+
+    let selectedMarker = null;
+    const attractionStore = useAttractionStore();
+    const locationStore = useLocation();
+    kakao.maps.event.addListener(marker, "click", function () {
+      // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
+      // 마커의 이미지를 클릭 이미지로 변경합니다
+
+      if (!selectedMarker || selectedMarker !== marker) {
+        // 클릭된 마커 객체가 null이 아니면
+        // 클릭된 마커의 이미지를 기본 이미지로 변경하고
+        // !!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+        // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+        // marker.setImage(clickImage);
+
+        console.log(i);
+        console.log(selectedLocation);
+      }
+
+      // attractionStore.showModal(selectedLocation);
+
+      // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+      selectedMarker = marker;
+    });
   }
 
   // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
@@ -129,25 +158,6 @@ function initMap() {
       infowindow.close();
     };
   }
-
-  let selectedMarker = null;
-  const attractionStore = useAttractionStore();
-  const locationStore = useLocation();
-  kakao.maps.event.addListener(marker, "click", function () {
-    // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
-    // 마커의 이미지를 클릭 이미지로 변경합니다
-
-    if (!selectedMarker || selectedMarker !== marker) {
-      // 클릭된 마커 객체가 null이 아니면
-      // 클릭된 마커의 이미지를 기본 이미지로 변경하고
-      // !!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
-      // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-      // marker.setImage(clickImage);
-    }
-
-    // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
-    selectedMarker = marker;
-  });
 }
 
 // const categoryStore = useCategoryStore();
@@ -163,8 +173,8 @@ watch(
 
 watch(
   () => locationStore.location,
-  (newLocation) => {
-    console.log(newLocation);
+  () => {
+    // console.log(newLocation);
     initMap();
   },
   { deep: true }
