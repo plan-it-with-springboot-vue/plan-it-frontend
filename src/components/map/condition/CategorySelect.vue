@@ -64,8 +64,8 @@ watch(
   (newVal) => {
     categoryStore.addCategoryCondition(
       newVal.map((cat) => cat.code),
-      categoryStore.selectedCategory.sido_code,
-      categoryStore.selectedCategory.gugun_code
+      categoryStore.selectedCategory.sidoCode,
+      categoryStore.selectedCategory.gugunCode
     );
   }
 );

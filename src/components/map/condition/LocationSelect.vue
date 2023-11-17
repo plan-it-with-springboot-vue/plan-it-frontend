@@ -3,8 +3,8 @@
     <div>
       <select v-model="selectedSido" @change="updateSidoOptions">
         <option disabled value="">시도</option>
-        <option v-for="sido in sidos" :key="sido.sido_code" :value="sido">
-          {{ sido.sido_name }}
+        <option v-for="sido in sidos" :key="sido.sidoCode" :value="sido">
+          {{ sido.sidoName }}
         </option>
       </select>
     </div>
@@ -13,10 +13,10 @@
         <option value="" disabled>구군</option>
         <option
           v-for="gugun in filteredGuguns"
-          :key="gugun.gugun_code"
+          :key="gugun.gugunCode"
           :value="gugun"
         >
-          {{ gugun.gugun_name }}
+          {{ gugun.gugunName }}
         </option>
       </select>
     </div>
@@ -28,20 +28,20 @@ import { ref, computed } from "vue";
 import { useCategoryStore } from "../../../stores/store";
 
 const sidos = [
-  { sido_code: 0, sido_name: "전체" },
-  { sido_code: 1, sido_name: "서울" },
-  { sido_code: 2, sido_name: "인천" },
-  { sido_code: 3, sido_name: "대전" },
-  { sido_code: 4, sido_name: "대구" },
+  { sidoCode: 0, sidoName: "전체" },
+  { sidoCode: 1, sidoName: "서울" },
+  { sidoCode: 2, sidoName: "인천" },
+  { sidoCode: 3, sidoName: "대전" },
+  { sidoCode: 4, sidoName: "대구" },
 ];
 
 const guguns = [
-  { gugun_code: 0, gugun_name: "전체", sido_code: 0 },
-  { gugun_code: 1, gugun_name: "강남구", sido_code: 1 },
-  { gugun_code: 2, gugun_name: "강동구", sido_code: 1 },
-  { gugun_code: 1, gugun_name: "강화군", sido_code: 2 },
-  { gugun_code: 2, gugun_name: "계양구", sido_code: 2 },
-  { gugun_code: 3, gugun_name: "미추홀구", sido_code: 2 },
+  { gugunCode: 0, gugunName: "전체", sidoCode: 0 },
+  { gugunCode: 1, gugunName: "강남구", sidoCode: 1 },
+  { gugunCode: 2, gugunName: "강동구", sidoCode: 1 },
+  { gugunCode: 1, gugunName: "강화군", sidoCode: 2 },
+  { gugunCode: 2, gugunName: "계양구", sidoCode: 2 },
+  { gugunCode: 3, gugunName: "미추홀구", sidoCode: 2 },
 ];
 
 const selectedSido = ref("");
@@ -50,7 +50,7 @@ const selectedGugun = ref("");
 const filteredGuguns = computed(() => {
   if (selectedSido.value) {
     return guguns.filter(
-      (gugun) => gugun.sido_code === selectedSido.value.sido_code
+      (gugun) => gugun.sidoCode === selectedSido.value.sidoCode
     );
   }
   return [];
@@ -63,17 +63,17 @@ const updateSidoOptions = () => {
   selectedGugun.value = ""; // 선택된 구군 초기화
 
   categoryStore.addCategoryCondition(
-    categoryStore.selectedCategory.content_type_id,
-    selectedSido.value.sido_code,
-    selectedGugun.value.gugun_code
+    categoryStore.selectedCategory.contentTypeId,
+    selectedSido.value.sidoCode,
+    selectedGugun.value.gugunCode
   );
 };
 
 const updateGugunOptions = () => {
   categoryStore.addCategoryCondition(
-    categoryStore.selectedCategory.content_type_id,
-    selectedSido.value.sido_code,
-    selectedGugun.value.gugun_code
+    categoryStore.selectedCategory.contentTypeId,
+    selectedSido.value.sidoCode,
+    selectedGugun.value.gugunCode
   );
 };
 </script>

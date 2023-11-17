@@ -5,8 +5,8 @@
 </template>
 
 <script setup>
-import { toRaw, ref, onMounted } from "vue";
-import { useMapStore } from "../../stores/store";
+import { toRaw, ref, onMounted, watch } from "vue";
+import { useLocation, useMapStore } from "../../stores/store";
 
 const mapStore = useMapStore();
 
@@ -39,13 +39,25 @@ function initMap() {
   const container = document.getElementById("map");
   const selectedLocation = mapStore.selectedLocation;
 
-  const options = {
-    center: new kakao.maps.LatLng(
-      selectedLocation[2].latitude,
-      selectedLocation[2].longitude
-    ), // 지도의 중심좌표
-    level: 8, // 지도의 확대 레벨
-  };
+  let options;
+
+  if (locationStore.location) {
+    options = {
+      center: new kakao.maps.LatLng(
+        locationStore.location.latitude,
+        locationStore.location.longitude
+      ), // 지도의 중심좌표
+      level: 2, // 지도의 확대 레벨
+    };
+  } else {
+    options = {
+      center: new kakao.maps.LatLng(
+        selectedLocation[2].latitude,
+        selectedLocation[2].longitude
+      ), // 지도의 중심좌표
+      level: 12, // 지도의 확대 레벨
+    };
+  }
 
   //지도 객체를 등록합니다.
   //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
@@ -118,6 +130,26 @@ function initMap() {
     };
   }
 }
+
+// const categoryStore = useCategoryStore();
+const locationStore = useLocation();
+watch(
+  () => mapStore.selectedLocation,
+  (newMap) => {
+    console.log(newMap);
+    initMap();
+  },
+  { deep: true }
+);
+
+watch(
+  () => locationStore.location,
+  (newLocation) => {
+    console.log(newLocation);
+    initMap();
+  },
+  { deep: true }
+);
 
 onMounted(() => {
   //여기서 kakao 맵을 화면에 반영합니다.

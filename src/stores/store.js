@@ -44,12 +44,7 @@ const useMapStore = defineStore("map", {
 
 const useLocation = defineStore("location", {
   state: () => ({
-    location: {
-      title: "임시 데이터",
-      addr1: "임시 주소",
-      latitude: 36.87884469,
-      longitude: 128.4391216,
-    },
+    location: null,
   }),
   actions: {
     selectLocation(attraction) {
@@ -66,17 +61,17 @@ const useLocation = defineStore("location", {
 const useCategoryStore = defineStore("category", {
   state: () => ({
     selectedCategory: {
-      content_type_id: [12, 14, 15, 25, 28, 32, 38, 39],
-      sido_code: 0,
-      gugun_code: 0,
+      contentTypeId: [12, 14, 15, 25, 28, 32, 38, 39],
+      sidoCode: 0,
+      gugunCode: 0,
     },
   }), // 0은 전체를 뜻함 // 12: 관광지, 14: 문화시설, 15: 축제공연행사, 25: 여행코스, 28: 레포츠, 32: 숙박, 38: 쇼핑, 39: 음식점
   actions: {
     addCategoryCondition(types, sido, gugun) {
       this.selectedCategory = {
-        content_type_id: types,
-        sido_code: sido || 0,
-        gugun_code: gugun || 0,
+        contentTypeId: types,
+        sidoCode: sido || 0,
+        gugunCode: gugun || 0,
       };
     },
   },

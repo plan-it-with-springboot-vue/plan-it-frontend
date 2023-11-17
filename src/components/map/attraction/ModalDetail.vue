@@ -8,10 +8,7 @@
 
       <!-- <p>content_id: {{ attractionStore.selectedAttraction.content_id }}</p> -->
       <div id="img-des">
-        <img
-          :src="`${attractionStore.selectedAttraction.first_image}`"
-          alt=""
-        />
+        <img :src="`${attractionStore.selectedAttraction.firstImage}`" alt="" />
         <div class="scrollable-container">
           <div id="des">
             <p>{{ description.overview }}</p>

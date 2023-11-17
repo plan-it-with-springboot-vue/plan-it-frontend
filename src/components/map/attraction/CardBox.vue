@@ -1,14 +1,14 @@
 <template>
   <div class="scrollable-container">
     <hr />
-    <div v-for="attractionItem in attraction" :key="attractionItem.content_id">
+    <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
       <div class="attraction-card">
         <div>
           <!-- <img
             :src="`/src/assets/image/${attractionItem.first_image}.png`"
             alt=""
           /> -->
-          <img :src="`${attractionItem.first_image}`" alt="" />
+          <img :src="`${attractionItem.firstImage}`" alt="" />
         </div>
         <div class="attraction-card-content">
           <div>
@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="line">
-            <LikeVue
+            <!-- <LikeVue
               class="like-svg"
               v-if="!attractionItem.isLike"
               @click="toggleLike(attractionItem)"
@@ -36,7 +36,7 @@
               v-else
               @click="toggleLike(attractionItem)"
             />
-            <span class="like-number">{{ attractionItem.like }}</span>
+            <span class="like-number">{{ attractionItem.like }}</span> -->
           </div>
         </div>
       </div>
@@ -49,19 +49,21 @@
 import { ref, watch } from "vue";
 import LikeVue from "../../../assets/svg/Like.vue";
 import LikeRedVue from "../../../assets/svg/LikeRed.vue";
+import axios from "axios";
 import {
   useAttractionStore,
   useCategoryStore,
+  useLocation,
   useMapStore,
 } from "../../../stores/store";
 
 const attraction = ref([
   {
-    content_id: 125266,
-    content_type_id: 12,
+    contentId: 125266,
+    contentTypeId: 12,
     title: "국립 청태산자연휴양림",
     addr1: "강원도 횡성군 둔내면",
-    first_image:
+    firstImage:
       "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
     latitude: 38.51112664,
     longitude: 128.4191502,
@@ -69,11 +71,11 @@ const attraction = ref([
     isLike: false, // 로그인된 정보로 동작하게 바꿔야함
   },
   {
-    content_id: 125677,
-    content_type_id: 12,
+    contentId: 125677,
+    contentTypeId: 12,
     title: "무릉계곡",
     addr1: "강원도 동해시 삼화로 538",
-    first_image:
+    firstImage:
       "http://tong.visitkorea.or.kr/cms/resource/88/1955788_image2_1.jpg",
     latitude: 38.47884469,
     longitude: 128.4391216,
@@ -81,11 +83,11 @@ const attraction = ref([
     isLike: false,
   },
   {
-    content_id: 125782,
-    content_type_id: 12,
+    contentId: 125782,
+    contentTypeId: 12,
     title: "고석정국민관광지",
     addr1: "강원도 철원군",
-    first_image:
+    firstImage:
       "http://tong.visitkorea.or.kr/cms/resource/62/219162_image2_1.jpg",
     latitude: 38.44084943,
     longitude: 128.4547464,
@@ -93,59 +95,11 @@ const attraction = ref([
     isLike: false,
   },
   {
-    content_id: 125266,
-    content_type_id: 12,
+    contentId: 125266,
+    contentTypeId: 12,
     title: "국립 청태산자연휴양림",
     addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/83/1070183_image2_1.jpg",
-    latitude: 38.34028704,
-    longitude: 128.4999566,
-    like: 22,
-    isLike: false,
-  },
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-    latitude: 38.51112664,
-    longitude: 128.4191502,
-    like: 12,
-    isLike: false, // 로그인된 정보로 동작하게 바꿔야함
-  },
-  {
-    content_id: 125677,
-    content_type_id: 12,
-    title: "무릉계곡",
-    addr1: "강원도 동해시 삼화로 538",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/88/1955788_image2_1.jpg",
-    latitude: 38.47884469,
-    longitude: 128.4391216,
-    like: 8,
-    isLike: false,
-  },
-  {
-    content_id: 125782,
-    content_type_id: 12,
-    title: "고석정국민관광지",
-    addr1: "강원도 철원군",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/62/219162_image2_1.jpg",
-    latitude: 38.44084943,
-    longitude: 128.4547464,
-    like: 5,
-    isLike: false,
-  },
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
+    firstImage:
       "http://tong.visitkorea.or.kr/cms/resource/83/1070183_image2_1.jpg",
     latitude: 38.34028704,
     longitude: 128.4999566,
@@ -156,9 +110,13 @@ const attraction = ref([
 
 const attractionStore = useAttractionStore();
 
+const locationStore = useLocation();
+
 const showModal = (attractionItem) => {
   console.log("click");
   attractionStore.showModal(attractionItem);
+
+  locationStore.selectLocation(attractionItem);
 };
 
 const toggleLike = (attractionItem) => {
@@ -179,6 +137,27 @@ watch(
   () => categoryStore.selectedCategory,
   (newVal) => {
     console.log("Selected Category changed:", newVal);
+
+    const { contentTypeId, sidoCode, gugunCode } = newVal;
+
+    // Axios를 사용하여 API 호출
+    const BASE_URL = process.env.VUE_APP_BASE_URL;
+    axios
+      .get(`${BASE_URL}/attraction/list`, {
+        params: {
+          sidoCode: sidoCode,
+          gugunCode: gugunCode,
+          contentTypeId: contentTypeId.join(","),
+        },
+      })
+      .then((response) => {
+        // console.log("API Response:", response.data);
+        attraction.value = response.data;
+        mapStore.addAttractionList(attraction.value);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
   }
 );
 </script>
