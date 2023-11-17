@@ -17,6 +17,17 @@ const useAttractionStore = defineStore("attraction", {
   },
 });
 
+const useFavoriteStores = defineStore("favorites", {
+  state: () => ({
+    favorites: [],
+  }),
+  actions: {
+    addFavorites(favorites) {
+      this.favorites = favorites;
+    },
+  },
+});
+
 const useMapStore = defineStore("map", {
   state: () => ({
     selectedLocation: [
@@ -142,4 +153,5 @@ export {
   usePlanStore,
   useDateStore,
   useLocation,
+  useFavoriteStores,
 };
