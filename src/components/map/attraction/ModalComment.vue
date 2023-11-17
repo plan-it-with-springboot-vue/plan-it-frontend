@@ -10,7 +10,7 @@
         <span id="timestamp">{{ commentItem.registerTime }}</span>
       </div>
     </div>
-    <hr />
+    <!-- <hr /> -->
   </div>
 </template>
 
@@ -51,6 +51,8 @@ watch(
 #comment-container {
   display: flex;
   margin: 1.3rem 0.4rem;
+  background-color: #6499e917;
+  border-radius: 0.3rem;
 }
 span {
   color: #8c8c8c;

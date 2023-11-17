@@ -1,6 +1,5 @@
 <template>
   <div class="scrollable-container">
-    <hr />
     <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
       <div class="attraction-card">
         <div>
