@@ -1,8 +1,9 @@
 <template>
   <div id="container">
     <div id="search-condition-container">
+      <h3>장소 고르기</h3>
       <LocationSelectVue />
-      <KeywordSearchVue />
+      <!-- <KeywordSearchVue /> -->
       <CategorySelectVue />
     </div>
   </div>
@@ -15,12 +16,18 @@ import CategorySelectVue from "./CategorySelect.vue";
 </script>
 
 <style scoped>
+h3 {
+  text-align: center;
+  font-size: 1.25rem;
+  /* color: #6499e9; */
+}
 #container {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 30vh;
+  /* height: 30vh; */
   margin-top: 3.75rem;
+  width: 20.8125rem;
   /* height: 12.8125rem; */
   /* width: 100vw; */
 }
@@ -28,11 +35,11 @@ import CategorySelectVue from "./CategorySelect.vue";
 #search-condition-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   /* width: 20.8125rem; */
   width: 18.4375rem;
-  height: 8.3125rem;
-  margin: 2.56rem 0;
+  /* height: 8.3125rem; */
+  margin: 1.56rem 0;
 }
 hr {
   width: 20.8125rem;

@@ -40,11 +40,13 @@ const description = ref({
 <style scoped>
 h3 {
   font-size: 1.25rem;
+  margin: 1.5rem 0rem 0.5rem 0rem;
 }
 span {
   color: #8c8c8c;
   font-size: 1rem;
   margin-left: 1rem;
+  margin-bottom: 1rem;
 }
 p {
   font-size: 1rem;
@@ -52,26 +54,32 @@ p {
   margin: 0;
 }
 img {
+  display: flex;
   margin-right: 2rem;
   border-radius: 1rem;
-  width: 22rem;
+  width: 20.8125rem;
+  max-height: 15rem;
 }
 #container {
-  padding: 2rem;
+  /* padding: 1rem; */
 }
 
 #des-container {
   display: flex;
   flex-direction: column;
-  width: rem;
+  /* width: rem; */
 }
 #title-addr1 {
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 #img-des {
   display: flex;
-  height: 15rem;
+  flex-direction: column;
+  height: 24rem;
+  justify-content: center;
+  align-content: center;
 }
 #des {
   /* background-color: #6499e916; */

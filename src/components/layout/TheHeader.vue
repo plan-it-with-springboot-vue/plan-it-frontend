@@ -29,7 +29,7 @@ header {
   box-shadow: 0 2px 2px -2px #c8c8c8;
   position: fixed;
   background: #fff;
-  z-index: 4;
+  z-index: 7;
   width: 100%;
   padding: 0 20px;
 }
