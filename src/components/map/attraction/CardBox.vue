@@ -70,66 +70,17 @@ import {
   useMapStore,
 } from "../../../stores/store";
 
-const attraction = ref([
-  {
-    contentId: 125266,
-    contentTypeId: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    firstImage:
-      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-    latitude: 38.51112664,
-    longitude: 128.4191502,
-    like: 12,
-    isLike: false, // 로그인된 정보로 동작하게 바꿔야함
-  },
-  {
-    contentId: 125677,
-    contentTypeId: 12,
-    title: "무릉계곡",
-    addr1: "강원도 동해시 삼화로 538",
-    firstImage:
-      "http://tong.visitkorea.or.kr/cms/resource/88/1955788_image2_1.jpg",
-    latitude: 38.47884469,
-    longitude: 128.4391216,
-    like: 8,
-    isLike: false,
-  },
-  {
-    contentId: 125782,
-    contentTypeId: 12,
-    title: "고석정국민관광지",
-    addr1: "강원도 철원군",
-    firstImage:
-      "http://tong.visitkorea.or.kr/cms/resource/62/219162_image2_1.jpg",
-    latitude: 38.44084943,
-    longitude: 128.4547464,
-    like: 5,
-    isLike: false,
-  },
-  {
-    contentId: 125266,
-    contentTypeId: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    firstImage:
-      "http://tong.visitkorea.or.kr/cms/resource/83/1070183_image2_1.jpg",
-    latitude: 38.34028704,
-    longitude: 128.4999566,
-    like: 22,
-    isLike: false,
-  },
-]);
+const attraction = ref([]);
 
 const attractionStore = useAttractionStore();
 
 const locationStore = useLocation();
 
 const showModal = (attractionItem) => {
-  console.log("click");
+  locationStore.selectLocation(attractionItem);
   attractionStore.showModal(attractionItem);
 
-  locationStore.selectLocation(attractionItem);
+  console.log(attractionStore.selectedAttraction);
 };
 
 const toggleLike = (attractionItem) => {
@@ -154,9 +105,9 @@ watch(
     const { contentTypeId, sidoCode, gugunCode } = newVal;
 
     // Axios를 사용하여 API 호출
-    const BASE_URL = process.env.VUE_APP_BASE_URL;
+    // const BASE_URL = process.env.VUE_APP_BASE_URL;
     axios
-      .get(`${BASE_URL}/attraction/list`, {
+      .get(`/attraction/list`, {
         params: {
           sidoCode: sidoCode,
           gugunCode: gugunCode,
@@ -164,7 +115,7 @@ watch(
         },
       })
       .then((response) => {
-        console.log("API Response:", response.data);
+        // console.log("API Response:", response.data);
         if (Array.isArray(response.data) && response.data.length === 0) {
           attraction.value = [
             {
@@ -177,7 +128,6 @@ watch(
               longitude: 128.4191502,
             },
           ];
-          console.log("gdsags");
         } else {
           attraction.value = response.data;
         }
