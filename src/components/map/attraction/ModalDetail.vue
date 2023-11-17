@@ -27,14 +27,33 @@
 <script setup>
 import { useAttractionStore } from "../../../stores/store";
 import ModalComment from "./ModalComment.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import axios from "axios";
 
 const attractionStore = useAttractionStore();
 const description = ref({
-  content_id: 125266,
-  overview:
-    "바탕으로 한 국유림 경영 시범단지로서 숲속에는 온갖 야생 동식물이 고루 서식하고 있어 자연박물관을 찾은 기분을 느낄 수 있다. 영동고속도로 신갈기점 강릉방향 128km 지점에 위치하고 있어 여름철 동해안 피서객들이 잠시 쉬었다 가기에 편리하고, 청소년의 심신수련을 위한 숲속교실도 설치되어 있으며 울창한 잣나무 숲속의 산림욕장은 한번왔다간 사람은 누구나 매료되어 찾는 곳이기도 하다.,",
+  content_id: 0,
+  overview: "",
 });
+watch(
+  () => attractionStore.selectedAttraction,
+  () => {
+    axios
+      .get(`http://localhost/attraction/view`, {
+        params: {
+          contentId: attractionStore.selectedAttraction.contentId,
+        },
+      })
+      .then((response) => {
+        description.value = response.data;
+        // console.log(description);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>
