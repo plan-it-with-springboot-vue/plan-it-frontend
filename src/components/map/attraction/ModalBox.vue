@@ -1,5 +1,5 @@
 <template>
-  <div class="black-bg" v-if="attractionStore.modalVisible" @click="closeModal">
+  <div class="black-bg">
     <div class="white-bg" @click.stop>
       <div class="close-button" @click="closeModal"><CloseButton /></div>
       <ModalDetail />
@@ -25,29 +25,29 @@ div {
 }
 .black-bg {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
   position: fixed;
-  padding: 20px;
+  /* padding: 20px; */
   z-index: 6;
+  padding-top: 3.75rem;
 }
 .white-bg {
-  width: 60vw;
-  height: 56rem;
-  background: white;
-  border-radius: 8px;
-  padding: 30px;
-  position: relative;
+  width: 25.8125rem;
+  /* height: 56rem; */
+  /* background: white; */
+  /* border-radius: 8px; */
+  /* padding: 1rem; */
+  /* position: relative; */
+  background-color: white;
   z-index: 6;
 }
 
 .close-button {
   cursor: pointer;
   position: absolute;
-  right: 30px;
-  top: 30px;
+  right: 20px;
+  top: 77px;
 }
 </style>

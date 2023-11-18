@@ -1,14 +1,16 @@
 <template>
-  <div class="scrollable-container">
-    <hr />
-    <div v-for="attractionItem in attraction" :key="attractionItem.content_id">
+  <div v-if="attraction.length === 0">
+    <p>검색 결과 없음</p>
+  </div>
+  <div v-else class="scrollable-container">
+    <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
       <div class="attraction-card">
         <div>
           <!-- <img
             :src="`/src/assets/image/${attractionItem.first_image}.png`"
             alt=""
           /> -->
-          <img :src="`${attractionItem.first_image}`" alt="" />
+          <img :src="`${attractionItem.firstImage}`" alt="" />
         </div>
         <div class="attraction-card-content">
           <div>
@@ -19,24 +21,81 @@
               {{ attractionItem.title }}
             </div>
             <div class="line">
-              <span class="attraction-card-category">관광지&nbsp;</span
-              ><span class="attraction-card-address">{{
+              <span
+                v-if="attractionItem.contentTypeId === 12"
+                class="attraction-card-category"
+                >관광지&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 14"
+                class="attraction-card-category"
+                >문화시설&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 15"
+                class="attraction-card-category"
+                >축제공연&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 25"
+                class="attraction-card-category"
+                >여행코스&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 28"
+                class="attraction-card-category"
+                >레포츠&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 32"
+                class="attraction-card-category"
+                >숙박&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 38"
+                class="attraction-card-category"
+                >쇼핑&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 39"
+                class="attraction-card-category"
+                >음식점&nbsp;</span
+              >
+              <span class="attraction-card-address">{{
                 attractionItem.addr1
               }}</span>
             </div>
           </div>
           <div class="line">
-            <LikeVue
-              class="like-svg"
-              v-if="!attractionItem.isLike"
-              @click="toggleLike(attractionItem)"
-            />
-            <LikeRedVue
-              class="like-svg"
-              v-else
-              @click="toggleLike(attractionItem)"
-            />
-            <span class="like-number">{{ attractionItem.like }}</span>
+            <div
+              v-if="!favoritesStore || favoritesStore.favorites.length === 0"
+            >
+              <LikeVue
+                class="like-svg"
+                @click="likeAttraction(attractionItem)"
+              />
+            </div>
+            <template v-else>
+              <div
+                v-if="
+                  favoritesStore.favorites.find(
+                    (item) => item.contentId === attractionItem.contentId
+                  )
+                "
+              >
+                <LikeRedVue
+                  class="like-svg"
+                  @click="deleteLike(attractionItem)"
+                />
+              </div>
+              <div v-else>
+                <LikeVue
+                  class="like-svg"
+                  @click="likeAttraction(attractionItem)"
+                />
+              </div>
+            </template>
+            <!-- <span class="like-number">{{ attractionItem.like }}</span> -->
           </div>
         </div>
       </div>
@@ -49,116 +108,26 @@
 import { ref, watch } from "vue";
 import LikeVue from "../../../assets/svg/Like.vue";
 import LikeRedVue from "../../../assets/svg/LikeRed.vue";
+import axios from "axios";
 import {
   useAttractionStore,
   useCategoryStore,
+  useFavoriteStores,
+  useLocation,
   useMapStore,
 } from "../../../stores/store";
 
-const attraction = ref([
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-    latitude: 38.51112664,
-    longitude: 128.4191502,
-    like: 12,
-    isLike: false, // 로그인된 정보로 동작하게 바꿔야함
-  },
-  {
-    content_id: 125677,
-    content_type_id: 12,
-    title: "무릉계곡",
-    addr1: "강원도 동해시 삼화로 538",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/88/1955788_image2_1.jpg",
-    latitude: 38.47884469,
-    longitude: 128.4391216,
-    like: 8,
-    isLike: false,
-  },
-  {
-    content_id: 125782,
-    content_type_id: 12,
-    title: "고석정국민관광지",
-    addr1: "강원도 철원군",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/62/219162_image2_1.jpg",
-    latitude: 38.44084943,
-    longitude: 128.4547464,
-    like: 5,
-    isLike: false,
-  },
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/83/1070183_image2_1.jpg",
-    latitude: 38.34028704,
-    longitude: 128.4999566,
-    like: 22,
-    isLike: false,
-  },
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-    latitude: 38.51112664,
-    longitude: 128.4191502,
-    like: 12,
-    isLike: false, // 로그인된 정보로 동작하게 바꿔야함
-  },
-  {
-    content_id: 125677,
-    content_type_id: 12,
-    title: "무릉계곡",
-    addr1: "강원도 동해시 삼화로 538",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/88/1955788_image2_1.jpg",
-    latitude: 38.47884469,
-    longitude: 128.4391216,
-    like: 8,
-    isLike: false,
-  },
-  {
-    content_id: 125782,
-    content_type_id: 12,
-    title: "고석정국민관광지",
-    addr1: "강원도 철원군",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/62/219162_image2_1.jpg",
-    latitude: 38.44084943,
-    longitude: 128.4547464,
-    like: 5,
-    isLike: false,
-  },
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/83/1070183_image2_1.jpg",
-    latitude: 38.34028704,
-    longitude: 128.4999566,
-    like: 22,
-    isLike: false,
-  },
-]);
+const attraction = ref([]);
 
 const attractionStore = useAttractionStore();
 
+const locationStore = useLocation();
+
 const showModal = (attractionItem) => {
-  console.log("click");
+  locationStore.selectLocation(attractionItem);
   attractionStore.showModal(attractionItem);
+
+  console.log(attractionStore.selectedAttraction);
 };
 
 const toggleLike = (attractionItem) => {
@@ -179,8 +148,76 @@ watch(
   () => categoryStore.selectedCategory,
   (newVal) => {
     console.log("Selected Category changed:", newVal);
+
+    const { contentTypeId, sidoCode, gugunCode } = newVal;
+
+    // Axios를 사용하여 API 호출
+    // const BASE_URL = process.env.VUE_APP_BASE_URL;
+    axios
+      .get(`/attraction/list`, {
+        params: {
+          sidoCode: sidoCode,
+          gugunCode: gugunCode,
+          contentTypeId: contentTypeId.join(","),
+        },
+      })
+      .then((response) => {
+        // console.log("API Response:", response.data);
+        if (Array.isArray(response.data) && response.data.length === 0) {
+          attraction.value = [];
+        } else {
+          attraction.value = response.data;
+        }
+        mapStore.addAttractionList(attraction.value);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
   }
 );
+
+const favoritesStore = useFavoriteStores();
+
+const likeAttraction = async (attractionItem) => {
+  try {
+    const response = await axios.post("http://localhost/attraction/like", {
+      userId: "ssafy",
+      contentId: attractionItem.contentId,
+    });
+
+    favoritesStore.favorites.push({
+      userId: "ssafy",
+      contentId: attractionItem.contentId,
+    });
+    // console.log(favoritesStore.favorites);
+  } catch (error) {
+    console.error("Error while liking the attraction:", error);
+  }
+};
+
+const deleteLike = async (attractionItem) => {
+  try {
+    const response = await axios
+      .delete(`http://localhost/attraction/like`, {
+        params: {
+          userId: "ssafy",
+          contentId: attractionItem.contentId,
+        },
+      })
+      .then((response) => {
+        favoritesStore.favorites = favoritesStore.favorites.filter(
+          (item) => item.contentId !== attractionItem.contentId
+        );
+
+        // console.log(favoritesStore.favorites);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+  } catch (error) {
+    console.error("Error while liking the attraction:", error);
+  }
+};
 </script>
 
 <style scoped>
@@ -188,7 +225,8 @@ watch(
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 20.8125rem;
+  /* width: 20.8125rem; */
+  width: 100%;
   height: 5.75rem;
   margin: 0.62rem 0rem;
 }
@@ -240,8 +278,8 @@ img {
   height: auto;
   overflow-y: auto;
   /* height: 34.5rem; */
-  height: 80vw;
-  width: 20vw;
+  /* height: 80vw; */
+  /* width: 20vw; */
   overflow-x: hidden;
 }
 .scrollable-container::-webkit-scrollbar {
