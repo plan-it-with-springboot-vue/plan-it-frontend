@@ -1,7 +1,7 @@
 <template>
   <div id="comment-input-container">
-    <textarea type="text"></textarea>
-    <button><p>등록</p></button>
+    <textarea v-model="commentInput" type="text"></textarea>
+    <button @click="submitComment"><p>등록</p></button>
   </div>
   <div v-for="(commentItem, index) in comment" :key="index">
     <div id="comment-container">
@@ -49,6 +49,29 @@ watch(
       });
   }
 );
+
+const commentInput = ref("");
+const submitComment = () => {
+  axios
+    .post("http://localhost/attraction/review/write", {
+      content: commentInput.value,
+      userId: "ssafy",
+      contentId: attractionStore.selectedAttraction.contentId,
+    })
+    .then((response) => {
+      comment.value.push({
+        content: commentInput.value,
+        userId: "ssafy",
+        contentId: attractionStore.selectedAttraction.contentId,
+        registerTime: Date(Date.now()),
+      });
+
+      commentInput.value = "";
+    })
+    .catch((error) => {
+      console.error("Error submitting comment:", error);
+    });
+};
 </script>
 
 <style scoped>
