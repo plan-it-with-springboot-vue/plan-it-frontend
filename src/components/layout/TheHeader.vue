@@ -5,17 +5,17 @@
         <img src="@/assets/image/plan-it-logo.png" alt="PLAN IT">
       </div>
       <ul>
-        <li>홈</li>
-        <li>여행 지도</li>
-        <li>계획 세우기</li>
-        <li>커뮤니티</li>
+        <li class="nav-content">홈</li>
+        <li class="nav-content">여행 지도</li>
+        <li class="nav-content">계획 세우기</li>
+        <li class="nav-content">커뮤니티</li>
       </ul>
       <ul>
-        <li v-if="!isLoggedIn">로그인</li>
+        <li class="nav-content-login" v-if="!isLoggedIn">로그인</li>
         <li v-if="!isLoggedIn">회원가입</li>
         <li v-else class="dropdown">
-          <div>
-            {{ userName }}님
+          <div id="nav-name-box">
+            <label id="nav-name">{{ userName }}님</label>
           </div>
           <div id="profile-img">
             <img src="@/assets/image/profile.png" alt="profile">
@@ -57,6 +57,14 @@ header {
   padding: 0 20px;
 }
 
+#nav-name-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#nav-name {
+  cursor: pointer;
+}
 #logo {
   display: flex;
   justify-content: center;
@@ -91,11 +99,17 @@ nav ul {
   margin: 0;
   padding: 0;
 }
+nav ul li{
+  cursor: pointer;
+}
 
-nav ul li {
-  align-items: center;
+.nav-content {
   margin-right: 3.61rem;
   cursor: pointer;
+}
+
+.nav-content-login {
+  margin-right: 1rem;
 }
 
 nav ul li:hover {

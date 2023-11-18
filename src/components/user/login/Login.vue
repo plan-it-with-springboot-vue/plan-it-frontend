@@ -22,14 +22,14 @@
                     <div id="login-etc-find">
                         <div>
                             <!-- 아이디 찾는 페이지로 이동 -->
-                            <a href="">아이디 찾기</a>
+                            <RouterLink to="/findid">아이디 찾기</RouterLink>
                         </div>
                         <div>
                             <label id="login-etc-find-line">|</label>
                         </div>
                         <div>
                             <!-- 비밀번호 찾는 페이지로 이동 -->
-                            <a href="">비밀번호 찾기</a>
+                            <RouterLink to="/findpass">비밀번호 찾기</RouterLink>
                         </div>
                     </div>
                 </div>
@@ -48,6 +48,7 @@
 <script setup>
 import { ref } from 'vue';
 // import axios from 'axios';
+import { useRouter } from 'vue-router';
 import LoginCheckIcon from "../../../assets/svg/LoginCheckIcon.vue";
 import LoginUncheckIcon from "../../../assets/svg/LoginUncheckIcon.vue";
 
@@ -56,6 +57,8 @@ const userId = ref('');
 const password = ref('');
 const isSaved = ref(false); // 아이디 저장 상태를 관리하는 반응형 데이터
 const loginFailed = ref(false); // 로그인 실패 상태 추가
+
+const router = useRouter();
 
 function toggleSaveState() {
     isSaved.value = !isSaved.value; // 클릭할 때마다 아이디 저장 상태를 토글

@@ -4,62 +4,65 @@
             <div class="sign-up-flex">
                 <label id="sign-up-label">회원가입</label>
             </div>
-            
-            <SignUpInput label="아이디" type="text" v-model="id"/>
-            <p v-if="fieldErrors.id" class="error-message">{{ fieldErrors.id }}</p>
-            <div id="sign-up-idcheck-box-btn">
-                <button id="sign-up-idcheck-btn">중복확인</button>
-            </div>
-            
-            <SignUpInput label="비밀번호" type="password" v-model="password" placeholder="특수문자를 포함한 8~15자리" />
-            <p v-if="fieldErrors.password" class="error-message">{{ fieldErrors.password }}</p>
 
-            <SignUpInput label="비밀번호 확인" type="password" v-model="password_check" placeholder="비밀번호를 다시 입력해주세요." />
-            <p v-if="fieldErrors.password_check" class="error-message">{{ fieldErrors.password_check }}</p>
-            
-            <SignUpInput label="이메일" type="email" v-model="email" placeholder="example@example.com" />
-            <p v-if="fieldErrors.email" class="error-message">{{ fieldErrors.email }}</p>
-            <div id="sign-up-email-box-btn">
-                <button id="sign-up-email-btn">확인</button>
-            </div>
-            
-            <SignUpInput label="인증번호" type="text" v-model="certification" placeholder="인증 번호를 입력해주세요." />
-            <p v-if="fieldErrors.certification" class="error-message">{{ fieldErrors.certification }}</p>
-            <div id="sign-up-certification-box-btn">
+            <form @submit.prevent="signUp">
+                <SignUpInput label="아이디" type="text" v-model="id"/>
+                <p v-if="fieldErrors.id" class="error-message">{{ fieldErrors.id }}</p>
+                <div id="sign-up-idcheck-box-btn">
+                    <button id="sign-up-idcheck-btn">중복확인</button>
+                </div>
+                
+                <SignUpInput label="비밀번호" type="password" v-model="password" placeholder="특수문자를 포함한 8~15자리" />
+                <p v-if="fieldErrors.password" class="error-message">{{ fieldErrors.password }}</p>
+    
+                <SignUpInput label="비밀번호 확인" type="password" v-model="password_check" placeholder="비밀번호를 다시 입력해주세요." />
+                <p v-if="fieldErrors.password_check" class="error-message">{{ fieldErrors.password_check }}</p>
+                
+                <SignUpInput label="이메일" type="email" v-model="email" placeholder="example@example.com" />
+                <p v-if="fieldErrors.email" class="error-message">{{ fieldErrors.email }}</p>
+                <div id="sign-up-email-box-btn">
+                    <button id="sign-up-email-btn">확인</button>
+                </div>
+                
+                <SignUpInput label="인증번호" type="text" v-model="certification" placeholder="인증 번호를 입력해주세요." />
+                <p v-if="fieldErrors.certification" class="error-message">{{ fieldErrors.certification }}</p>
+                <div id="sign-up-certification-box-btn">
+                    <div>
+                        <button id="sign-up-recertification-btn">재전송</button>
+                    </div>
+                    <div>
+                        <button id="sign-up-certification-btn">인증하기</button>
+                    </div>
+                </div>
+    
+                <SignUpInput label="이름" type="text" v-model="name"/>
+                <p v-if="fieldErrors.name" class="error-message">{{ fieldErrors.name }}</p>
+                
+                <SignUpInput label="전화번호" type="text" v-model="phonenumber" placeholder="'-' 구분 없이 입력" />
+                <p v-if="fieldErrors.phonenumber" class="error-message">{{ fieldErrors.phonenumber }}</p>
+                
+                <SignUpInput label="생년월일" type="text" v-model="birth" placeholder="ex) 20001225" />
+                <p v-if="fieldErrors.birth" class="error-message">{{ fieldErrors.birth }}</p>
+    
+                <div id="sign-up-gender-box">
+                    <div id="sign-up-gender-label">
+                        <label>성별</label>
+                    </div>
+                    <div>
+                        <form>
+                            <select id="sign-up-gender-select" v-model="gender" name="gender">
+                                <option value="male">남성</option>
+                                <option value="female">여성</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                
                 <div>
-                    <button id="sign-up-recertification-btn">재전송</button>
+                    <button id="sign-up-btn" type="submit">완료</button>
                 </div>
-                <div>
-                    <button id="sign-up-certification-btn">인증하기</button>
-                </div>
-            </div>
+            </form>
 
-            <SignUpInput label="이름" type="text" v-model="name"/>
-            <p v-if="fieldErrors.name" class="error-message">{{ fieldErrors.name }}</p>
-            
-            <SignUpInput label="전화번호" type="text" v-model="phonenumber" placeholder="'-' 구분 없이 입력" />
-            <p v-if="fieldErrors.phonenumber" class="error-message">{{ fieldErrors.phonenumber }}</p>
-            
-            <SignUpInput label="생년월일" type="text" v-model="birth" placeholder="ex) 20001225" />
-            <p v-if="fieldErrors.birth" class="error-message">{{ fieldErrors.birth }}</p>
-
-            <div id="sign-up-gender-box">
-                <div id="sign-up-gender-label">
-                    <label>성별</label>
-                </div>
-                <div>
-                    <form>
-                        <select id="sign-up-gender-select" v-model="gender" name="gender">
-                            <option value="male">남성</option>
-                            <option value="female">여성</option>
-                        </select>
-                    </form>
-                </div>
-            </div>
-
-            <div>
-                <button id="sign-up-btn" @click="submitSignUp">완료</button>
-            </div>
         </div>
     
     </div>
@@ -69,7 +72,7 @@
 // import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import SignUpInput from '../login/SignUpInputComponents.vue';
+import SignUpInput from '../login/InputComponents.vue';
 
 const name = ref('');
 const id = ref('');
@@ -121,13 +124,13 @@ const validateInput = () => {
 };
 
 //회원가입 API 연결
-const submitSignUp = async () => {
+const signUp = async () => {
     if (!validateInput()) {
         return;
     }
 
     try {
-        // const response = await axios.post('', {
+        // const response = await axios.post('https://example.com/api/signup', {
         //     id: id.value,
         //     password: password.value,
         //     name: name.value,
@@ -138,7 +141,7 @@ const submitSignUp = async () => {
         // });
         // console.log('회원가입 성공:', response.data);
         // 회원가입 성공 후 처리 로직 작성 (페이지 이동)
-        
+        console.log(id.value);
         router.push('/login');
     } catch (error) {
         console.error('회원가입 실패:', error);
@@ -258,7 +261,6 @@ const submitSignUp = async () => {
     border: 1px solid var(--main, #6499E9);
     background: var(--main, #6499E9);
     margin-top: 2.57rem;
-
 }
 .error-message {
     color: red;

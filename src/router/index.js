@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
+import FindIdView from "../views/FindIdView.vue";
+import FindPassView from "../views/FindPassView.vue";
+import FindIdResultView from "../views/FindIdResultView.vue";
+import FindPassResultView from "../views/FindPassResultView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +24,26 @@ const router = createRouter({
       path: "/signup",
       name: "signup",
       component: SignUpView,
+    },
+    {
+      path: "/findid",
+      name: "findid",
+      component: FindIdView,
+    },
+    {
+      path: "/findpass",
+      name: "findpass",
+      component: FindPassView,
+    },
+    {
+      path: "/findid/result",
+      name: "findidresult",
+      component: FindIdResultView,
+    },
+    {
+      path: "/findpass/result",
+      name: "findpassresult",
+      component: FindPassResultView,
     },
     {
       path: "/map",

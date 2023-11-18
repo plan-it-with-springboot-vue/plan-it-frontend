@@ -1,22 +1,21 @@
 <template>
     <TheHeader />
-    <div id="login-container">
+    <div id="find-id-container">
         <div> 
-            <Login />
+            <FindId />
         </div>
     </div>
     <TheFooter />
 </template>
 
 <script setup>
-import TheFooter from '../components/layout/TheFooter.vue';
 import TheHeader from '../components/layout/TheHeader.vue';
-import Login from "../components/user/login/Login.vue";
+import TheFooter from '../components/layout/TheFooter.vue';
+import FindId from "../components/user/login/FindId.vue";
 </script>
 
-
 <style scoped>
-#login-container {
+#find-id-container {
     display: flex;
     height: 100vh;
     justify-content: center;
