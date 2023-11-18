@@ -17,8 +17,9 @@ import SignUp from "../components/user/login/SignUp.vue";
 <style scoped>
 #sign-up-container {
     display: flex;
-    height: 93vh;
+    height: 100vh;
     justify-content: center;
     align-items: center;
+    margin-bottom: 60rem;
 }
 </style>
