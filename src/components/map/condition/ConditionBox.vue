@@ -1,9 +1,8 @@
 <template>
   <div id="container">
     <div id="search-condition-container">
-      <h3>장소 고르기</h3>
+      <h3>지역 고르기</h3>
       <LocationSelectVue />
-      <!-- <KeywordSearchVue /> -->
       <CategorySelectVue />
     </div>
   </div>
@@ -34,7 +33,8 @@ h3 {
   justify-content: center;
   /* height: 30vh; */
   margin-top: 3.75rem;
-  width: 20.8125rem;
+  /* width: 20.8125rem; */
+  width: 100%;
   /* height: 12.8125rem; */
   /* width: 100vw; */
 }
@@ -42,14 +42,13 @@ h3 {
 #search-condition-container {
   display: flex;
   flex-direction: column;
-  /* align-items: flex-start; */
-  /* width: 20.8125rem; */
-  width: 18.4375rem;
-  /* height: 8.3125rem; */
-  margin: 1.56rem 0;
+  /* width: 18.4375rem; */
+  width: 100%;
+  margin: 0.5rem 0;
 }
 hr {
-  width: 20.8125rem;
+  /* width: 20.8125rem; */
+  width: 100%;
   height: 0.03125rem;
   background-color: #c8c8c8;
   border: 0;

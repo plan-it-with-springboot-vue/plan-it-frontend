@@ -34,7 +34,7 @@ div {
   padding-top: 3.75rem;
 }
 .white-bg {
-  width: 23.8125rem;
+  width: 25.8125rem;
   /* height: 56rem; */
   /* background: white; */
   /* border-radius: 8px; */

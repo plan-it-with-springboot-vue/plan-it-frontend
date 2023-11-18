@@ -31,7 +31,7 @@ const attractionStore = useAttractionStore();
 const favoritesStore = useFavoriteStores();
 
 axios
-  .get(`${BASE_URL}/attraction/like`, {
+  .get(`http://localhost/attraction/like`, {
     params: {
       userId: "ssafy",
     },
@@ -50,10 +50,10 @@ axios
 #left-container {
   display: flex;
   /* padding-top: 3.75rem; */
-  width: 20.8125rem;
+  width: 25.8125rem;
   height: 100vh;
   /* width: 20vw; */
-  background-color: gray;
+  background-color: #808080;
 }
 #left-first {
   display: flex;

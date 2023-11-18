@@ -1,4 +1,8 @@
 <template>
+  <div id="comment-input-container">
+    <textarea type="text"></textarea>
+    <button><p>등록</p></button>
+  </div>
   <div v-for="(commentItem, index) in comment" :key="index">
     <div id="comment-container">
       <div id="profile"><ProfileImg /></div>
@@ -28,7 +32,7 @@ watch(
   () => attractionStore.selectedAttraction,
   () => {
     axios
-      .get(`/attraction/review`, {
+      .get(`http://localhost/attraction/review`, {
         params: {
           contentId: attractionStore.selectedAttraction.contentId,
         },
@@ -48,11 +52,40 @@ watch(
 </script>
 
 <style scoped>
+#comment-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  height: 7.25rem;
+  padding: 0 0.7rem;
+}
+textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  margin-bottom: 0.4rem;
+  box-sizing: border-box;
+}
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.0125rem;
+  height: 1.5125rem;
+  border-radius: 0.125rem;
+  background-color: #6499e9;
+  border: 0.5px solid #6499e9;
+  cursor: pointer;
+  color: white;
+}
 #comment-container {
   display: flex;
   margin: 1.3rem 0.4rem;
-  background-color: #6499e917;
-  border-radius: 0.3rem;
+  /* background-color: #6499e917; */
+  background-color: #f3f3f3;
+  border-radius: 0.5rem;
+  padding: 0.4rem;
 }
 span {
   color: #8c8c8c;
