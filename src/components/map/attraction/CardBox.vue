@@ -1,5 +1,8 @@
 <template>
-  <div class="scrollable-container">
+  <div v-if="attraction.length === 0">
+    <p>검색 결과 없음</p>
+  </div>
+  <div v-else class="scrollable-container">
     <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
       <div class="attraction-card">
         <div>
@@ -161,17 +164,7 @@ watch(
       .then((response) => {
         // console.log("API Response:", response.data);
         if (Array.isArray(response.data) && response.data.length === 0) {
-          attraction.value = [
-            {
-              contentId: 125266,
-              contentTypeId: 12,
-              title: "검색 결과 없음",
-              addr1: "",
-              firstImage: "",
-              latitude: 38.51112664,
-              longitude: 128.4191502,
-            },
-          ];
+          attraction.value = [];
         } else {
           attraction.value = response.data;
         }
@@ -187,7 +180,7 @@ const favoritesStore = useFavoriteStores();
 
 const likeAttraction = async (attractionItem) => {
   try {
-    const response = await axios.post("/attraction/like", {
+    const response = await axios.post("http://localhost/attraction/like", {
       userId: "ssafy",
       contentId: attractionItem.contentId,
     });
@@ -205,7 +198,7 @@ const likeAttraction = async (attractionItem) => {
 const deleteLike = async (attractionItem) => {
   try {
     const response = await axios
-      .delete(`/attraction/like`, {
+      .delete(`http://localhost/attraction/like`, {
         params: {
           userId: "ssafy",
           contentId: attractionItem.contentId,
@@ -232,7 +225,8 @@ const deleteLike = async (attractionItem) => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 20.8125rem;
+  /* width: 20.8125rem; */
+  width: 100%;
   height: 5.75rem;
   margin: 0.62rem 0rem;
 }
