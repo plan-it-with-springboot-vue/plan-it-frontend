@@ -27,7 +27,7 @@ const types = [
   { code: 38, name: "쇼핑" },
   { code: 28, name: "레포츠" },
   { code: 32, name: "숙박" },
-  { code: 15, name: "축제공연행사" },
+  { code: 15, name: "축제공연" },
   { code: 39, name: "음식점" },
 ];
 

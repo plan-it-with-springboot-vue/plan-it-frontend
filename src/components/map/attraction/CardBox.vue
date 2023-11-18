@@ -18,8 +18,47 @@
               {{ attractionItem.title }}
             </div>
             <div class="line">
-              <span class="attraction-card-category">관광지&nbsp;</span
-              ><span class="attraction-card-address">{{
+              <span
+                v-if="attractionItem.contentTypeId === 12"
+                class="attraction-card-category"
+                >관광지&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 14"
+                class="attraction-card-category"
+                >문화시설&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 15"
+                class="attraction-card-category"
+                >축제공연&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 25"
+                class="attraction-card-category"
+                >여행코스&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 28"
+                class="attraction-card-category"
+                >레포츠&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 32"
+                class="attraction-card-category"
+                >숙박&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 38"
+                class="attraction-card-category"
+                >쇼핑&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 39"
+                class="attraction-card-category"
+                >음식점&nbsp;</span
+              >
+              <span class="attraction-card-address">{{
                 attractionItem.addr1
               }}</span>
             </div>
