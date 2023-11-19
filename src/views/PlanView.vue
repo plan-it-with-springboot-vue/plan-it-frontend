@@ -6,14 +6,32 @@
       <div id="map-container"><PlanKakaoMap /></div>
       <RightBox />
     </div>
+    <button @click="sendPlan">완료</button>
   </div>
 </template>
 
 <script setup>
+import axios from "axios";
 import TheHeaderVue from "../components/layout/TheHeader.vue";
 import LeftBox from "../components/plan/left/LeftBox.vue";
 import PlanKakaoMap from "../components/plan/PlanKakaoMap.vue";
 import RightBox from "../components/plan/right/RightBox.vue";
+import { usePlanStore } from "../stores/store";
+
+const planStore = usePlanStore();
+
+const sendPlan = () => {
+  axios
+    .post("http://localhost/plan/make", planStore.plan)
+    .then((response) => {
+      // 성공적으로 전송된 경우의 로직
+      console.log("Plan sent successfully!", response.data);
+    })
+    .catch((error) => {
+      // 에러 발생 시 처리하는 로직
+      console.error("Error sending plan:", error);
+    });
+};
 </script>
 
 <style scoped>
@@ -23,6 +41,7 @@ import RightBox from "../components/plan/right/RightBox.vue";
   align-items: center;
   justify-content: center;
   padding-top: 5.8rem;
+  flex-direction: column;
 }
 #plan-container {
   display: flex;
