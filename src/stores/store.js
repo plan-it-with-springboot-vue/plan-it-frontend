@@ -126,6 +126,7 @@ const usePlanStore = defineStore("plan", {
           contentId: detailItem.contentId,
           planDate: detailItem.planDate,
           time: detailItem.time,
+          sequence: detailItem.sequence,
         })),
       };
     },

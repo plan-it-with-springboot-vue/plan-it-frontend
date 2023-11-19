@@ -1,14 +1,17 @@
 <template>
   <div class="scrollable-container">
     <hr />
-    <div v-for="attractionItem in attraction" :key="attractionItem.content_id">
+    <div
+      v-for="attractionItem in currentDatePlanDetail"
+      :key="attractionItem.contentId"
+    >
       <div class="attraction-card">
         <div>
           <!-- <img
             :src="`/src/assets/image/${attractionItem.first_image}.png`"
             alt=""
           /> -->
-          <img :src="`${attractionItem.first_image}`" alt="" />
+          <img :src="`${attractionItem.firstImage}`" alt="" />
         </div>
         <div class="attraction-card-content">
           <div>
@@ -47,20 +50,20 @@ import {
 
 const currentDatePlanDetail = ref([]);
 
-const attraction = ref([
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-    latitude: 38.51112664,
-    longitude: 128.4191502,
-    like: 12,
-    isLike: false, // 로그인된 정보로 동작하게 바꿔야함
-  },
-]);
+// const attraction = ref([
+//   {
+//     content_id: 125266,
+//     content_type_id: 12,
+//     title: "국립 청태산자연휴양림",
+//     addr1: "강원도 횡성군 둔내면",
+//     first_image:
+//       "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
+//     latitude: 38.51112664,
+//     longitude: 128.4191502,
+//     like: 12,
+//     isLike: false, // 로그인된 정보로 동작하게 바꿔야함
+//   },
+// ]);
 
 const attractionStore = useAttractionStore();
 
@@ -70,7 +73,7 @@ const showModal = (attractionItem) => {
 };
 
 const mapStore = useMapStore();
-mapStore.addAttractionList(attraction.value);
+mapStore.addAttractionList(currentDatePlanDetail.value);
 
 // 계획 추가
 const planStore = usePlanStore();
@@ -83,9 +86,26 @@ watch(
       (detailItem) => detailItem.planDate === dateStore.date
     );
 
-    currentDatePlanDetail.value = [...matchingAttractions];
+    currentDatePlanDetail.value = matchingAttractions;
     // console.log("attract plan box : ");
-    // console.log(currentDatePlanDetail.value);
+    console.log(currentDatePlanDetail.value);
+    // console.log(planStore.plan);
+  },
+  // watch는 shallow임!! deep으로 해주기
+  { deep: true }
+);
+
+watch(
+  () => dateStore.date,
+  () => {
+    const matchingAttractions = planStore.plan.planDetail.filter(
+      (detailItem) => detailItem.planDate === dateStore.date
+    );
+
+    currentDatePlanDetail.value = matchingAttractions;
+    // console.log("attract plan box : ");
+    console.log(currentDatePlanDetail.value);
+    // console.log(planStore.plan);
   },
   // watch는 shallow임!! deep으로 해주기
   { deep: true }
