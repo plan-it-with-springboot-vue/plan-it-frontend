@@ -48,7 +48,6 @@
 <script setup>
 import { ref } from 'vue';
 // import axios from 'axios';
-import { useRouter } from 'vue-router';
 import LoginCheckIcon from "../../../assets/svg/LoginCheckIcon.vue";
 import LoginUncheckIcon from "../../../assets/svg/LoginUncheckIcon.vue";
 
@@ -57,8 +56,6 @@ const userId = ref('');
 const password = ref('');
 const isSaved = ref(false); // 아이디 저장 상태를 관리하는 반응형 데이터
 const loginFailed = ref(false); // 로그인 실패 상태 추가
-
-const router = useRouter();
 
 function toggleSaveState() {
     isSaved.value = !isSaved.value; // 클릭할 때마다 아이디 저장 상태를 토글
