@@ -19,6 +19,7 @@
       <div id="attraction-search">
         <input
           type="text"
+          v-model="searchText"
           :disabled="selectedMenu === 2"
           :style="{
             'border-bottom':
@@ -26,13 +27,15 @@
                 ? '0.0625rem solid #c8c8c8'
                 : '0.0625rem solid #000',
           }"
-        /><SearchIcon class="svg" v-if="selectedMenu === 1" /><BlockSearchIcon
-          v-else
-        />
+        /><SearchIcon
+          class="svg"
+          v-if="selectedMenu === 1"
+          @click="searchAttraction"
+        /><BlockSearchIcon v-else />
       </div>
     </div>
 
-    <AttractionSearchBox v-if="selectedMenu === 1" />
+    <AttractionSearchBox v-if="selectedMenu === 1" :attraction="attraction" />
     <LikeBox v-else />
   </div>
 </template>
@@ -43,11 +46,30 @@ import AttractionSearchBox from "./AttractionSearchBox.vue";
 import BlockSearchIcon from "../../../assets/svg/BlockSearchIcon.vue";
 import LikeBox from "./LikeBox.vue";
 import { ref } from "vue";
+import axios from "axios";
 
 const selectedMenu = ref(1);
+const searchText = ref("");
+const attraction = ref([]);
 
 const selectMenu = (menu) => {
   selectedMenu.value = menu;
+};
+
+const searchAttraction = () => {
+  axios
+    .get("http://localhost/attraction/search", {
+      params: {
+        title: searchText.value,
+      },
+    })
+    .then((response) => {
+      attraction.value = response.data;
+      searchText.value = "";
+    })
+    .catch((error) => {
+      console.error("Error fetching attraction data:", error);
+    });
 };
 </script>
 
