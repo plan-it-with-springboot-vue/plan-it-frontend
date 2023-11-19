@@ -3,7 +3,7 @@
   <div class="flex-box">
     <div id="plan-container">
       <LeftBox />
-      <div id="map"><PlanKakaoMap /></div>
+      <div id="map-container"><PlanKakaoMap /></div>
       <RightBox />
     </div>
   </div>
@@ -32,7 +32,7 @@ import RightBox from "../components/plan/right/RightBox.vue";
   width: 87.375rem;
   box-shadow: 2px 2px 2px #c8c8c8;
 }
-#map {
+#map-container {
   /* width: 42.4375rem; */
   width: 100%;
   height: 40.4375rem;
