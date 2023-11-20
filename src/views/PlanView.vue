@@ -22,16 +22,20 @@ const planStore = usePlanStore();
 const dateStore = useDateStore();
 
 const sendPlan = () => {
-  axios
-    .post("http://localhost/plan/make", planStore.plan)
-    .then((response) => {
-      console.log("Plan sent successfully!", response.data);
-      planStore.plan = null;
-      dateStore.date = "";
-    })
-    .catch((error) => {
-      console.error("Error sending plan:", error);
-    });
+  if (planStore.plan?.planDetail) {
+    axios
+      .post("http://localhost/plan/make", planStore.plan)
+      .then((response) => {
+        console.log("Plan sent successfully!", response.data);
+        planStore.plan = null;
+        dateStore.date = "";
+      })
+      .catch((error) => {
+        console.error("Error sending plan:", error);
+      });
+  } else {
+    alert("계획을 만들어 주세요!!");
+  }
 };
 </script>
 
