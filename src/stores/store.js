@@ -107,13 +107,7 @@ const useCategoryStore = defineStore("category", {
 
 const usePlanStore = defineStore("plan", {
   state: () => ({
-    plan: {
-      title: "",
-      startSchedule: "",
-      endSchedule: "",
-      userId: "",
-      planDetail: [],
-    },
+    plan: null,
   }),
   actions: {
     addPlan(plan) {

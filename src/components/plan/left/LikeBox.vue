@@ -63,7 +63,11 @@
               }}</span>
             </div>
           </div>
+          <div v-if="!hasPlan" class="line" id="plus-svg">
+            <BlockPlusIcon />
+          </div>
           <div
+            v-else
             class="line"
             id="plus-svg"
             @click="clickPlusIcon(attractionItem)"
@@ -79,8 +83,9 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
+import BlockPlusIcon from "../../../assets/svg/BlockPlusIcon.vue";
 import {
   useDateStore,
   useMapStore,
@@ -126,11 +131,16 @@ axios
     // console.log("API Response:", response.data);
     favoritesStore.favorites = response.data;
     attraction.value = response.data;
-    console.log(response.data);
+    // console.log(response.data);
   })
   .catch((error) => {
     console.error("API Error:", error);
   });
+
+const hasPlan = computed(() => {
+  const plan = planStore.plan;
+  return plan ? Object.keys(plan).length > 0 : false;
+});
 </script>
 
 <style scoped>

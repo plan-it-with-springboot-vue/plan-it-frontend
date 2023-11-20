@@ -1,7 +1,14 @@
 <template>
   <div class="scrollable-container">
     <hr />
-    <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
+    <div v-if="!hasPlan">
+      <p>제목과 기간을 설정해주세요</p>
+    </div>
+    <div
+      v-else
+      v-for="attractionItem in props.attraction"
+      :key="attractionItem.contentId"
+    >
       <div class="attraction-card">
         <div>
           <!-- <img
@@ -79,14 +86,13 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps } from "vue";
+import { defineProps, computed } from "vue";
 import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
 import {
   useDateStore,
   useMapStore,
   usePlanStore,
   useLocation,
-  useAttractionStore,
 } from "../../../stores/store";
 
 const props = defineProps({
@@ -96,32 +102,13 @@ const props = defineProps({
   },
 });
 
-// const attraction = ref([
-//   {
-//     contentId: 125266,
-//     contentTypeId: 12,
-//     title: "국립 청태산자연휴양림",
-//     addr1: "강원도 횡성군 둔내면",
-//     firstImage:
-//       "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-//     latitude: 38.51112664,
-//     longitude: 128.4191502,
-//   },
-//   {
-//     contentId: 125677,
-//     contentTypeId: 12,
-//     title: "무릉계곡",
-//     addr1: "강원도 동해시 삼화로 538",
-//     firstImage:
-//       "http://tong.visitkorea.or.kr/cms/resource/88/1955788_image2_1.jpg",
-//     latitude: 38.47884469,
-//     longitude: 128.4391216,
-//   },
-// ]);
+const hasPlan = computed(() => {
+  const plan = planStore.plan;
+  return plan ? Object.keys(plan).length > 0 : false;
+});
 
 const mapStore = useMapStore();
 const locationStore = useLocation();
-const attractionStore = useAttractionStore();
 
 const showLocation = (attractionItem) => {
   locationStore.selectLocation(attractionItem);
@@ -148,6 +135,9 @@ const clickPlusIcon = (attractionItem) => {
 </script>
 
 <style scoped>
+p {
+  text-align: center;
+}
 .attraction-card {
   display: flex;
   flex-direction: row;
