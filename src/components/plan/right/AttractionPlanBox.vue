@@ -2,8 +2,8 @@
   <div class="scrollable-container">
     <hr />
     <div
-      v-for="attractionItem in currentDatePlanDetail"
-      :key="attractionItem.contentId"
+      v-for="detailItem in currentDatePlanDetail"
+      :key="detailItem.attraction.contentId"
     >
       <div class="attraction-card">
         <div>
@@ -11,20 +11,58 @@
             :src="`/src/assets/image/${attractionItem.first_image}.png`"
             alt=""
           /> -->
-          <img :src="`${attractionItem.firstImage}`" alt="" />
+          <img :src="`${detailItem.attraction.firstImage}`" alt="" />
         </div>
         <div class="attraction-card-content">
           <div>
             <div
               class="attraction-card-title line"
-              @click="showModal(attractionItem)"
+              @click="showLocation(detailItem)"
             >
-              {{ attractionItem.title }}
+              {{ detailItem.attraction.title }}
             </div>
             <div class="line">
-              <span class="attraction-card-category">관광지&nbsp;</span
+              <span
+                v-if="detailItem.attraction.contentTypeId === 12"
+                class="attraction-card-category"
+                >관광지&nbsp;</span
+              >
+              <span
+                v-else-if="detailItem.attraction.contentTypeId === 14"
+                class="attraction-card-category"
+                >문화시설&nbsp;</span
+              >
+              <span
+                v-else-if="detailItem.attraction.contentTypeId === 15"
+                class="attraction-card-category"
+                >축제공연&nbsp;</span
+              >
+              <span
+                v-else-if="detailItem.attraction.contentTypeId === 25"
+                class="attraction-card-category"
+                >여행코스&nbsp;</span
+              >
+              <span
+                v-else-if="detailItem.attraction.contentTypeId === 28"
+                class="attraction-card-category"
+                >레포츠&nbsp;</span
+              >
+              <span
+                v-else-if="detailItem.attraction.contentTypeId === 32"
+                class="attraction-card-category"
+                >숙박&nbsp;</span
+              >
+              <span
+                v-else-if="detailItem.attraction.contentTypeId === 38"
+                class="attraction-card-category"
+                >쇼핑&nbsp;</span
+              >
+              <span
+                v-else-if="detailItem.attraction.contentTypeId === 39"
+                class="attraction-card-category"
+                >음식점&nbsp;</span
               ><span class="attraction-card-address">{{
-                attractionItem.addr1
+                detailItem.attraction.addr1
               }}</span>
             </div>
           </div>
@@ -42,34 +80,20 @@
 import { ref, watch } from "vue";
 import TrashIconVue from "../../../assets/svg/TrashIcon.vue";
 import {
-  useAttractionStore,
   useMapStore,
   usePlanStore,
   useDateStore,
+  useLocation,
 } from "../../../stores/store";
 
 const currentDatePlanDetail = ref([]);
 
-// const attraction = ref([
-//   {
-//     content_id: 125266,
-//     content_type_id: 12,
-//     title: "국립 청태산자연휴양림",
-//     addr1: "강원도 횡성군 둔내면",
-//     first_image:
-//       "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-//     latitude: 38.51112664,
-//     longitude: 128.4191502,
-//     like: 12,
-//     isLike: false, // 로그인된 정보로 동작하게 바꿔야함
-//   },
-// ]);
+const locationStore = useLocation();
 
-const attractionStore = useAttractionStore();
-
-const showModal = (attractionItem) => {
+// 작동 안됨
+const showLocation = (attractionItem) => {
   console.log("click");
-  attractionStore.showModal(attractionItem);
+  locationStore.selectLocation(attractionItem);
 };
 
 const mapStore = useMapStore();

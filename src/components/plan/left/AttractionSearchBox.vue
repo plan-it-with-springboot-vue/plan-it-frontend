@@ -135,7 +135,7 @@ const clickPlusIcon = (attractionItem) => {
   const planDate = dateStore.date;
   const time = null;
 
-  planStore.addPlanDetail(attractionItem.contentId, planDate, time);
+  planStore.addPlanDetail(attractionItem, planDate, time);
 
   // console.log("attratSearhBox : ");
   // console.log(planStore.plan);

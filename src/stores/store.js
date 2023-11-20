@@ -123,7 +123,7 @@ const usePlanStore = defineStore("plan", {
         endSchedule: plan.endSchedule,
         userId: plan.userId,
         planDetail: plan.planDetail.map((detailItem) => ({
-          contentId: detailItem.contentId,
+          attraction: detailItem.attractionItem,
           planDate: detailItem.planDate,
           time: detailItem.time,
           sequence: detailItem.sequence,
@@ -131,11 +131,11 @@ const usePlanStore = defineStore("plan", {
       };
     },
 
-    addPlanDetail(contentId, planDate, time) {
+    addPlanDetail(attractionItem, planDate, time) {
       // plan의 planDetail에서 planDate를 찾아서 planDetail에 contentId 추가
       this.plan.planDetail.push({
-        contentId,
-        planDate,
+        attraction: attractionItem,
+        planDate: planDate,
         time: time,
       });
     },

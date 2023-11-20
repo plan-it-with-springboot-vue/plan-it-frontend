@@ -79,7 +79,7 @@
 
 <script setup>
 import axios from "axios";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
 import {
   useDateStore,
@@ -106,7 +106,7 @@ const clickPlusIcon = (attractionItem) => {
   const planDate = dateStore.date;
   const time = null;
 
-  planStore.addPlanDetail(attractionItem.contentId, planDate, time);
+  planStore.addPlanDetail(attractionItem, planDate, time);
 
   // 지도 마커를 위해 저장
   mapStore.addAttractionList([...mapStore.selectedLocation, attractionItem]);
