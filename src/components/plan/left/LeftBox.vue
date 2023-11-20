@@ -99,15 +99,16 @@ input {
 #left-box-container {
   display: flex;
   flex-direction: column;
-  width: 21.75rem;
+  width: 20.8125rem;
   height: 40.4375rem;
 }
 #menu-container {
-  padding: 0 1.44rem;
+  width: 20.8125rem;
 }
 #menu-btn-container {
   display: flex;
   justify-content: space-between;
+  padding: 0 1.94rem;
 }
 .menu-btn {
   display: flex;

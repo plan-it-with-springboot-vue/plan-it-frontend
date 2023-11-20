@@ -51,7 +51,7 @@ function initMap() {
         locationStore.location.latitude,
         locationStore.location.longitude
       ), // 지도의 중심좌표
-      level: 2, // 지도의 확대 레벨
+      level: 12, // 지도의 확대 레벨
     };
   } else {
     options = {

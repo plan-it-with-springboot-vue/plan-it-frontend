@@ -1,7 +1,12 @@
 <template>
-  <div id="input-container">
-    <input type="text" placeholder="제목을 입력해주세요" v-model="planTitle" />
-    <!-- <div id="check-svg">
+  <div id="title-date-container">
+    <div id="input-container">
+      <input
+        type="text"
+        placeholder="제목을 입력해주세요"
+        v-model="planTitle"
+      />
+      <!-- <div id="check-svg">
       <svg
         width="24"
         height="24"
@@ -18,80 +23,81 @@
         />
       </svg>
     </div> -->
-  </div>
-
-  <div class="date date-container" v-if="!isSelect">
-    <div class="svg">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M11.8667 12.8L10.6667 7.33333L13 5C14 4 14.3333 2.66667 14 2C13.3333 1.66667 12 2 11 3L8.66667 5.33333L3.2 4.13333C2.86667 4.06667 2.6 4.2 2.46667 4.46667L2.26667 4.8C2.13333 5.13333 2.2 5.46667 2.46667 5.66667L6 8L4.66667 10H2.66667L2 10.6667L4 12L5.33333 14L6 13.3333V11.3333L8 10L10.3333 13.5333C10.5333 13.8 10.8667 13.8667 11.2 13.7333L11.5333 13.6C11.8 13.4 11.9333 13.1333 11.8667 12.8Z"
-          stroke="black"
-          stroke-width="1.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
     </div>
-    <Datepicker
-      v-model="dp2From"
-      :ref="inputs.dp2From"
-      class="datepicker"
-      :locale="locale"
-      :weekStartsOn="0"
-      :inputFormat="inputFormat"
-      @focus="setOldValue($event.target.value)"
-      @update:modelValue="validateFromTo('from', 'dp2From', 'dp2To')"
-    />
-    <span>~</span>
-    <Datepicker
-      v-model="dp2To"
-      :ref="inputs.dp2To"
-      class="datepicker"
-      :locale="locale"
-      :weekStartsOn="0"
-      :inputFormat="inputFormat"
-      @focus="setOldValue($event.target.value)"
-      @update:modelValue="validateFromTo('to', 'dp2From', 'dp2To')"
-    />
-    <div id="confirm-btn" @click="addPlan"><p>선택</p></div>
-  </div>
 
-  <div v-else>
-    <div id="calender">
-      <!-- <div id="day-cnt"><p>Day1</p></div> -->
-      <div class="date-container">
-        <div class="svg">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M6 1.3335C6.36819 1.3335 6.66667 1.63197 6.66667 2.00016V2.66683H9.33333V2.00016C9.33333 1.63197 9.63181 1.3335 10 1.3335C10.3682 1.3335 10.6667 1.63197 10.6667 2.00016V2.66683H12.6667C13.403 2.66683 14 3.26378 14 4.00016V12.6668C14 13.4032 13.403 14.0002 12.6667 14.0002H3.33333C2.59695 14.0002 2 13.4032 2 12.6668V4.00016C2 3.26378 2.59695 2.66683 3.33333 2.66683H5.33333V2.00016C5.33333 1.63197 5.63181 1.3335 6 1.3335ZM5.33333 4.00016H3.33333V6.00016H12.6667V4.00016H10.6667V4.66683C10.6667 5.03502 10.3682 5.3335 10 5.3335C9.63181 5.3335 9.33333 5.03502 9.33333 4.66683V4.00016H6.66667V4.66683C6.66667 5.03502 6.36819 5.3335 6 5.3335C5.63181 5.3335 5.33333 5.03502 5.33333 4.66683V4.00016ZM12.6667 7.3335H3.33333V12.6668H12.6667V7.3335Z"
-              fill="black"
-            />
-          </svg>
+    <div class="date date-container" v-if="!isSelect">
+      <div class="svg">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11.8667 12.8L10.6667 7.33333L13 5C14 4 14.3333 2.66667 14 2C13.3333 1.66667 12 2 11 3L8.66667 5.33333L3.2 4.13333C2.86667 4.06667 2.6 4.2 2.46667 4.46667L2.26667 4.8C2.13333 5.13333 2.2 5.46667 2.46667 5.66667L6 8L4.66667 10H2.66667L2 10.6667L4 12L5.33333 14L6 13.3333V11.3333L8 10L10.3333 13.5333C10.5333 13.8 10.8667 13.8667 11.2 13.7333L11.5333 13.6C11.8 13.4 11.9333 13.1333 11.8667 12.8Z"
+            stroke="black"
+            stroke-width="1.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <Datepicker
+        v-model="dp2From"
+        :ref="inputs.dp2From"
+        class="datepicker"
+        :locale="locale"
+        :weekStartsOn="0"
+        :inputFormat="inputFormat"
+        @focus="setOldValue($event.target.value)"
+        @update:modelValue="validateFromTo('from', 'dp2From', 'dp2To')"
+      />
+      <span>~</span>
+      <Datepicker
+        v-model="dp2To"
+        :ref="inputs.dp2To"
+        class="datepicker"
+        :locale="locale"
+        :weekStartsOn="0"
+        :inputFormat="inputFormat"
+        @focus="setOldValue($event.target.value)"
+        @update:modelValue="validateFromTo('to', 'dp2From', 'dp2To')"
+      />
+      <div id="confirm-btn" @click="addPlan"><p>선택</p></div>
+    </div>
+
+    <div v-else>
+      <div id="calender">
+        <!-- <div id="day-cnt"><p>Day1</p></div> -->
+        <div class="date-container">
+          <div class="svg">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M6 1.3335C6.36819 1.3335 6.66667 1.63197 6.66667 2.00016V2.66683H9.33333V2.00016C9.33333 1.63197 9.63181 1.3335 10 1.3335C10.3682 1.3335 10.6667 1.63197 10.6667 2.00016V2.66683H12.6667C13.403 2.66683 14 3.26378 14 4.00016V12.6668C14 13.4032 13.403 14.0002 12.6667 14.0002H3.33333C2.59695 14.0002 2 13.4032 2 12.6668V4.00016C2 3.26378 2.59695 2.66683 3.33333 2.66683H5.33333V2.00016C5.33333 1.63197 5.63181 1.3335 6 1.3335ZM5.33333 4.00016H3.33333V6.00016H12.6667V4.00016H10.6667V4.66683C10.6667 5.03502 10.3682 5.3335 10 5.3335C9.63181 5.3335 9.33333 5.03502 9.33333 4.66683V4.00016H6.66667V4.66683C6.66667 5.03502 6.36819 5.3335 6 5.3335C5.63181 5.3335 5.33333 5.03502 5.33333 4.66683V4.00016ZM12.6667 7.3335H3.33333V12.6668H12.6667V7.3335Z"
+                fill="black"
+              />
+            </svg>
+          </div>
+          <Datepicker
+            v-model="dp2"
+            :ref="inputs.dp2"
+            class="datepicker"
+            :locale="locale"
+            :weekStartsOn="0"
+            :inputFormat="inputFormat"
+            :lower-limit="dp2From"
+            :upper-limit="dp2To"
+          />
         </div>
-        <Datepicker
-          v-model="dp2"
-          :ref="inputs.dp2"
-          class="datepicker"
-          :locale="locale"
-          :weekStartsOn="0"
-          :inputFormat="inputFormat"
-          :lower-limit="dp2From"
-          :upper-limit="dp2To"
-        />
       </div>
     </div>
   </div>
@@ -216,6 +222,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#title-date-container {
+  width: 20.8125rem;
+}
 input {
   width: 100%;
   padding: 1.2rem;
