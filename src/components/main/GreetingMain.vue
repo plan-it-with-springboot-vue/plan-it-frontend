@@ -54,7 +54,7 @@
   flex-shrink: 0;
   color: #fff;
   text-align: center;
-  font-family: Noto Sans;
+  /* font-family: Noto Sans; */
   font-size: 0.75rem;
   font-style: normal;
   line-height: 0;
@@ -65,7 +65,7 @@
   height: 7.5rem;
   flex-shrink: 0;
   color: #000;
-  font-family: Noto Sans;
+  /* font-family: Noto Sans; */
   font-size: 1.75rem;
   font-style: normal;
   font-weight: 600;

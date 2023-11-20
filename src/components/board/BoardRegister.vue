@@ -9,12 +9,12 @@
     <div id="board-register-content-box">
       <div id="board-register-title-input-box">
         <label class="board-register-input-label">제목</label>
-        <input class="board-register-input" placeholder="제목을 입력하세요." />
+        <input class="board-register-input" v-model="title" placeholder="제목을 입력하세요." />
       </div>
       <hr class="board-register-content-hr" />
       <div id="board-register-content-textarea-box">
         <label class="board-register-input-label">내용</label>
-        <textarea id="board-register-textarea" placeholder="내용을 입력하세요."></textarea>
+        <textarea id="board-register-textarea" v-model="content" placeholder="내용을 입력하세요."></textarea>
       </div>
       <hr class="board-register-content-hr" />
       <div id="board-register-file-box">
@@ -24,12 +24,43 @@
       <hr class="board-register-content-hr" />
     </div>
     <div id="board-register-btn-box">
-      <button id="board-register-btn">등록</button>
+      <button id="board-cancel-btn" @click="goToBoardList">취소</button>
+      <button id="board-register-btn" @click="registerPost">등록</button>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+// import axios from 'axios';
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const title = ref('');
+const content = ref('');
+
+// // 게시글 등록 함수
+// const registerPost = async () => {
+//   try {
+//     const response = await axios.post('YOUR_BACKEND_ENDPOINT', {
+//       title: title.value,
+//       content: content.value
+//     });
+//     // 요청 성공 후 처리 로직
+//     router.push('/board');
+//   } catch (error) {
+//     console.error('게시글 등록 실패:', error);
+//     // 에러 처리 로직
+//   }
+// };
+
+// 게시글 목록 페이지 경로로 이동
+const goToBoardList = () => {
+  if (confirm("게시글 작성을 취소하시겠습니까?")) {
+    router.push('/board');
+  }
+};
+</script>
 
 <style scoped>
 #board-register-box-container {
@@ -158,6 +189,20 @@
   justify-content: flex-end;
   align-items: center;
   margin-top: 1rem;
+}
+#board-cancel-btn {
+  width: 5.625rem;
+  height: 2.0625rem;
+  flex-shrink: 0;
+  border-radius: 0.3125rem;
+  background: var(--main, #C8C8C8);
+  border: none;
+  color: #fff;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 1rem;
 }
 #board-register-btn {
   width: 5.625rem;
