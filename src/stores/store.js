@@ -132,7 +132,6 @@ const usePlanStore = defineStore("plan", {
     },
 
     addPlanDetail(attractionItem, planDate, time) {
-      // plan의 planDetail에서 planDate를 찾아서 planDetail에 contentId 추가
       this.plan.planDetail.push({
         attraction: attractionItem,
         planDate: planDate,
@@ -141,13 +140,14 @@ const usePlanStore = defineStore("plan", {
     },
 
     deletePlanDetail(contentId, planDate) {
-      // plan의 planDetail에서 planDate를 찾아서 plandDetail에 contentId 삭제
-      const existingDetailIndex = this.plan.planDetail.findIndex(
-        (detailItem) => detailItem.planDate === planDate
+      const indexToRemove = this.plan.planDetail.findIndex(
+        (detailItem) =>
+          detailItem.planDate === planDate &&
+          detailItem.attraction.contentId === contentId
       );
 
-      if (existingDetailIndex !== -1) {
-        this.plan.planDetail.splice(existingDetailIndex, 1);
+      if (indexToRemove !== -1) {
+        this.plan.planDetail.splice(indexToRemove, 1);
       }
     },
   },

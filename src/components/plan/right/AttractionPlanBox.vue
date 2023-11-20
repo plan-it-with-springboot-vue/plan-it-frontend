@@ -67,7 +67,9 @@
             </div>
           </div>
           <div class="line" id="trash-svg">
-            <div><TrashIconVue /></div>
+            <div @click="deleteAttractionPlanCard(detailItem.attraction)">
+              <TrashIconVue />
+            </div>
           </div>
         </div>
       </div>
@@ -99,6 +101,12 @@ const showLocation = (attractionItem) => {
 const mapStore = useMapStore();
 mapStore.addAttractionList(currentDatePlanDetail.value);
 
+// 계획 관광지 카드 삭제
+const deleteAttractionPlanCard = (attractionItem) => {
+  planStore.deletePlanDetail(attractionItem.contentId, dateStore.date);
+  console.log("delete click");
+};
+
 // 계획 추가
 const planStore = usePlanStore();
 const dateStore = useDateStore();
@@ -113,7 +121,7 @@ watch(
     currentDatePlanDetail.value = matchingAttractions;
     // console.log("attract plan box : ");
     console.log(currentDatePlanDetail.value);
-    // console.log(planStore.plan);
+    console.log(planStore.plan);
   },
   // watch는 shallow임!! deep으로 해주기
   { deep: true }
@@ -128,8 +136,8 @@ watch(
 
     currentDatePlanDetail.value = matchingAttractions;
     // console.log("attract plan box : ");
-    console.log(currentDatePlanDetail.value);
-    // console.log(planStore.plan);
+    // console.log(currentDatePlanDetail.value);
+    console.log(planStore.plan);
   },
   // watch는 shallow임!! deep으로 해주기
   { deep: true }
