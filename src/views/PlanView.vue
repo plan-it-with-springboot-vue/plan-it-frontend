@@ -53,7 +53,8 @@ const sendPlan = () => {
 
   border-radius: 0.9125rem;
   border: 1.8px solid #eeeeee;
-  width: 87.375rem;
+  /* width: 108.375rem; */
+  width: 95%;
   box-shadow: 2px 2px 2px #c8c8c8;
 }
 #map-container {
