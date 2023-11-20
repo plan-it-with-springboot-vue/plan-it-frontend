@@ -28,7 +28,7 @@
             <ul>
               <li @click="navigateTo('/mypage')">마이페이지</li>
               <li @click="navigateTo('/mypage/planlist')">여행 일정 관리</li>
-              <li @click="navigateTo('/')">좋아요 목록</li>
+              <li @click="navigateTo('/')">관심 여행지</li>
             </ul>
           </div>
         </li>
@@ -41,7 +41,7 @@
 import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
-const isLoggedIn = ref(false); // 로그인 상태
+const isLoggedIn = ref(true); // 로그인 상태
 const userName = ref('김싸피'); // 사용자 이름
 const router = useRouter();
 const route = useRoute();
