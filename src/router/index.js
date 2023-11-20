@@ -8,6 +8,8 @@ import FindIdResultView from "../views/FindIdResultView.vue";
 import FindPassResultView from "../views/FindPassResultView.vue";
 import BoardView from "../views/BoardView.vue";
 import BoardDetailView from "../views/BoardDetailView.vue";
+import BoardRegisterView from "../views/BoardRegisterView.vue";
+import MyPageView from "../views/MyPageView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +68,16 @@ const router = createRouter({
       path: "/board/:boardId",
       name: "BoardDetailView",
       component: BoardDetailView,
+    },
+    {
+      path: "/board/register",
+      name: "BoardRegisterView",
+      component: BoardRegisterView,
+    },
+    {
+      path: "/mypage",
+      name: "mypage",
+      component: MyPageView,
     },
 
     // {
