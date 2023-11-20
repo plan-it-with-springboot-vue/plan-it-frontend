@@ -21,6 +21,9 @@
         <p id="board-detail-content" v-html="boardDetail.content"></p>
         <hr />
       </div>
+      <div id="board-detail-btn-box">
+          <button id="board-detail-btn" @click="goToBoardList">목록</button>
+      </div>
     </div>
     <div id="board-detail-comment-box-container">
       <div id="board-detail-comment-input-box">
@@ -78,10 +81,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 // import axios from 'axios';
 
 const route = useRoute();
+const router = useRouter();
 const boardId = route.params.boardId; // URL에서 boardId 가져오기
 const boardDetail = ref({
   subject: "핫플레이스 공유합니다!",
@@ -143,6 +147,9 @@ const comments = ref([
   },
 ]);
 
+const goToBoardList = () => {
+    router.push('/board');
+}
 // const getBoardDetail = async () => {
 //   try {
 //     const response = await axios.get(`https://example.com/api/boards/${boardId}`);
@@ -238,6 +245,27 @@ p {
   color: #000;
   font-size: 1rem;
   font-weight: 500;
+}
+#board-detail-btn-box {
+    height: 3.875rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    margin-top: 1rem;
+}
+#board-detail-btn {
+    width: 4.75rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  border-radius: 0.125rem;
+  background: var(--main, #C8C8C8);
+  border: none;
+  color: #fff;
+  text-align: center;
+  font-family: Noto Sans;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 #board-detail-comment-input-box {
   width: 59.75rem;
