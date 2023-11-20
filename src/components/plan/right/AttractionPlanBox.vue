@@ -17,7 +17,7 @@
           <div>
             <div
               class="attraction-card-title line"
-              @click="showLocation(detailItem)"
+              @click="showLocation(detailItem.attraction)"
             >
               {{ detailItem.attraction.title }}
             </div>
@@ -104,7 +104,7 @@ mapStore.addAttractionList(currentDatePlanDetail.value);
 // 계획 관광지 카드 삭제
 const deleteAttractionPlanCard = (attractionItem) => {
   planStore.deletePlanDetail(attractionItem.contentId, dateStore.date);
-  console.log("delete click");
+  mapStore.deleteAttractionItem(attractionItem.contentId);
 };
 
 // 계획 추가

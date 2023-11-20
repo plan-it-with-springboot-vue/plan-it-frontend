@@ -51,7 +51,7 @@ function initMap() {
         locationStore.location.latitude,
         locationStore.location.longitude
       ), // 지도의 중심좌표
-      level: 12, // 지도의 확대 레벨
+      level: 9, // 지도의 확대 레벨
     };
   } else {
     options = {
@@ -59,7 +59,7 @@ function initMap() {
         selectedLocation[0].latitude,
         selectedLocation[0].longitude
       ), // 지도의 중심좌표
-      level: 12, // 지도의 확대 레벨
+      level: 9, // 지도의 확대 레벨
     };
   }
 
@@ -93,19 +93,30 @@ function initMap() {
   //   latlng: new kakao.maps.LatLng(location.latitude, location.longitude),
   // }));
 
-  const positions = [
-    ...mapStore.selectedLocation.map((location) => ({
-      content: `<div>${location.title}</div>`,
-      latlng: new kakao.maps.LatLng(location.latitude, location.longitude),
-    })),
-    {
-      content: `<div>${locationStore.location.title}</div>`,
-      latlng: new kakao.maps.LatLng(
-        locationStore.location.latitude,
-        locationStore.location.longitude
-      ),
-    },
-  ];
+  let positions;
+
+  if (locationStore.location.contentId === 0) {
+    positions = [
+      ...mapStore.selectedLocation.map((location) => ({
+        content: `<div>${location.title}</div>`,
+        latlng: new kakao.maps.LatLng(location.latitude, location.longitude),
+      })),
+    ];
+  } else {
+    positions = [
+      ...mapStore.selectedLocation.map((location) => ({
+        content: `<div>${location.title}</div>`,
+        latlng: new kakao.maps.LatLng(location.latitude, location.longitude),
+      })),
+      {
+        content: `<div>${locationStore.location.title}</div>`,
+        latlng: new kakao.maps.LatLng(
+          locationStore.location.latitude,
+          locationStore.location.longitude
+        ),
+      },
+    ];
+  }
 
   // console.log(selectedLocation);
   for (var i = 0; i < positions.length; i++) {
@@ -135,8 +146,6 @@ function initMap() {
     );
 
     let selectedMarker = ref();
-
-    const locationStore = useLocation();
 
     kakao.maps.event.addListener(
       marker,
@@ -169,7 +178,7 @@ function initMap() {
       console.log(selectedLocation[index]);
       // attractionStore.showModal(selectedLocation[index]);
       // }
-      selectedMarker = marker;
+      // selectedMarker = marker;
     };
   }
 }

@@ -58,13 +58,22 @@ const useMapStore = defineStore("map", {
 
       this.selectedLocation = locations;
     },
+
+    deleteAttractionItem(contentId) {
+      const index = this.selectedLocation.findIndex(
+        (item) => item.contentId === contentId
+      );
+      if (index !== -1) {
+        this.selectedLocation.splice(index, 1);
+      }
+    },
   },
 });
 
 const useLocation = defineStore("location", {
   state: () => ({
     location: {
-      contentId: 125266,
+      contentId: 0,
       contentTypeId: 12,
       title: "",
       addr1: "",
