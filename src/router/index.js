@@ -10,6 +10,7 @@ import BoardView from "../views/BoardView.vue";
 import BoardDetailView from "../views/BoardDetailView.vue";
 import BoardRegisterView from "../views/BoardRegisterView.vue";
 import MyPageView from "../views/MyPageView.vue";
+import PlanListView from "../views/PlanListView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,6 +79,11 @@ const router = createRouter({
       path: "/mypage",
       name: "mypage",
       component: MyPageView,
+    },
+    {
+      path: "/mypage/planlist",
+      name: "PlanListView",
+      component: PlanListView,
     },
 
     // {

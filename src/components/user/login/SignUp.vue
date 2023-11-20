@@ -12,41 +12,21 @@
           <button id="sign-up-idcheck-btn">중복확인</button>
         </div>
 
-        <SignUpInput
-          label="비밀번호"
-          type="password"
-          v-model="password"
-          placeholder="특수문자를 포함한 8~15자리"
-        />
+        <SignUpInput label="비밀번호" type="password" v-model="password" placeholder="특수문자를 포함한 8~15자리" />
         <p v-if="fieldErrors.password" class="error-message">{{ fieldErrors.password }}</p>
 
-        <SignUpInput
-          label="비밀번호 확인"
-          type="password"
-          v-model="password_check"
-          placeholder="비밀번호를 다시 입력해주세요."
-        />
+        <SignUpInput label="비밀번호 확인" type="password" v-model="password_check" placeholder="비밀번호를 다시 입력해주세요." />
         <p v-if="fieldErrors.password_check" class="error-message">
           {{ fieldErrors.password_check }}
         </p>
 
-        <SignUpInput
-          label="이메일"
-          type="email"
-          v-model="email"
-          placeholder="example@example.com"
-        />
+        <SignUpInput label="이메일" type="email" v-model="email" placeholder="example@example.com" />
         <p v-if="fieldErrors.email" class="error-message">{{ fieldErrors.email }}</p>
         <div id="sign-up-email-box-btn">
           <button id="sign-up-email-btn">확인</button>
         </div>
 
-        <SignUpInput
-          label="인증번호"
-          type="text"
-          v-model="certification"
-          placeholder="인증 번호를 입력해주세요."
-        />
+        <SignUpInput label="인증번호" type="text" v-model="certification" placeholder="인증 번호를 입력해주세요." />
         <p v-if="fieldErrors.certification" class="error-message">
           {{ fieldErrors.certification }}
         </p>
@@ -62,12 +42,7 @@
         <SignUpInput label="이름" type="text" v-model="name" />
         <p v-if="fieldErrors.name" class="error-message">{{ fieldErrors.name }}</p>
 
-        <SignUpInput
-          label="전화번호"
-          type="text"
-          v-model="phonenumber"
-          placeholder="'-' 구분 없이 입력"
-        />
+        <SignUpInput label="전화번호" type="text" v-model="phonenumber" placeholder="'-' 구분 없이 입력" />
         <p v-if="fieldErrors.phonenumber" class="error-message">{{ fieldErrors.phonenumber }}</p>
 
         <SignUpInput label="생년월일" type="text" v-model="birth" placeholder="ex) 20001225" />
@@ -185,9 +160,10 @@ const signUp = async () => {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 40rem;
+  margin-top: 30rem;
   margin-bottom: 4.13rem;
 }
+
 #sign-up-label {
   display: flex;
   justify-content: center;
@@ -196,11 +172,13 @@ const signUp = async () => {
   font-weight: 700;
   margin-top: 11.75rem;
 }
+
 #sign-up-idcheck-box-btn {
   display: flex;
   margin-top: -0.5rem;
   margin-left: 22.62rem;
 }
+
 #sign-up-idcheck-btn {
   cursor: pointer;
   width: 4.3125rem;
@@ -212,11 +190,13 @@ const signUp = async () => {
   border: 1px solid var(--main, #6499e9);
   background: var(--main, #6499e9);
 }
+
 #sign-up-email-box-btn {
   display: flex;
   margin-top: -0.5rem;
   margin-left: 22.62rem;
 }
+
 #sign-up-email-btn {
   cursor: pointer;
   width: 4.3125rem;
@@ -228,6 +208,7 @@ const signUp = async () => {
   border: 1px solid var(--main, #6499e9);
   background: var(--main, #6499e9);
 }
+
 #sign-up-certification-box-btn {
   display: flex;
   justify-content: space-between;
@@ -237,6 +218,7 @@ const signUp = async () => {
   margin-top: -0.5rem;
   margin-left: 17.69rem;
 }
+
 #sign-up-recertification-btn {
   cursor: pointer;
   width: 4.3125rem;
@@ -248,6 +230,7 @@ const signUp = async () => {
   border: 1px solid var(--light-gray, #c8c8c8);
   background: var(--light-gray, #c8c8c8);
 }
+
 #sign-up-certification-btn {
   cursor: pointer;
   width: 4.3125rem;
@@ -259,9 +242,11 @@ const signUp = async () => {
   border: 1px solid var(--main, #6499e9);
   background: var(--main, #6499e9);
 }
+
 #sign-up-gender-box {
   margin-bottom: 1.37rem;
 }
+
 #sign-up-gender-label {
   display: flex;
   width: 11.875rem;
@@ -271,6 +256,7 @@ const signUp = async () => {
   flex-shrink: 0;
   font-size: 1rem;
 }
+
 #sign-up-gender-select {
   width: 26.9375rem;
   height: 3.125rem;
@@ -281,6 +267,7 @@ const signUp = async () => {
   padding-left: 0.6rem;
   cursor: pointer;
 }
+
 #sign-up-btn {
   cursor: pointer;
   width: 26.875rem;
@@ -293,6 +280,7 @@ const signUp = async () => {
   background: var(--main, #6499e9);
   margin-top: 2.57rem;
 }
+
 .error-message {
   color: red;
   font-size: 0.75rem;
