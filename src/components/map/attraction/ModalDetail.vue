@@ -11,7 +11,7 @@
       <div id="title-addr1">
         <div id="title-like-container">
           <h3>{{ attractionStore.selectedAttraction?.title }}</h3>
-          <!-- <div>
+          <div v-if="!favoritesStore || favoritesStore.favorites.length === 0">
             <LikeBig
               class="like-svg"
               @click="likeAttraction(attractionStore.selectedAttraction)"
@@ -32,7 +32,13 @@
                 @click="deleteLike(attractionStore.selectedAttraction)"
               />
             </div>
-          </div> -->
+            <div v-else>
+              <LikeBig
+                class="like-svg"
+                @click="likeAttraction(attractionStore.selectedAttraction)"
+              />
+            </div>
+          </div>
         </div>
 
         <span>{{ attractionStore.selectedAttraction?.addr1 }}</span>
@@ -61,7 +67,48 @@ import LikeRedBig from "../../../assets/svg/LikeRedBig.vue";
 import axios from "axios";
 
 const attractionStore = useAttractionStore();
-const favoritesStore = useFavoriteStores;
+const favoritesStore = useFavoriteStores();
+
+const likeAttraction = async (attractionItem) => {
+  try {
+    const response = await axios.post("http://localhost/attraction/like", {
+      userId: "ssafy",
+      contentId: attractionItem.contentId,
+    });
+
+    favoritesStore.favorites.push({
+      userId: "ssafy",
+      contentId: attractionItem.contentId,
+    });
+    // console.log(favoritesStore.favorites);
+  } catch (error) {
+    console.error("Error while liking the attraction:", error);
+  }
+};
+
+const deleteLike = async (attractionItem) => {
+  try {
+    const response = await axios
+      .delete(`http://localhost/attraction/like`, {
+        params: {
+          userId: "ssafy",
+          contentId: attractionItem.contentId,
+        },
+      })
+      .then((response) => {
+        favoritesStore.favorites = favoritesStore.favorites.filter(
+          (item) => item.contentId !== attractionItem.contentId
+        );
+
+        // console.log(favoritesStore.favorites);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+  } catch (error) {
+    console.error("Error while liking the attraction:", error);
+  }
+};
 </script>
 
 <style scoped>
