@@ -5,6 +5,7 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import { toRaw, ref, onMounted, watch } from "vue";
 import {
   useAttractionStore,
@@ -154,6 +155,33 @@ function initMap() {
       console.log(index);
       console.log(selectedLocation[index]);
       attractionStore.showModal(selectedLocation[index]);
+
+      axios
+        .get(`http://localhost/attraction/view`, {
+          params: {
+            contentId: attractionStore.selectedAttraction.contentId,
+          },
+        })
+        .then((response) => {
+          attractionStore.selectedAttractionDes = response.data;
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+
+      axios
+        .get(`http://localhost/attraction/review`, {
+          params: {
+            contentId: attractionStore.selectedAttraction.contentId,
+          },
+        })
+        .then((response) => {
+          // console.log("API Response:", response.data);
+          attractionStore.selectedAttractionReview = response.data;
+        })
+        .catch((error) => {
+          console.error("API Error:", error);
+        });
       // }
       selectedMarker = marker;
     };
