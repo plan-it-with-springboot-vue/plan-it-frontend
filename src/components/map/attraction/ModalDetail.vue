@@ -9,11 +9,34 @@
       </div>
 
       <div id="title-addr1">
-        <h3>{{ attractionStore.selectedAttraction?.title }}</h3>
+        <div id="title-like-container">
+          <h3>{{ attractionStore.selectedAttraction?.title }}</h3>
+          <!-- <div>
+            <LikeBig
+              class="like-svg"
+              @click="likeAttraction(attractionStore.selectedAttraction)"
+            />
+          </div>
+          <div v-else>
+            <div
+              v-if="
+                favoritesStore.favorites.find(
+                  (item) =>
+                    item.contentId ===
+                    attractionStore.selectedAttraction.contentId
+                )
+              "
+            >
+              <LikeRedBig
+                class="like-svg"
+                @click="deleteLike(attractionStore.selectedAttraction)"
+              />
+            </div>
+          </div> -->
+        </div>
+
         <span>{{ attractionStore.selectedAttraction?.addr1 }}</span>
       </div>
-
-      <!-- <p>content_id: {{ attractionStore.selectedAttraction.content_id }}</p> -->
       <div id="des">
         <div class="scrollable-container">
           <p>{{ attractionStore.selectedAttractionDes?.overview }}</p>
@@ -31,13 +54,21 @@
 </template>
 
 <script setup>
-import { useAttractionStore } from "../../../stores/store";
+import { useAttractionStore, useFavoriteStores } from "../../../stores/store";
 import ModalComment from "./ModalComment.vue";
+import LikeBig from "../../../assets/svg/LikeBig.vue";
+import LikeRedBig from "../../../assets/svg/LikeRedBig.vue";
+import axios from "axios";
 
 const attractionStore = useAttractionStore();
+const favoritesStore = useFavoriteStores;
 </script>
 
 <style scoped>
+.like-svg {
+  margin-right: 0.25rem;
+  cursor: pointer;
+}
 h3 {
   font-size: 1.25rem;
   margin: 0.2rem 0rem 0.2rem 0rem;
@@ -59,14 +90,19 @@ img {
   border-radius: 1rem;
   /* width: 20.8125rem; */
   width: 100%;
-  max-height: 15rem;
+  height: 15rem;
 }
 #container {
   /* padding: 1rem; */
 }
 
+#title-like-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 .img-container {
-  padding: 0.8rem;
 }
 
 #des-container {
@@ -78,7 +114,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0.8rem;
+  padding: 0.9rem 1.2rem;
 }
 #img-des {
   display: flex;
@@ -90,7 +126,7 @@ img {
 #des {
   /* background-color: #6499e916; */
   /* padding: 1rem 1rem; */
-  height: 6.9rem;
+  height: 9rem;
 }
 
 #user-id {
@@ -103,12 +139,12 @@ img {
   font-size: 1.25rem;
   font-weight: 700;
   color: #6499e9;
-  margin-top: 2rem;
-  padding: 0rem 0.8rem;
+  margin: 1.2rem 0 0.5rem 0;
+  padding: 0rem 1.2rem;
 }
 
 #review {
-  height: 21.82rem;
+  height: 22.8rem;
 }
 
 #comment {
@@ -119,7 +155,7 @@ img {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
-  padding: 0.8rem;
+  padding: 0 1.2rem;
 }
 .scrollable-container::-webkit-scrollbar {
   width: 6px;
