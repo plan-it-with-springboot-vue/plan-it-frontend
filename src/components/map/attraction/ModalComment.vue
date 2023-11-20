@@ -3,11 +3,16 @@
     <textarea v-model="commentInput" type="text"></textarea>
     <button @click="submitComment"><p>등록</p></button>
   </div>
-  <div v-for="(commentItem, index) in comment" :key="index">
+  <div
+    v-for="(commentItem, index) in attractionStore.selectedAttractionReview"
+    :key="index"
+  >
     <div id="comment-container">
       <div id="profile"><ProfileImg /></div>
-      <div>
-        <span id="user-id">{{ commentItem.userId }}</span>
+      <div id="ex-profile">
+        <div id="user-delete-container">
+          <span id="user-id">{{ commentItem.userId }}</span> <span>삭제</span>
+        </div>
         <p>
           {{ commentItem.content }}
         </p>
@@ -21,34 +26,10 @@
 <script setup>
 import ProfileImg from "../../../assets/svg/ProfileImg.vue";
 import { useAttractionStore } from "../../../stores/store";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import axios from "axios";
 
 const attractionStore = useAttractionStore();
-
-const comment = ref();
-
-watch(
-  () => attractionStore.selectedAttraction,
-  () => {
-    axios
-      .get(`http://localhost/attraction/review`, {
-        params: {
-          contentId: attractionStore.selectedAttraction.contentId,
-        },
-      })
-      .then((response) => {
-        console.log(
-          "API Response:",
-          attractionStore.selectedAttraction.contentId
-        );
-        comment.value = response.data;
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
-  }
-);
 
 const commentInput = ref("");
 const submitComment = () => {
@@ -58,8 +39,8 @@ const submitComment = () => {
       userId: "ssafy",
       contentId: attractionStore.selectedAttraction.contentId,
     })
-    .then((response) => {
-      comment.value.push({
+    .then(() => {
+      attractionStore.selectedAttractionReview.push({
         content: commentInput.value,
         userId: "ssafy",
         contentId: attractionStore.selectedAttraction.contentId,
@@ -75,6 +56,16 @@ const submitComment = () => {
 </script>
 
 <style scoped>
+#ex-profile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+#user-delete-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 #comment-input-container {
   display: flex;
   flex-direction: column;
@@ -108,7 +99,7 @@ button {
   /* background-color: #6499e917; */
   background-color: #f3f3f3;
   border-radius: 0.5rem;
-  padding: 0.4rem;
+  padding: 0.5rem;
 }
 span {
   color: #8c8c8c;

@@ -127,17 +127,32 @@ const showModal = (attractionItem) => {
   locationStore.selectLocation(attractionItem);
   attractionStore.showModal(attractionItem);
 
-  console.log(attractionStore.selectedAttraction);
-};
+  axios
+    .get(`http://localhost/attraction/view`, {
+      params: {
+        contentId: attractionStore.selectedAttraction.contentId,
+      },
+    })
+    .then((response) => {
+      attractionStore.selectedAttractionDes = response.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
 
-const toggleLike = (attractionItem) => {
-  attractionItem.isLike = !attractionItem.isLike;
-
-  if (attractionItem.isLike) {
-    attractionItem.like++;
-  } else {
-    attractionItem.like--;
-  }
+  axios
+    .get(`http://localhost/attraction/review`, {
+      params: {
+        contentId: attractionStore.selectedAttraction.contentId,
+      },
+    })
+    .then((response) => {
+      // console.log("API Response:", response.data);
+      attractionStore.selectedAttractionReview = response.data;
+    })
+    .catch((error) => {
+      console.error("API Error:", error);
+    });
 };
 
 const mapStore = useMapStore();
@@ -154,7 +169,7 @@ watch(
     // Axios를 사용하여 API 호출
     // const BASE_URL = process.env.VUE_APP_BASE_URL;
     axios
-      .get(`/attraction/list`, {
+      .get(`http://localhost/attraction/list`, {
         params: {
           sidoCode: sidoCode,
           gugunCode: gugunCode,

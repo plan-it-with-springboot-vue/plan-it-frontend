@@ -4,6 +4,8 @@ const useAttractionStore = defineStore("attraction", {
   state: () => ({
     modalVisible: false,
     selectedAttraction: [],
+    selectedAttractionDes: {},
+    selectedAttractionReview: [],
   }),
   actions: {
     showModal(attractionItem) {

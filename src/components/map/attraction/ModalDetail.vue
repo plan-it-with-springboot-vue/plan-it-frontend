@@ -2,18 +2,21 @@
   <div id="container">
     <div id="des-container">
       <div class="img-container">
-        <img :src="`${attractionStore.selectedAttraction.firstImage}`" alt="" />
+        <img
+          :src="`${attractionStore.selectedAttraction?.firstImage}`"
+          alt=""
+        />
       </div>
 
       <div id="title-addr1">
-        <h3>{{ attractionStore.selectedAttraction.title }}</h3>
-        <span>{{ attractionStore.selectedAttraction.addr1 }}</span>
+        <h3>{{ attractionStore.selectedAttraction?.title }}</h3>
+        <span>{{ attractionStore.selectedAttraction?.addr1 }}</span>
       </div>
 
       <!-- <p>content_id: {{ attractionStore.selectedAttraction.content_id }}</p> -->
       <div id="des">
         <div class="scrollable-container">
-          <p>{{ description.overview }}</p>
+          <p>{{ attractionStore.selectedAttractionDes?.overview }}</p>
         </div>
       </div>
     </div>
@@ -30,33 +33,8 @@
 <script setup>
 import { useAttractionStore } from "../../../stores/store";
 import ModalComment from "./ModalComment.vue";
-import { ref, watch } from "vue";
-import axios from "axios";
 
 const attractionStore = useAttractionStore();
-const description = ref({
-  content_id: 0,
-  overview: "",
-});
-watch(
-  () => attractionStore.selectedAttraction,
-  () => {
-    axios
-      .get(`http://localhost/attraction/view`, {
-        params: {
-          contentId: attractionStore.selectedAttraction.contentId,
-        },
-      })
-      .then((response) => {
-        description.value = response.data;
-        // console.log(description);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  },
-  { deep: true }
-);
 </script>
 
 <style scoped>
