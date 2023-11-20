@@ -2,30 +2,17 @@
   <div id="title-date-container">
     <div id="input-container">
       <input
+        v-if="!hasPlan"
         type="text"
         placeholder="제목을 입력해주세요"
         v-model="planTitle"
       />
-      <!-- <div id="check-svg">
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M20 6L9 17L4 12"
-          stroke="black"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </div> -->
+      <div v-else>
+        <h2>{{ planStore.plan.title }}</h2>
+      </div>
     </div>
 
-    <div class="date date-container" v-if="!isSelect">
+    <div class="date date-container" v-if="!hasPlan">
       <div class="svg">
         <svg
           width="16"
@@ -64,7 +51,7 @@
         @focus="setOldValue($event.target.value)"
         @update:modelValue="validateFromTo('to', 'dp2From', 'dp2To')"
       />
-      <div id="confirm-btn" @click="addPlan"><p>선택</p></div>
+      <div id="confirm-btn" @click="addPlan"><p>설정</p></div>
     </div>
 
     <div v-else>
@@ -105,7 +92,7 @@
 
 <script>
 import { defineRefs } from "../../../utils/helper";
-import { ref, reactive, defineComponent, watch } from "vue";
+import { ref, reactive, defineComponent, watch, computed } from "vue";
 import Datepicker from "vue3-datepicker";
 import { ko } from "date-fns/locale";
 import { format } from "date-fns";
@@ -125,14 +112,12 @@ export default defineComponent({
     // dp2
     const now = new Date();
     let dp2 = ref(new Date());
-    const dp2From = ref(new Date(now.setDate(now.getDate() - 7)));
-    const dp2To = ref(new Date(now.setDate(now.getDate() + 14)));
+    const dp2From = ref(new Date(now.setDate(now.getDate())));
+    const dp2To = ref(new Date(now.setDate(now.getDate())));
 
     // [from, to]'s value before changing value
     let oldVal = "";
 
-    // refs
-    const datepicker1 = ref(null);
     // dynamic refs
     const inputs = defineRefs(["dp1", "dp2From", "dp2To", "dp2", "dp3"]);
 
@@ -163,20 +148,19 @@ export default defineComponent({
       return date > new Date();
     };
 
-    let isSelect = ref(false);
     let duration = ref({ from: "", to: "" });
     const planTitle = ref("");
     const planStore = usePlanStore();
 
     const addPlan = () => {
       if (duration.value.from > duration.value.to) {
-        alert("Validation Error!!");
+        alert("기간을 잘못 설정");
+      } else if (planTitle.value == "") {
+        alert("제목 입력");
       }
       // day1 날짜 설정
       else {
-        isSelect.value = !isSelect.value;
         dp2.value = new Date(duration.value.from); // 시작 날짜로 picker 설정
-
         // plan store 저장
         const plan = {
           title: planTitle.value,
@@ -186,8 +170,8 @@ export default defineComponent({
           planDetail: [],
         };
         planStore.addPlan(plan);
-
-        console.log(planStore.plan);
+        planTitle.value = "";
+        // console.log(planStore.plan);
       }
     };
 
@@ -196,9 +180,14 @@ export default defineComponent({
     watch(dp2, (newDp2) => {
       const formattedDate = format(newDp2, "yyyy-MM-dd");
       dateStore.selectDate(formattedDate);
-      console.log("store 저장 : " + dateStore.date);
+      // console.log("store 저장 : " + dateStore.date);
       // console.log(dp2From);
       // console.log(dp2To);
+    });
+
+    const hasPlan = computed(() => {
+      const plan = planStore.plan;
+      return plan ? Object.keys(plan).length > 0 : false;
     });
 
     return {
@@ -214,8 +203,9 @@ export default defineComponent({
       validateFromTo,
       isTodayOver,
       addPlan,
-      isSelect,
       planTitle,
+      hasPlan,
+      planStore,
     };
   },
 });
@@ -225,21 +215,25 @@ export default defineComponent({
 #title-date-container {
   width: 20.8125rem;
 }
+h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  width: 13rem;
+  text-align: center;
+  padding: 1.2rem;
+  background-color: white;
+}
 input {
   width: 100%;
-  padding: 1.2rem;
+  padding: 0.4rem 0;
   border: none;
   border-bottom: 0.0625rem solid #e6e3e3;
   outline: none;
-  font-size: 1rem;
   box-sizing: border-box;
   width: 13rem;
-  height: 1.25rem;
   background-color: white;
-  margin: 2.23rem 0;
   font-size: 1.25rem;
   font-weight: 700;
-
   text-align: center;
 }
 #input-container {
@@ -247,6 +241,7 @@ input {
   justify-content: center;
   align-items: center;
   text-align: center;
+  height: 6.4rem;
 }
 p {
   text-align: center;

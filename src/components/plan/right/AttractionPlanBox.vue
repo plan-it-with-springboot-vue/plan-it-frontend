@@ -114,7 +114,7 @@ const dateStore = useDateStore();
 watch(
   () => planStore.plan,
   (newPlan) => {
-    const matchingAttractions = newPlan.planDetail.filter(
+    const matchingAttractions = newPlan?.planDetail.filter(
       (detailItem) => detailItem.planDate === dateStore.date
     );
 
@@ -130,14 +130,15 @@ watch(
 watch(
   () => dateStore.date,
   () => {
-    const matchingAttractions = planStore.plan.planDetail.filter(
-      (detailItem) => detailItem.planDate === dateStore.date
-    );
-
-    currentDatePlanDetail.value = matchingAttractions;
-    // console.log("attract plan box : ");
-    // console.log(currentDatePlanDetail.value);
-    console.log(planStore.plan);
+    if (planStore.plan?.planDetail) {
+      const matchingAttractions = planStore.plan.planDetail.filter(
+        (detailItem) => detailItem.planDate === dateStore.date
+      );
+      currentDatePlanDetail.value = matchingAttractions;
+      // console.log("attract plan box : ");
+      // console.log(currentDatePlanDetail.value);
+      // console.log(planStore.plan);
+    }
   },
   // watch는 shallow임!! deep으로 해주기
   { deep: true }

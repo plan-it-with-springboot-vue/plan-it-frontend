@@ -16,19 +16,20 @@ import TheHeaderVue from "../components/layout/TheHeader.vue";
 import LeftBox from "../components/plan/left/LeftBox.vue";
 import PlanKakaoMap from "../components/plan/PlanKakaoMap.vue";
 import RightBox from "../components/plan/right/RightBox.vue";
-import { usePlanStore } from "../stores/store";
+import { useDateStore, usePlanStore } from "../stores/store";
 
 const planStore = usePlanStore();
+const dateStore = useDateStore();
 
 const sendPlan = () => {
   axios
     .post("http://localhost/plan/make", planStore.plan)
     .then((response) => {
-      // 성공적으로 전송된 경우의 로직
       console.log("Plan sent successfully!", response.data);
+      planStore.plan = null;
+      dateStore.date = "";
     })
     .catch((error) => {
-      // 에러 발생 시 처리하는 로직
       console.error("Error sending plan:", error);
     });
 };
