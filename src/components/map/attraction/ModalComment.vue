@@ -3,7 +3,11 @@
     <textarea v-model="commentInput" type="text"></textarea>
     <button @click="submitComment"><p>등록</p></button>
   </div>
+  <div v-if="attractionStore.selectedAttractionReview.length === 0">
+    방문 후기가 없습니다
+  </div>
   <div
+    v-else
     v-for="(commentItem, index) in attractionStore.selectedAttractionReview"
     :key="index"
   >
@@ -19,7 +23,6 @@
         <span id="timestamp">{{ commentItem.registerTime }}</span>
       </div>
     </div>
-    <!-- <hr /> -->
   </div>
 </template>
 
