@@ -231,6 +231,13 @@ const goToMain = () => {
     cursor: pointer;
 }
 
+hr {
+    border: 0;
+    height: 0.0625rem;
+    background-color: #000000;
+    /* 선의 색상 */
+}
+
 .mypage-content-hr {
     border: 0;
     height: 0.0625rem;
