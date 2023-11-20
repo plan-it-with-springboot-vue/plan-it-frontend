@@ -6,6 +6,10 @@ import FindIdView from "../views/FindIdView.vue";
 import FindPassView from "../views/FindPassView.vue";
 import FindIdResultView from "../views/FindIdResultView.vue";
 import FindPassResultView from "../views/FindPassResultView.vue";
+import BoardView from "../views/BoardView.vue";
+import BoardDetailView from "../views/BoardDetailView.vue";
+import BoardRegisterView from "../views/BoardRegisterView.vue";
+import MyPageView from "../views/MyPageView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,12 +41,12 @@ const router = createRouter({
     },
     {
       path: "/findid/result",
-      name: "findidresult",
+      name: "findidResult",
       component: FindIdResultView,
     },
     {
       path: "/findpass/result",
-      name: "findpassresult",
+      name: "findpassResult",
       component: FindPassResultView,
     },
     {
@@ -54,6 +58,26 @@ const router = createRouter({
       path: "/plan",
       name: "plan",
       component: () => import("../views/PlanView.vue"),
+    },
+    {
+      path: "/board",
+      name: "board",
+      component: BoardView,
+    },
+    {
+      path: "/board/:boardId",
+      name: "BoardDetailView",
+      component: BoardDetailView,
+    },
+    {
+      path: "/board/register",
+      name: "BoardRegisterView",
+      component: BoardRegisterView,
+    },
+    {
+      path: "/mypage",
+      name: "mypage",
+      component: MyPageView,
     },
 
     // {
