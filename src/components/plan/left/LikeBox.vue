@@ -1,14 +1,14 @@
 <template>
   <div class="scrollable-container">
     <hr />
-    <div v-for="attractionItem in attraction" :key="attractionItem.content_id">
+    <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
       <div class="attraction-card">
         <div>
           <!-- <img
             :src="`/src/assets/image/${attractionItem.first_image}.png`"
             alt=""
           /> -->
-          <img :src="`${attractionItem.first_image}`" alt="" />
+          <img :src="`${attractionItem.firstImage}`" alt="" />
         </div>
         <div class="attraction-card-content">
           <div>
@@ -19,16 +19,58 @@
               {{ attractionItem.title }}
             </div>
             <div class="line">
-              <span class="attraction-card-category">관광지&nbsp;</span
+              <span
+                v-if="attractionItem.contentTypeId === 12"
+                class="attraction-card-category"
+                >관광지&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 14"
+                class="attraction-card-category"
+                >문화시설&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 15"
+                class="attraction-card-category"
+                >축제공연&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 25"
+                class="attraction-card-category"
+                >여행코스&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 28"
+                class="attraction-card-category"
+                >레포츠&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 32"
+                class="attraction-card-category"
+                >숙박&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 38"
+                class="attraction-card-category"
+                >쇼핑&nbsp;</span
+              >
+              <span
+                v-else-if="attractionItem.contentTypeId === 39"
+                class="attraction-card-category"
+                >음식점&nbsp;</span
               ><span class="attraction-card-address">{{
                 attractionItem.addr1
               }}</span>
             </div>
           </div>
+          <div v-if="!hasPlan" class="line" id="plus-svg">
+            <BlockPlusIcon />
+          </div>
           <div
+            v-else
             class="line"
             id="plus-svg"
-            @click="clickPlusIcon(attractionItem.content_id)"
+            @click="clickPlusIcon(attractionItem)"
           >
             <div><PlusIconVue /></div>
           </div>
@@ -40,72 +82,65 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import axios from "axios";
+import { computed, ref } from "vue";
 import PlusIconVue from "../../../assets/svg/PlusIcon.vue";
+import BlockPlusIcon from "../../../assets/svg/BlockPlusIcon.vue";
 import {
   useDateStore,
   useMapStore,
   usePlanStore,
   useLocation,
+  useFavoriteStores,
 } from "../../../stores/store";
 
-const attraction = ref([
-  {
-    content_id: 125266,
-    content_type_id: 12,
-    title: "국립 청태산자연휴양림",
-    addr1: "강원도 횡성군 둔내면",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/21/2657021_image2_1.jpg",
-    latitude: 38.51112664,
-    longitude: 128.4191502,
-    like: 12,
-    isLike: false, // 로그인된 정보로 동작하게 바꿔야함
-  },
-  {
-    content_id: 125677,
-    content_type_id: 12,
-    title: "무릉계곡",
-    addr1: "강원도 동해시 삼화로 538",
-    first_image:
-      "http://tong.visitkorea.or.kr/cms/resource/88/1955788_image2_1.jpg",
-    latitude: 38.47884469,
-    longitude: 128.4391216,
-    like: 8,
-    isLike: false,
-  },
-]);
+const attraction = ref([]);
 
 const mapStore = useMapStore();
 const locationStore = useLocation();
 
 const showLocation = (attractionItem) => {
   locationStore.selectLocation(attractionItem);
-  // console.log("search vox");
-  // console.log(locationStore.location);
 };
 
 // 계획
 const planStore = usePlanStore();
 const dateStore = useDateStore();
 
-const clickPlusIcon = (contentId) => {
+const clickPlusIcon = (attractionItem) => {
   const planDate = dateStore.date;
   const time = null;
 
-  planStore.addPlanDetail(contentId, planDate, time);
-
-  // console.log("attratSearhBox : ");
-  // console.log(planStore.plan);
+  planStore.addPlanDetail(attractionItem, planDate, time);
 
   // 지도 마커를 위해 저장
-  mapStore.addAttractionList([
-    ...mapStore.selectedLocation,
-    attraction.value[2],
-  ]);
-  // console.log("map att plan : ");
-  // console.log(mapStore.selectedLocation);
+  mapStore.addAttractionList([...mapStore.selectedLocation, attractionItem]);
+
+  console.log(attractionItem);
 };
+
+const favoritesStore = useFavoriteStores();
+
+axios
+  .get(`http://localhost/attraction/like`, {
+    params: {
+      userId: "ssafy",
+    },
+  })
+  .then((response) => {
+    // console.log("API Response:", response.data);
+    favoritesStore.favorites = response.data;
+    attraction.value = response.data;
+    // console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("API Error:", error);
+  });
+
+const hasPlan = computed(() => {
+  const plan = planStore.plan;
+  return plan ? Object.keys(plan).length > 0 : false;
+});
 </script>
 
 <style scoped>

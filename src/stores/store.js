@@ -107,13 +107,7 @@ const useCategoryStore = defineStore("category", {
 
 const usePlanStore = defineStore("plan", {
   state: () => ({
-    plan: {
-      title: "",
-      startSchedule: "",
-      endSchedule: "",
-      userId: "",
-      planDetail: [],
-    },
+    plan: null,
   }),
   actions: {
     addPlan(plan) {
@@ -123,30 +117,31 @@ const usePlanStore = defineStore("plan", {
         endSchedule: plan.endSchedule,
         userId: plan.userId,
         planDetail: plan.planDetail.map((detailItem) => ({
-          contentId: detailItem.contentId,
+          attraction: detailItem.attractionItem,
           planDate: detailItem.planDate,
           time: detailItem.time,
+          sequence: detailItem.sequence,
         })),
       };
     },
 
-    addPlanDetail(contentId, planDate, time) {
-      // plan의 planDetail에서 planDate를 찾아서 planDetail에 contentId 추가
+    addPlanDetail(attractionItem, planDate, time) {
       this.plan.planDetail.push({
-        contentId,
-        planDate,
+        attraction: attractionItem,
+        planDate: planDate,
         time: time,
       });
     },
 
     deletePlanDetail(contentId, planDate) {
-      // plan의 planDetail에서 planDate를 찾아서 plandDetail에 contentId 삭제
-      const existingDetailIndex = this.plan.planDetail.findIndex(
-        (detailItem) => detailItem.planDate === planDate
+      const indexToRemove = this.plan.planDetail.findIndex(
+        (detailItem) =>
+          detailItem.planDate === planDate &&
+          detailItem.attraction.contentId === contentId
       );
 
-      if (existingDetailIndex !== -1) {
-        this.plan.planDetail.splice(existingDetailIndex, 1);
+      if (indexToRemove !== -1) {
+        this.plan.planDetail.splice(indexToRemove, 1);
       }
     },
   },

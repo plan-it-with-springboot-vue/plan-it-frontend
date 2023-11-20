@@ -154,7 +154,7 @@ watch(
     // Axios를 사용하여 API 호출
     // const BASE_URL = process.env.VUE_APP_BASE_URL;
     axios
-      .get(`/attraction/list`, {
+      .get(`http://localhost/attraction/list`, {
         params: {
           sidoCode: sidoCode,
           gugunCode: gugunCode,
