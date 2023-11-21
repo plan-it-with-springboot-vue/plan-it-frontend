@@ -9,7 +9,7 @@
     <div id="board-register-content-box">
       <div id="board-register-title-input-box">
         <label class="board-register-input-label">제목</label>
-        <input class="board-register-input" v-model="title" placeholder="제목을 입력하세요." />
+        <input class="board-register-input" v-model="subject" placeholder="제목을 입력하세요." />
       </div>
       <hr class="board-register-content-hr" />
       <div id="board-register-content-textarea-box">
@@ -32,27 +32,31 @@
 
 <script setup>
 import { ref } from "vue";
-// import axios from 'axios';
+import axios from 'axios';
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const title = ref('');
+const subject = ref('');
 const content = ref('');
 
-// // 게시글 등록 함수
-// const registerPost = async () => {
-//   try {
-//     const response = await axios.post('YOUR_BACKEND_ENDPOINT', {
-//       title: title.value,
-//       content: content.value
-//     });
-//     // 요청 성공 후 처리 로직
-//     router.push('/board');
-//   } catch (error) {
-//     console.error('게시글 등록 실패:', error);
-//     // 에러 처리 로직
-//   }
-// };
+// 게시글 등록
+const registerPost = () => {
+  const postData = {
+    subject: subject.value,
+    content: content.value,
+    userId: "ssafy"
+  };
+
+  axios
+    .post(`http://localhost/board/write`, postData)
+    .then((response) => {
+      // 게시글 등록 후 게시판 목록으로 이동
+      router.push('/board');
+    })
+    .catch((error) => {
+      console.error("Error posting data:", error);
+    });
+};
 
 // 게시글 목록 페이지 경로로 이동
 const goToBoardList = () => {
