@@ -28,7 +28,7 @@
             <ul>
               <li @click="navigateTo('/mypage')">마이페이지</li>
               <li @click="navigateTo('/mypage/planlist')">여행 일정 관리</li>
-              <li @click="navigateTo('/')">관심 여행지</li>
+              <li @click="navigateTo('/mypage/wishlist')">관심 여행지</li>
             </ul>
           </div>
         </li>
