@@ -28,6 +28,7 @@ const sendPlan = () => {
       .then((response) => {
         console.log("Plan sent successfully!", response.data);
         planStore.plan = null;
+        planStore.sequence = 0;
         dateStore.date = "";
       })
       .catch((error) => {

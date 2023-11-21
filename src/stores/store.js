@@ -119,6 +119,7 @@ const useCategoryStore = defineStore("category", {
 const usePlanStore = defineStore("plan", {
   state: () => ({
     plan: null,
+    sequence: 0,
   }),
   actions: {
     addPlan(plan) {
@@ -141,6 +142,7 @@ const usePlanStore = defineStore("plan", {
         attraction: attractionItem,
         planDate: planDate,
         time: time,
+        sequence: this.sequence++,
       });
     },
 
