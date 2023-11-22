@@ -23,9 +23,9 @@
             </div>
             <div id="notice-detail-btn-box">
                 <div id="notice-detail-select-box">
-                    <button v-if="userStore.userInfo.userId === 'admin'" id="notice-detail-modify-btn"
+                    <button v-if="userStore.userInfo?.userId === 'admin'" id="notice-detail-modify-btn"
                         @click="modifyNotice(noticeDetail.noticeId)">수정</button>
-                    <button v-if="userStore.userInfo.userId === 'admin'" id="notice-detail-delete-btn"
+                    <button v-if="userStore.userInfo?.userId === 'admin'" id="notice-detail-delete-btn"
                         @click="deleteNotice">삭제</button>
                 </div>
                 <div id="notice-detail-list-btn-box">
@@ -81,7 +81,7 @@ const modifyNotice = (noticeId) => {
 const deleteNotice = () => {
     if (confirm("게시글을 삭제하시겠습니까?")) {
         axios
-            .get(`http://localhost/notice/delete?noticeId=${noticeId}`, {
+            .delete(`http://localhost/notice/delete?noticeId=${noticeId}`, {
             })
             .then((response) => {
                 console.log(response.data);
