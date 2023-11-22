@@ -72,7 +72,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import ModalComponent from './ModalBox.vue';
+// import ModalComponent from './ModalBox.vue';
 
 const wishlist = ref([]);
 // const router = useRouter();

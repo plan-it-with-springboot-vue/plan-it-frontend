@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useUserStore } from "../stores/user";
+import { storeToRefs } from "pinia";
+
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
@@ -9,9 +12,28 @@ import FindPassResultView from "../views/FindPassResultView.vue";
 import BoardView from "../views/BoardView.vue";
 import BoardDetailView from "../views/BoardDetailView.vue";
 import BoardRegisterView from "../views/BoardRegisterView.vue";
+import BoardModifyView from "../views/BoardModifyView.vue";
+import NoticeView from "../views/NoticeView.vue";
 import MyPageView from "../views/MyPageView.vue";
 import PlanListView from "../views/PlanListView.vue";
 import WishListView from "../views/WishListView.vue";
+
+const onlyAuthUser = async (to, from, next) => {
+  const userStore = useUserStore();
+  const { userInfo, isValidToken } = storeToRefs(userStore);
+  const { getUserInfo } = userStore;
+
+  let token = sessionStorage.getItem("accessToken");
+
+  if (userInfo.value != null && token) {
+    await getUserInfo(token);
+  }
+  if (!isValidToken.value || userInfo.value === null) {
+    next({ name: "login" });
+  } else {
+    next();
+  }
+};
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -63,6 +85,7 @@ const router = createRouter({
     {
       path: "/board",
       name: "board",
+      beforeEnter: onlyAuthUser,
       component: BoardView,
     },
     {
@@ -74,6 +97,16 @@ const router = createRouter({
       path: "/board/register",
       name: "BoardRegisterView",
       component: BoardRegisterView,
+    },
+    {
+      path: "/board/modify/:boardId",
+      name: "BoardModifyView",
+      component: BoardModifyView,
+    },
+    {
+      path: "/notice",
+      name: "NoticeView",
+      component: NoticeView,
     },
     {
       path: "/mypage",

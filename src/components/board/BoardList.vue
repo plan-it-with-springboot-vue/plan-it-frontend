@@ -65,7 +65,7 @@
                 <th scope="row">{{ board.boardId }}</th>
                 <td>{{ board.subject }}</td>
                 <td>{{ board.userId }}</td>
-                <td>{{ board.registerTime }}</td>
+                <td>{{ formatDate(board.registerTime) }}</td>
                 <td>{{ board.hit }}</td>
               </tr>
             </tbody>
@@ -77,8 +77,8 @@
 </template>
 
 <script setup>
-// import axios from 'axios';
-import { ref } from "vue";
+import axios from 'axios';
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -96,91 +96,33 @@ const goToRegister = () => {
 // 셀렉트 박스의 선택된 값을 관리하는 반응형 데이터
 const sort = ref("latest"); // '최신순'이 기본값
 const search = ref("none"); // '검색'이 기본값
-const boardList = ref([
-  {
-    boardId: 1,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 2,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 3,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 4,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 5,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 6,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 7,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 8,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 9,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-  {
-    boardId: 10,
-    subject: "제목1",
-    userId: "ssafy",
-    registerTime: "2023.11.19",
-    hit: 0,
-  },
-]); // 게시물 목록을 저장할 배열
+const boardList = ref([]); // 게시물 목록을 저장할 배열
 
-// // 백엔드에서 데이터 가져오는 함수
-// const getBoardList = async () => {
-//   try {
-//     const response = await axios.get('백엔드_API_주소');
-//     boardList.value = response.data; // 응답 데이터를 boardList에 저장
-//   } catch (error) {
-//     console.error('API 호출 중 오류 발생:', error);
-//   }
-// };
+//날짜 형식 변환
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
-// // 컴포넌트가 마운트될 때 API 호출
-// onMounted(getBoardList);
+//게시판 전체 목록
+const getBoardList = () => {
+  axios
+    .get(`http://localhost/board/list`, {
+    })
+    .then((response) => {
+      console.log(response.data);
+      boardList.value = response.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+};
+
+onMounted(getBoardList);
+
 </script>
 
 <style scoped>
@@ -189,7 +131,6 @@ const boardList = ref([
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  /* margin-top: 40rem; */
   margin-bottom: 5.5rem;
 }
 #board-list-label {
