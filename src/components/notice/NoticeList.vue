@@ -90,7 +90,7 @@ const goToNoticeDetail = (noticeId) => {
 
 const goToRegister = () => {
     // 사용자 정보가 로드될 때까지 기다리고, 존재하는 경우에만 접근
-    if (userStore.userInfo && userStore.userInfo.userId === 'admin') {
+    if (userStore.userInfo && userStore.userInfo?.userId === 'admin') {
         router.push("/notice/register");
     }
 };

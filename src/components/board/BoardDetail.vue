@@ -23,9 +23,9 @@
       </div>
       <div id="board-detail-btn-box">
         <div id="board-detail-select-box">
-          <button v-if="userStore.userInfo.userId === boardDetail.userId" id="board-detail-modify-btn"
+          <button v-if="userStore.userInfo?.userId === boardDetail.userId" id="board-detail-modify-btn"
             @click="modifyBoard(boardDetail.boardId)">수정</button>
-          <button v-if="userStore.userInfo.userId === boardDetail.userId" id="board-detail-delete-btn"
+          <button v-if="userStore.userInfo?.userId === boardDetail.userId" id="board-detail-delete-btn"
             @click="deleteBoard">삭제</button>
         </div>
         <div id="board-detail-list-btn-box">
@@ -53,7 +53,7 @@
               </div>
             </div>
             <div>
-              <svg v-if="userStore.userInfo.userId === comment.userId" id="board-detail-comment-header-setting"
+              <svg v-if="userStore.userInfo?.userId === comment.userId" id="board-detail-comment-header-setting"
                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
                 viewBox="0 0 16 16" @click="toggleCommentMenu(comment.boardCommentId)">
                 <path
@@ -141,7 +141,7 @@ const modifyBoard = (boardId) => {
 const deleteBoard = () => {
   if (confirm("게시글을 삭제하시겠습니까?")) {
     axios
-      .get(`http://localhost/board/delete?boardId=${boardId}`, {
+      .delete(`http://localhost/board/delete?boardId=${boardId}`, {
       })
       .then((response) => {
         console.log(response.data);
@@ -253,7 +253,7 @@ const submitEdit = async (commentId) => {
 const deleteComment = (commentId) => {
   if (confirm("댓글을 삭제하시겠습니까?")) {
     axios
-      .get(`http://localhost/board/comment/delete?boardCommentId=${commentId}`, {
+      .delete(`http://localhost/board/comment/delete?boardCommentId=${commentId}`, {
       })
       .then((response) => {
         console.log('댓글 삭제 성공');
