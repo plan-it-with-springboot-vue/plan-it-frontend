@@ -93,6 +93,7 @@ import {
   useLocation,
   useFavoriteStores,
 } from "../../../stores/store";
+import { useUserStore } from "../../../stores/user";
 
 const attraction = ref([]);
 
@@ -120,22 +121,25 @@ const clickPlusIcon = (attractionItem) => {
 };
 
 const favoritesStore = useFavoriteStores();
+const userStore = useUserStore();
 
-axios
-  .get(`http://localhost/attraction/like`, {
-    params: {
-      userId: "ssafy",
-    },
-  })
-  .then((response) => {
-    // console.log("API Response:", response.data);
-    favoritesStore.favorites = response.data;
-    attraction.value = response.data;
-    // console.log(response.data);
-  })
-  .catch((error) => {
-    console.error("API Error:", error);
-  });
+if (userStore.isLogin) {
+  axios
+    .get(`http://localhost/attraction/like`, {
+      params: {
+        userId: userStore.userInfo.userId,
+      },
+    })
+    .then((response) => {
+      // console.log("API Response:", response.data);
+      favoritesStore.favorites = response.data;
+      attraction.value = response.data;
+      // console.log(response.data);
+    })
+    .catch((error) => {
+      console.error("API Error:", error);
+    });
+}
 
 const hasPlan = computed(() => {
   const plan = planStore.plan;
