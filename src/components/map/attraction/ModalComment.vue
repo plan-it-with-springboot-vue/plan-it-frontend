@@ -31,30 +31,40 @@ import ProfileImg from "../../../assets/svg/ProfileImg.vue";
 import { useAttractionStore } from "../../../stores/store";
 import { ref } from "vue";
 import axios from "axios";
+import { useUserStore } from "../../../stores/user";
 
 const attractionStore = useAttractionStore();
+const userStore = useUserStore();
 
 const commentInput = ref("");
 const submitComment = () => {
-  axios
-    .post("http://localhost/attraction/review/write", {
-      content: commentInput.value,
-      userId: "ssafy",
-      contentId: attractionStore.selectedAttraction.contentId,
-    })
-    .then(() => {
-      attractionStore.selectedAttractionReview.push({
-        content: commentInput.value,
-        userId: "ssafy",
-        contentId: attractionStore.selectedAttraction.contentId,
-        registerTime: Date(Date.now()),
-      });
+  if (userStore.isLogin) {
+    if (commentInput.value === "") {
+      alert("내용 작성 부탁");
+    } else {
+      axios
+        .post("http://localhost/attraction/review/write", {
+          content: commentInput.value,
+          userId: userStore.userInfo.userId,
+          contentId: attractionStore.selectedAttraction.contentId,
+        })
+        .then(() => {
+          attractionStore.selectedAttractionReview.push({
+            content: commentInput.value,
+            userId: userStore.userInfo.userId,
+            contentId: attractionStore.selectedAttraction.contentId,
+            registerTime: Date(Date.now()),
+          });
 
-      commentInput.value = "";
-    })
-    .catch((error) => {
-      console.error("Error submitting comment:", error);
-    });
+          commentInput.value = "";
+        })
+        .catch((error) => {
+          console.error("Error submitting comment:", error);
+        });
+    }
+  } else {
+    alert("로그인 후 이용해라");
+  }
 };
 </script>
 
