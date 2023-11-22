@@ -24,17 +24,29 @@ import WishListView from "../views/WishListView.vue";
 const onlyAuthUser = async (to, from, next) => {
   const userStore = useUserStore();
   const { userInfo, isValidToken } = storeToRefs(userStore);
-  const { getUserInfo } = userStore;
+  const token = sessionStorage.getItem("accessToken");
 
-  let token = sessionStorage.getItem("accessToken");
-
-  if (userInfo.value != null && token) {
-    await getUserInfo(token);
-  }
-  if (!isValidToken.value || userInfo.value === null) {
+  if (!token) {
+    // 토큰이 없으면 로그인 페이지로 리디렉션
+    alert("로그인 후 이용해주세요.");
     next({ name: "login" });
   } else {
-    next();
+    // 토큰이 있으면 사용자 정보 가져오기 시도
+    try {
+      await userStore.getUserInfo(token);
+      if (isValidToken.value && userInfo.value) {
+        next(); // 유효한 토큰과 사용자 정보가 있으면 네비게이션 진행
+      } else {
+        // 유효하지 않으면 로그인 페이지로 리디렉션
+        alert("로그인 후 이용해주세요.");
+        next({ name: "login" });
+      }
+    } catch (error) {
+      console.error("Error during authentication:", error);
+      // 예외 발생 시 로그인 페이지로 리디렉션
+      alert("로그인 후 이용해주세요.");
+      next({ name: "login" });
+    }
   }
 };
 const router = createRouter({

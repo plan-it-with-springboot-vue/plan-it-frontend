@@ -9,7 +9,7 @@
                 <!-- 검색, 버튼 부분 -->
                 <div id="notice-list-setting">
                     <div id="notice-list-register-box">
-                        <button v-if="userStore.userInfo.userId === 'admin'" id="notice-list-register-btn"
+                        <button v-if="userStore.userInfo?.userId === 'admin'" id="notice-list-register-btn"
                             @click="goToRegister">등록</button>
                     </div>
 
@@ -71,14 +71,28 @@ import { useUserStore } from "../../stores/user";
 const userStore = useUserStore();
 const router = useRouter();
 
+// 사용자 정보를 확인하고 업데이트하는 함수
+const updateUserInfo = async () => {
+    const token = sessionStorage.getItem("accessToken");
+    if (token) {
+        try {
+            await userStore.getUserInfo(token);
+        } catch (error) {
+            console.error("Error fetching user info:", error);
+        }
+    }
+};
+
 // 상세 페이지로 이동
 const goToNoticeDetail = (noticeId) => {
     router.push({ name: "NoticeDetailView", params: { noticeId } });
 };
 
-//공지사항 등록 페이지로 이동
 const goToRegister = () => {
-    router.push("/notice/register");
+    // 사용자 정보가 로드될 때까지 기다리고, 존재하는 경우에만 접근
+    if (userStore.userInfo && userStore.userInfo.userId === 'admin') {
+        router.push("/notice/register");
+    }
 };
 
 // 셀렉트 박스의 선택된 값을 관리하는 반응형 데이터
@@ -108,7 +122,10 @@ const getNoticeList = () => {
         });
 };
 
-onMounted(getNoticeList);
+onMounted(async () => {
+    await updateUserInfo();
+    getNoticeList();
+});
 
 </script>
   

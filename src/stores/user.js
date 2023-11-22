@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { jwtDecode } from "jwt-decode";
+import router from "@/router";
 
 import { userConfirm, findById, tokenRegeneration, logout } from "@/api/user";
 import { HttpStatusCode } from "axios";
@@ -98,7 +99,7 @@ export const useUserStore = defineStore("userStore", {
           sessionStorage.removeItem("refreshToken");
 
           console.log("logout success");
-          router.push({ name: "Login" });
+          router.push("/login");
         } else {
           console.error("유저 정보 없음!!!!");
         }
