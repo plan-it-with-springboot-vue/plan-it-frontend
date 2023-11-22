@@ -93,7 +93,12 @@ export const useUserStore = defineStore("userStore", {
           this.isLogin = false;
           this.userInfo = null;
           this.isValidToken = false;
+
+          sessionStorage.removeItem("accessToken");
+          sessionStorage.removeItem("refreshToken");
+
           console.log("logout success");
+          router.push({ name: "Login" });
         } else {
           console.error("유저 정보 없음!!!!");
         }

@@ -11,15 +11,17 @@
         </li>
         <li :class="{ 'nav-active': activeRoute === '/board' }" class="nav-content" @click="navigateTo('/board')">커뮤니티
         </li>
+        <li :class="{ 'nav-active': activeRoute === '/notice' }" class="nav-content" @click="navigateTo('/notice')">공지사항
+        </li>
       </ul>
       <ul>
-        <li :class="{ 'nav-active': activeRoute === '/login' }" class="nav-content-login" v-if="!isLoggedIn"
+        <li :class="{ 'nav-active': activeRoute === '/login' }" class="nav-content-login" v-if="!userStore.isLogin"
           @click="navigateTo('/login')">로그인</li>
-        <li :class="{ 'nav-active': activeRoute === '/signup' }" class="nav-content-sign-up" v-if="!isLoggedIn"
+        <li :class="{ 'nav-active': activeRoute === '/signup' }" class="nav-content-sign-up" v-if="!userStore.isLogin"
           @click="navigateTo('/signup')">회원가입</li>
         <li v-else class="dropdown">
           <div id="nav-name-box">
-            <label id="nav-name">{{ userName }}님</label>
+            <label id="nav-name">{{ userStore.userInfo?.userName }}님</label>
           </div>
           <div id="profile-img">
             <img src="@/assets/image/profile.png" alt="profile">
@@ -29,6 +31,7 @@
               <li @click="navigateTo('/mypage')">마이페이지</li>
               <li @click="navigateTo('/mypage/planlist')">여행 일정 관리</li>
               <li @click="navigateTo('/mypage/wishlist')">관심 여행지</li>
+              <li @click="logout">로그아웃</li>
             </ul>
           </div>
         </li>
@@ -40,9 +43,10 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useUserStore } from "../../stores/user";
 
-const isLoggedIn = ref(true); // 로그인 상태
-const userName = ref('김싸피'); // 사용자 이름
+const userStore = useUserStore();
+
 const router = useRouter();
 const route = useRoute();
 const activeRoute = ref(route.path); // 현재 활성화된 라우트
@@ -54,6 +58,16 @@ watch(route, (newRoute) => {
 const navigateTo = (path) => {
   router.push(path);
 };
+
+const logout = () => {
+  userStore.userLogout(userStore.userInfo.userId);
+  router.push("/login");
+}
+
+if (sessionStorage.getItem("accessToken")) {
+  userStore.isLogin = true;
+  userStore.userInfo = userStore.getUserInfo(sessionStorage.getItem("accessToken"));
+}
 </script>
 
 <style scoped>
