@@ -33,8 +33,8 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="loginFailed" id="login-error">
-                    아이디 또는 비밀번호를 잘못 입력했습니다.<br/>
+                <div v-if="!isLogin" id="login-error">
+                    아이디 또는 비밀번호를 잘못 입력했습니다.<br />
                     입력하신 내용을 다시 확인해주세요.
                 </div>
                 <div id="login-button-box">
@@ -50,36 +50,41 @@ import { ref } from 'vue';
 // import axios from 'axios';
 import LoginCheckIcon from "../../../assets/svg/LoginCheckIcon.vue";
 import LoginUncheckIcon from "../../../assets/svg/LoginUncheckIcon.vue";
+import { useUserStore } from "../../../stores/user.js";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const userStore = useUserStore();
 
 //로그인 반응형 데이터
 const userId = ref('');
 const password = ref('');
 const isSaved = ref(false); // 아이디 저장 상태를 관리하는 반응형 데이터
-const loginFailed = ref(false); // 로그인 실패 상태 추가
+const isLogin = ref(true); // 로그인 실패 상태
 
 function toggleSaveState() {
     isSaved.value = !isSaved.value; // 클릭할 때마다 아이디 저장 상태를 토글
 }
 
 
-async function login() {
-    loginFailed.value = false; // 로그인 시도 전에 실패 상태 초기화
+function login() {
     const loginData = {
         userId: userId.value,
-        password: password.value,
+        userPassword: password.value,
     };
-    console.log(loginData);
 
-    try {
-        console.log(loginData);
-        // const response = await axios.post('https://example.com/login', loginData);
-        // 로그인 성공 처리
-        console.log(response.data);
-    } catch (error) {
+    userStore.userLogin(loginData).then(() => {
+        if (userStore.isLogin) {
+            router.push("/");
+        } else {
+            // 로그인 실패 시
+            isLogin.value = false;
+        }
+    }).catch((error) => {
         // 로그인 실패 처리
         console.error(error);
-        loginFailed.value = true; // 로그인 실패 시 실패 상태 설정
-    }
+        isLogin.value = false;
+    });
 }
 </script>
 
@@ -91,10 +96,12 @@ async function login() {
     align-items: center;
     flex-direction: column;
 }
+
 #logo-img img {
     width: 25.1875rem;
     height: auto;
 }
+
 .input {
     width: 26.875rem;
     height: 3.125rem;
@@ -105,6 +112,7 @@ async function login() {
     margin-bottom: 1rem;
     box-sizing: border-box;
 }
+
 #login-etc {
     width: 26.875rem;
     display: flex;
@@ -112,16 +120,19 @@ async function login() {
     align-items: center;
     flex-direction: row;
 }
+
 #login-etc-save {
     cursor: pointer;
     margin: 0;
     display: flex;
     align-items: center;
 }
+
 #login-text {
     font-size: 0.75rem;
     margin-left: 0.3rem;
 }
+
 #login-etc-find {
     width: 8.6875rem;
     display: flex;
@@ -129,6 +140,7 @@ async function login() {
     align-items: center;
     flex-direction: row;
 }
+
 a {
     text-decoration: none;
     color: black;
@@ -136,10 +148,12 @@ a {
     text-align: center;
     font-size: 0.75rem;
 }
+
 #login-etc-find-line {
     font-family: Noto Sans;
     font-size: 0.8rem;
 }
+
 #login-button-box {
     display: flex;
     justify-content: center;
@@ -147,6 +161,7 @@ a {
     flex-shrink: 0;
     margin-top: 4.06rem;
 }
+
 #login-button {
     cursor: pointer;
     width: 26.875rem;
@@ -154,9 +169,10 @@ a {
     background-color: #6499E9;
     color: white;
     font-size: 1rem;
-    border:none;
+    border: none;
     border-radius: 0.3rem;
 }
+
 #login-error {
     color: red;
     /* text-align: center; */
