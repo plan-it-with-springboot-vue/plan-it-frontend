@@ -23,8 +23,8 @@
       </div>
       <div id="board-detail-btn-box">
         <div id="board-detail-select-box">
-          <button v-if="isUserAuthor" id="board-detail-modify-btn" @click="modifyBoard">수정</button>
-          <button v-if="isUserAuthor" id="board-detail-delete-btn" @click="deleteBoard">삭제</button>
+          <button id="board-detail-modify-btn" @click="modifyBoard(boardDetail.boardId)">수정</button>
+          <button id="board-detail-delete-btn" @click="deleteBoard">삭제</button>
         </div>
         <div id="board-detail-list-btn-box">
           <button id="board-detail-btn" @click="goToBoardList">목록</button>
@@ -136,6 +136,7 @@ const comments = ref([
   },
 ]);
 
+//목록 이동
 const goToBoardList = () => {
   router.push('/board');
 }
@@ -158,23 +159,31 @@ const formatDateTime = (dateString) => {
   return formattedDate;
 };
 
+//게시글 수정
+const modifyBoard = (boardId) => {
+  router.push({ name: "BoardModifyView", params: { boardId } });
+}
+
 //게시글 삭제
 const deleteBoard = () => {
-  axios
-    .get(`http://localhost/board/delete=${boardId}`, {
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+  if (confirm("게시글을 삭제하시겠습니까?")) {
+    axios
+      .get(`http://localhost/board/delete?boardId=${boardId}`, {
+      })
+      .then((response) => {
+        console.log(response.data);
+        router.push('/board');
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }
 };
 
 //게시판 상세보기
 const getBoardDetail = () => {
   axios
-    .get(`http://localhost/board/view?articleNo=${boardId}`, {
+    .get(`http://localhost/board/view?boardId=${boardId}`, {
     })
     .then((response) => {
       boardDetail.value = response.data;
@@ -291,7 +300,8 @@ p {
   font-size: 1rem;
   font-weight: 500;
 }
-#board-detail-modify-btn{
+
+#board-detail-modify-btn {
   width: 4.75rem;
   height: 1.8rem;
   flex-shrink: 0;
@@ -306,6 +316,7 @@ p {
   cursor: pointer;
   margin-right: 0.5rem;
 }
+
 #board-detail-delete-btn {
   width: 4.75rem;
   height: 1.8rem;
@@ -320,6 +331,7 @@ p {
   font-weight: 600;
   cursor: pointer;
 }
+
 #board-detail-list-btn-box {
   width: 5.625rem;
   height: 2.0625rem;
@@ -339,15 +351,17 @@ p {
   flex-direction: row;
   margin-top: 1rem;
 }
+
 #board-detail-select-box {
-  width: 11.9375rem;
-height: 2.0625rem;
-flex-shrink: 0;
+  width: 9.9375rem;
+  height: 2.0625rem;
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   flex-direction: row;
 }
+
 #board-detail-btn {
   width: 4.75rem;
   height: 1.8rem;

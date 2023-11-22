@@ -47,15 +47,17 @@ const registerPost = () => {
     userId: "ssafy"
   };
 
-  axios
-    .post(`http://localhost/board/write`, postData)
-    .then((response) => {
-      // 게시글 등록 후 게시판 목록으로 이동
-      router.push('/board');
-    })
-    .catch((error) => {
-      console.error("Error posting data:", error);
-    });
+  if (confirm("게시글을 등록하시겠습니까?")) {
+    axios
+      .post(`http://localhost/board/write`, postData)
+      .then((response) => {
+        // 게시글 등록 후 게시판 목록으로 이동
+        router.push('/board');
+      })
+      .catch((error) => {
+        console.error("Error posting data:", error);
+      });
+  }
 };
 
 // 게시글 목록 페이지 경로로 이동
@@ -76,6 +78,7 @@ const goToBoardList = () => {
   flex-direction: column;
   margin-bottom: 0;
 }
+
 .board-register-flex {
   width: 59.75rem;
   height: 3rem;
@@ -86,6 +89,7 @@ const goToBoardList = () => {
   margin-top: 10rem;
   margin-bottom: 1.63rem;
 }
+
 #board-register-label {
   display: flex;
   justify-content: center;
@@ -93,9 +97,11 @@ const goToBoardList = () => {
   font-size: 2rem;
   font-weight: 700;
 }
+
 #board-register-content-box {
   margin-top: 2.56rem;
 }
+
 #board-register-title-input-box {
   width: 59.75rem;
   height: 5rem;
@@ -106,6 +112,7 @@ const goToBoardList = () => {
   flex-direction: column;
   margin-bottom: 1rem;
 }
+
 .board-register-input-label {
   display: flex;
   width: 11.875rem;
@@ -117,6 +124,7 @@ const goToBoardList = () => {
   font-size: 1.125rem;
   font-weight: 600;
 }
+
 .board-register-input {
   width: 59.75rem;
   height: 3.125rem;
@@ -132,6 +140,7 @@ const goToBoardList = () => {
   box-sizing: border-box;
   font-size: 1rem;
 }
+
 #board-register-content-textarea-box {
   width: 59.75rem;
   height: 18.75rem;
@@ -142,6 +151,7 @@ const goToBoardList = () => {
   flex-direction: column;
   margin-bottom: 2rem;
 }
+
 #board-register-textarea {
   width: 59.75rem;
   height: 16.8125rem;
@@ -152,11 +162,14 @@ const goToBoardList = () => {
   font-size: 1rem;
   box-sizing: border-box;
 }
+
 .board-register-content-hr {
   border: 0;
   height: 0.0625rem;
-  background-color: #e7e7e7; /* 선의 색상 */
+  background-color: #e7e7e7;
+  /* 선의 색상 */
 }
+
 #board-register-file-box {
   width: 59.75rem;
   height: 1.5rem;
@@ -168,6 +181,7 @@ const goToBoardList = () => {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
 #board-register-file-label {
   width: 5.875rem;
   height: 2.5625rem;
@@ -179,6 +193,7 @@ const goToBoardList = () => {
   font-size: 1.125rem;
   font-weight: 600;
 }
+
 #board-register-file-btn {
   display: flex;
   justify-content: center;
@@ -186,6 +201,7 @@ const goToBoardList = () => {
   cursor: pointer;
   font-size: 0.75rem;
 }
+
 #board-register-btn-box {
   width: 59.75rem;
   height: 2.0625rem;
@@ -194,6 +210,7 @@ const goToBoardList = () => {
   align-items: center;
   margin-top: 1rem;
 }
+
 #board-cancel-btn {
   width: 5.625rem;
   height: 2.0625rem;
@@ -208,6 +225,7 @@ const goToBoardList = () => {
   cursor: pointer;
   margin-right: 1rem;
 }
+
 #board-register-btn {
   width: 5.625rem;
   height: 2.0625rem;
@@ -220,5 +238,4 @@ const goToBoardList = () => {
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-}
-</style>
+}</style>
