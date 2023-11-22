@@ -26,24 +26,38 @@ import KakaoMapVue from "../components/map/KakaoMap.vue";
 import ModalBoxVue from "../components/map/attraction/ModalBox.vue";
 import TheHeaderVue from "../components/layout/TheHeader.vue";
 import axios from "axios";
+import { useUserStore } from "../stores/user";
+import { watch } from "vue";
 
+const userStore = useUserStore();
 const attractionStore = useAttractionStore();
 const favoritesStore = useFavoriteStores();
 
-axios
-  .get(`http://localhost/attraction/like`, {
-    params: {
-      userId: "ssafy",
-    },
-  })
-  .then((response) => {
-    // console.log("API Response:", response.data);
-    favoritesStore.favorites = response.data;
-    console.log(favoritesStore.favorites);
-  })
-  .catch((error) => {
-    console.error("API Error:", error);
-  });
+// watch(
+//   () => userStore.isLogin,
+//   () => {
+// userStore.getUserInfo(sessionStorage.getItem("accessToken"));
+// console.log(userStore.userInfo);
+//   }
+// );
+
+if (userStore.isLogin) {
+  axios
+    .get(`http://localhost/attraction/like`, {
+      params: {
+        userId: userStore.userInfo.userId,
+      },
+    })
+    .then((response) => {
+      // console.log("API Response:", response.data);
+      favoritesStore.favorites = response.data;
+      console.log(favoritesStore.favorites);
+      // console.log(userStore.userInfo.userId);
+    })
+    .catch((error) => {
+      console.error("API Error:", error);
+    });
+}
 </script>
 
 <style scoped>

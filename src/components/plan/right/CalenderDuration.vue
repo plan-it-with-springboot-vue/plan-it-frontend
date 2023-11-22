@@ -97,6 +97,7 @@ import Datepicker from "vue3-datepicker";
 import { ko } from "date-fns/locale";
 import { format } from "date-fns";
 import { usePlanStore, useDateStore } from "../../../stores/store";
+import { useUserStore } from "../../../stores/user";
 
 export default defineComponent({
   name: "App",
@@ -151,6 +152,7 @@ export default defineComponent({
     let duration = ref({ from: "", to: "" });
     const planTitle = ref("");
     const planStore = usePlanStore();
+    const userStore = useUserStore();
 
     const addPlan = () => {
       if (duration.value.from > duration.value.to) {
@@ -158,20 +160,21 @@ export default defineComponent({
       } else if (planTitle.value == "") {
         alert("제목 입력");
       }
-      // day1 날짜 설정
-      else {
+      if (userStore.isLogin) {
         dp2.value = new Date(duration.value.from); // 시작 날짜로 picker 설정
         // plan store 저장
         const plan = {
           title: planTitle.value,
           startSchedule: duration.value.from,
           endSchedule: duration.value.to,
-          userId: "ssafy",
+          userId: userStore.userInfo.userId,
           planDetail: [],
         };
         planStore.addPlan(plan);
         planTitle.value = "";
         // console.log(planStore.plan);
+      } else {
+        alert("로그인 후 이용해주세요");
       }
     };
 

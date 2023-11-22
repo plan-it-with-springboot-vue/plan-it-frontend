@@ -116,12 +116,13 @@ import {
   useLocation,
   useMapStore,
 } from "../../../stores/store";
+import { useUserStore } from "../../../stores/user";
 
 const attraction = ref([]);
 
 const attractionStore = useAttractionStore();
-
 const locationStore = useLocation();
+const userStore = useUserStore();
 
 const showModal = (attractionItem) => {
   locationStore.selectLocation(attractionItem);
@@ -194,43 +195,51 @@ watch(
 const favoritesStore = useFavoriteStores();
 
 const likeAttraction = async (attractionItem) => {
-  try {
-    const response = await axios.post("http://localhost/attraction/like", {
-      userId: "ssafy",
-      contentId: attractionItem.contentId,
-    });
+  if (userStore.isLogin) {
+    try {
+      const response = await axios.post("http://localhost/attraction/like", {
+        userId: userStore.userInfo.userId,
+        contentId: attractionItem.contentId,
+      });
 
-    favoritesStore.favorites.push({
-      userId: "ssafy",
-      contentId: attractionItem.contentId,
-    });
-    // console.log(favoritesStore.favorites);
-  } catch (error) {
-    console.error("Error while liking the attraction:", error);
+      favoritesStore.favorites.push({
+        userId: userStore.userInfo.userId,
+        contentId: attractionItem.contentId,
+      });
+      // console.log(favoritesStore.favorites);
+    } catch (error) {
+      console.error("Error while liking the attraction:", error);
+    }
+  } else {
+    alert("로그인 후 이용해 주세용~~~~~");
   }
 };
 
 const deleteLike = async (attractionItem) => {
-  try {
-    const response = await axios
-      .delete(`http://localhost/attraction/like`, {
-        params: {
-          userId: "ssafy",
-          contentId: attractionItem.contentId,
-        },
-      })
-      .then((response) => {
-        favoritesStore.favorites = favoritesStore.favorites.filter(
-          (item) => item.contentId !== attractionItem.contentId
-        );
+  if (userStore.isLogin) {
+    try {
+      const response = await axios
+        .delete(`http://localhost/attraction/like`, {
+          params: {
+            userId: userStore.userInfo.userId,
+            contentId: attractionItem.contentId,
+          },
+        })
+        .then((response) => {
+          favoritesStore.favorites = favoritesStore.favorites.filter(
+            (item) => item.contentId !== attractionItem.contentId
+          );
 
-        // console.log(favoritesStore.favorites);
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
-  } catch (error) {
-    console.error("Error while liking the attraction:", error);
+          // console.log(favoritesStore.favorites);
+        })
+        .catch((error) => {
+          console.error("API Error:", error);
+        });
+    } catch (error) {
+      console.error("Error while liking the attraction:", error);
+    }
+  } else {
+    alert("로그인 후 이용해 주세용~~~~~");
   }
 };
 </script>
