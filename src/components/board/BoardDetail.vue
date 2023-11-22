@@ -36,9 +36,9 @@
     <div id="board-detail-comment-box-container">
       <div id="board-detail-comment-input-box">
         <label id="board-detail-comment-input-label">댓글</label>
-        <textarea id="board-detail-comment-textarea"></textarea>
+        <textarea id="board-detail-comment-textarea" v-model="newComment"></textarea>
         <div id="board-detail-comment-input-box-btn">
-          <button id="board-detail-comment-input-btn">등록</button>
+          <button id="board-detail-comment-input-btn" @click="submitComment">등록</button>
         </div>
       </div>
       <div id="board-detail-comment-content-box">
@@ -49,21 +49,32 @@
               <img id="board-detail-comment-img" src="@/assets/image/profile.png" alt="profile" />
               <div id="board-detail-comment-header-left-text">
                 <p id="board-detail-comment-header-left-text-id">{{ comment.userId }}</p>
-                <p id="board-detail-comment-header-left-text-date">{{ comment.registerTime }}</p>
+                <p id="board-detail-comment-header-left-text-date">{{ formatDate(comment.registerTime) }}</p>
               </div>
             </div>
             <div>
-              <svg id="board-detail-comment-header-setting" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+              <svg v-if="userStore.userInfo.userId === comment.userId" id="board-detail-comment-header-setting"
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
+                viewBox="0 0 16 16" @click="toggleCommentMenu(comment.boardCommentId)">
                 <path
                   d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
                 <path
                   d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
               </svg>
+              <div v-if="isCommentMenuOpen(comment.boardCommentId)" class="comment-menu">
+                <button @click="startEdit(comment)">수정</button>
+                <button @click="deleteComment(comment.boardCommentId)">삭제</button>
+              </div>
             </div>
           </div>
           <div id="board-detail-comment-div">
-            <p id="board-detail-comment">{{ comment.content }}</p>
+            <div id="board-detail-comment-hide-div" v-if="editState[comment.boardCommentId]?.isEditing">
+              <textarea type="text" v-model="editState[comment.boardCommentId].editedComment"></textarea>
+              <div id="board-detail-comment-hide-btn-div">
+                <button @click="submitEdit(comment.boardCommentId)">수정</button>
+              </div>
+            </div>
+            <p v-else id="board-detail-comment">{{ comment.content }}</p>
           </div>
           <div>
             <hr class="board-detail-comment-hr" />
@@ -86,57 +97,10 @@ const route = useRoute();
 const router = useRouter();
 const boardId = route.params.boardId; // URL에서 boardId 가져오기
 const boardDetail = ref({});
-const comments = ref([
-  {
-    boardCommentId: 1,
-    boardId: 1,
-    userId: "ssafy",
-    registerTime: "2023.11.20",
-    content: "정말 좋은 정보네요! 감사합니다. 잘 읽고 가요~ :)",
-  },
-  {
-    boardCommentId: 1,
-    boardId: 1,
-    userId: "ssafy",
-    registerTime: "2023.11.20",
-    content: "정말 좋은 정보네요! 감사합니다. 잘 읽고 가요~ :)",
-  },
-  {
-    boardCommentId: 1,
-    boardId: 1,
-    userId: "ssafy",
-    registerTime: "2023.11.20",
-    content: "정말 좋은 정보네요! 감사합니다. 잘 읽고 가요~ :)",
-  },
-  {
-    boardCommentId: 1,
-    boardId: 1,
-    userId: "ssafy",
-    registerTime: "2023.11.20",
-    content: "정말 좋은 정보네요! 감사합니다. 잘 읽고 가요~ :)",
-  },
-  {
-    boardCommentId: 1,
-    boardId: 1,
-    userId: "ssafy",
-    registerTime: "2023.11.20",
-    content: "정말 좋은 정보네요! 감사합니다. 잘 읽고 가요~ :)",
-  },
-  {
-    boardCommentId: 1,
-    boardId: 1,
-    userId: "ssafy",
-    registerTime: "2023.11.20",
-    content: "정말 좋은 정보네요! 감사합니다. 잘 읽고 가요~ :)",
-  },
-  {
-    boardCommentId: 1,
-    boardId: 1,
-    userId: "ssafy",
-    registerTime: "2023.11.20",
-    content: "정말 좋은 정보네요! 감사합니다. 잘 읽고 가요~ :)",
-  },
-]);
+const comments = ref([]);
+const newComment = ref(''); // 댓글 입력 데이터를 저장할 ref
+const commentMenus = ref({}); //댓글 수정, 삭제 토글
+const editState = ref({}); //댓글 수정 상태
 
 //목록 이동
 const goToBoardList = () => {
@@ -144,6 +108,13 @@ const goToBoardList = () => {
 }
 
 //날짜 형식 변환
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 const formatDateTime = (dateString) => {
   if (!dateString || isNaN(Date.parse(dateString))) {
     return '';
@@ -197,18 +168,105 @@ const getBoardDetail = () => {
 
 onMounted(getBoardDetail); // 컴포넌트가 마운트될 때 API 호출
 
-// const getComments = async () => {
-//   try {
-//     const response = await axios.get(`https://example.com/api/boards/${boardId}/comments`);
-//     comments.value = response.data; // API에서 가져온 댓글 데이터 저장
-//   } catch (error) {
-//     console.error('댓글 API 호출 중 오류 발생:', error);
-//   }
-// };
+//댓글 리스트 가져오기
+const getComments = () => {
+  axios
+    .get(`http://localhost/board/comment/list?boardId=${boardId}`, {
+    })
+    .then((response) => {
+      comments.value = response.data;
+    })
+    .catch((error) => {
+      console.error('댓글 API 호출 중 오류 발생:', error);
+    });
+};
 
-// onMounted(async () => {
-//   await getComments();
-// });
+onMounted(async () => {
+  await getComments();
+});
+
+//댓글 작성 함수
+const submitComment = () => {
+  if (!newComment.value.trim()) {
+    alert('댓글을 입력해주세요.');
+    return;
+  }
+
+  const commentData = {
+    boardId: boardId, // 현재 보드 ID
+    userId: userStore.userInfo.userId, // 사용자 ID
+    content: newComment.value // 댓글 내용
+  };
+
+  axios.post('http://localhost/board/comment/write', commentData)
+    .then(response => {
+      console.log('댓글 등록 성공:', response);
+      newComment.value = ''; // 텍스트 에어리어 초기화
+      getComments(); // 댓글 목록 다시 불러오기
+    })
+    .catch(error => {
+      console.error('댓글 등록 실패:', error);
+    });
+};
+
+// 댓글 메뉴 토글
+const toggleCommentMenu = (commentId) => {
+  commentMenus.value[commentId] = !commentMenus.value[commentId];
+};
+
+// 특정 댓글 메뉴가 열려 있는지 확인
+const isCommentMenuOpen = (commentId) => {
+  return commentMenus.value[commentId];
+};
+
+// 댓글 수정 시작
+const startEdit = (comment) => {
+  editState.value[comment.boardCommentId] = {
+    isEditing: true,
+    editedComment: comment.content
+  };
+  // 해당 댓글의 메뉴 숨김
+  commentMenus.value[comment.boardCommentId] = false;
+};
+
+// 댓글 수정 제출
+const submitEdit = async (commentId) => {
+  const editedContent = editState.value[commentId].editedComment;
+
+  // 서버에 수정된 내용을 보내 업데이트
+  try {
+    await axios.post('http://localhost/board/comment/modify', {
+      boardCommentId: commentId,
+      content: editedContent
+    });
+    console.log('댓글 수정 성공');
+  } catch (error) {
+    console.error('댓글 수정 실패:', error);
+  }
+
+  // 댓글 수정 모드 종료
+  delete editState.value[commentId];
+  await getComments(); // 댓글 목록 다시 불러오기
+};
+
+// 댓글 삭제 함수
+const deleteComment = (commentId) => {
+  if (confirm("댓글을 삭제하시겠습니까?")) {
+    axios
+      .get(`http://localhost/board/comment/delete?boardCommentId=${commentId}`, {
+      })
+      .then((response) => {
+        console.log('댓글 삭제 성공');
+        getComments(); // 댓글 목록 다시 불러오기
+      })
+      .catch((error) => {
+        console.error('댓글 API 호출 중 오류 발생:', error);
+      });
+  }
+  else {
+    commentMenus.value[commentId] = !commentMenus.value[commentId];
+  }
+};
 </script>
 
 <style scoped>
@@ -441,6 +499,7 @@ p {
 }
 
 #board-detail-comment-header-box {
+  position: relative;
   width: 59.625rem;
   height: 3.75rem;
   flex-shrink: 0;
@@ -546,5 +605,75 @@ p {
   font-weight: 400;
   margin-left: 0.5rem;
   white-space: nowrap;
+}
+
+.comment-menu {
+  width: 5rem;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0.125rem;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  right: 0;
+  top: 65%;
+}
+
+.comment-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.comment-menu button:hover {
+  background-color: #f5f5f5;
+}
+
+#board-detail-comment-hide-div {
+  width: 59.625rem;
+  height: 3.6875rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#board-detail-comment-hide-div textarea {
+  width: 53rem;
+  height: 2.6875rem;
+  flex-shrink: 0;
+  border-radius: 0.125rem;
+  border: 1px solid var(--main, #C8C8C8);
+  background: rgba(255, 255, 255, 0.00);
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-top: 0.5rem;
+  padding-left: 0.7rem;
+}
+
+#board-detail-comment-hide-btn-div {
+  width: 5.00775rem;
+  height: 3.6rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+#board-detail-comment-hide-div button {
+  width: 4rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 0.125rem;
+  background: var(--main, #C8C8C8);
+  color: #FFF;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 </style>
