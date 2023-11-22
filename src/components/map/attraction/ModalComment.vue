@@ -15,7 +15,10 @@
       <div id="profile"><ProfileImg /></div>
       <div id="ex-profile">
         <div id="user-delete-container">
-          <span id="user-id">{{ commentItem.userId }}</span> <span>삭제</span>
+          <span id="user-id">{{ commentItem.userId }}</span>
+          <div v-if="userStore.userInfo.userId === commentItem.userId">
+            <span @click="deleteComment(commentItem)">삭제</span>
+          </div>
         </div>
         <p>
           {{ commentItem.content }}
@@ -35,8 +38,8 @@ import { useUserStore } from "../../../stores/user";
 
 const attractionStore = useAttractionStore();
 const userStore = useUserStore();
-
 const commentInput = ref("");
+
 const submitComment = () => {
   if (userStore.isLogin) {
     if (commentInput.value === "") {
@@ -49,11 +52,19 @@ const submitComment = () => {
           contentId: attractionStore.selectedAttraction.contentId,
         })
         .then(() => {
+          let reviewCnt = attractionStore.selectedAttractionReview.reduce(
+            (maxId, currentObj) => {
+              return currentObj.reviewId > maxId ? currentObj.reviewId : maxId;
+            },
+            attractionStore.selectedAttractionReview[0].reviewId
+          );
+
           attractionStore.selectedAttractionReview.push({
             content: commentInput.value,
             userId: userStore.userInfo.userId,
             contentId: attractionStore.selectedAttraction.contentId,
             registerTime: Date(Date.now()),
+            reviewId: ++reviewCnt,
           });
 
           commentInput.value = "";
@@ -64,6 +75,31 @@ const submitComment = () => {
     }
   } else {
     alert("로그인 후 이용해라");
+  }
+};
+
+const deleteComment = (commentItem) => {
+  if (commentItem.userId !== userStore.userInfo?.userId) {
+    alert("본인 댓글만 삭제 가능");
+  } else {
+    axios
+      .delete(`http://localhost/attraction/review/delete`, {
+        params: {
+          reviewId: commentItem.reviewId,
+        },
+      })
+      .then(() => {
+        const indexToDelete =
+          attractionStore.selectedAttractionReview.findIndex(
+            (comment) => comment.reviewId === commentItem.reviewId
+          );
+        if (indexToDelete !== -1) {
+          attractionStore.selectedAttractionReview.splice(indexToDelete, 1);
+        }
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
   }
 };
 </script>
@@ -117,6 +153,7 @@ button {
 span {
   color: #8c8c8c;
   font-size: 1rem;
+  cursor: pointer;
 }
 p {
   font-size: 1rem;
