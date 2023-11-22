@@ -14,6 +14,9 @@ import BoardDetailView from "../views/BoardDetailView.vue";
 import BoardRegisterView from "../views/BoardRegisterView.vue";
 import BoardModifyView from "../views/BoardModifyView.vue";
 import NoticeView from "../views/NoticeView.vue";
+import NoticeDetailView from "../views/NoticeDetailView.vue";
+import NoticeRegisterView from "../views/NoticeRegisterView.vue";
+import NoticeModifyView from "../views/NoticeModifyView.vue";
 import MyPageView from "../views/MyPageView.vue";
 import PlanListView from "../views/PlanListView.vue";
 import WishListView from "../views/WishListView.vue";
@@ -107,6 +110,21 @@ const router = createRouter({
       path: "/notice",
       name: "NoticeView",
       component: NoticeView,
+    },
+    {
+      path: "/notice/:noticeId",
+      name: "NoticeDetailView",
+      component: NoticeDetailView,
+    },
+    {
+      path: "/notice/register",
+      name: "NoticeRegisterView",
+      component: NoticeRegisterView,
+    },
+    {
+      path: "/notice/modify/:noticeId",
+      name: "NoticeModifyView",
+      component: NoticeModifyView,
     },
     {
       path: "/mypage",

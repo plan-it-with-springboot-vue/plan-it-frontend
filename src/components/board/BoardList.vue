@@ -56,12 +56,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                id="board-list-table-hover"
-                v-for="board in boardList"
-                :key="board.boardId"
-                @click="goToBoardDetail(board.boardId)"
-              >
+              <tr id="board-list-table-hover" v-for="board in boardList" :key="board.boardId"
+                @click="goToBoardDetail(board.boardId)">
                 <th scope="row">{{ board.boardId }}</th>
                 <td>{{ board.subject }}</td>
                 <td>{{ board.userId }}</td>
@@ -122,7 +118,6 @@ const getBoardList = () => {
 };
 
 onMounted(getBoardList);
-
 </script>
 
 <style scoped>
@@ -133,6 +128,7 @@ onMounted(getBoardList);
   flex-shrink: 0;
   margin-bottom: 5.5rem;
 }
+
 #board-list-label {
   display: flex;
   justify-content: center;
@@ -141,6 +137,7 @@ onMounted(getBoardList);
   font-weight: 700;
   /* margin-top: 11.75rem; */
 }
+
 #board-list-box {
   width: 80.4375rem;
   height: 33.375rem;
@@ -150,6 +147,7 @@ onMounted(getBoardList);
   align-items: center;
   flex-direction: column;
 }
+
 #board-list-setting {
   width: 80.4375rem;
   height: 2rem;
@@ -160,11 +158,13 @@ onMounted(getBoardList);
   flex-direction: row;
   margin-bottom: 2.12rem;
 }
+
 #board-list-register-box {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 #board-list-register-btn {
   width: 4.75rem;
   height: 1.8rem;
@@ -181,6 +181,7 @@ onMounted(getBoardList);
   font-weight: 500;
   cursor: pointer;
 }
+
 #board-list-search {
   width: 29.6875rem;
   height: 1.8rem;
@@ -190,6 +191,7 @@ onMounted(getBoardList);
   align-items: center;
   flex-direction: row;
 }
+
 .board-list-select {
   display: flex;
   justify-content: center;
@@ -202,6 +204,7 @@ onMounted(getBoardList);
   font-size: 0.75rem;
   font-weight: 500;
 }
+
 #board-list-search-input {
   width: 13.375rem;
   height: 1.8rem;
@@ -210,6 +213,7 @@ onMounted(getBoardList);
   border: 0.5px solid #000;
   box-sizing: border-box;
 }
+
 #board-list-search-btn {
   width: 4.75rem;
   height: 1.8rem;
@@ -223,15 +227,18 @@ onMounted(getBoardList);
   font-weight: 500;
   cursor: pointer;
 }
+
 #board-list-table-box {
   width: 80.5625rem;
   height: 30.375rem;
   flex-shrink: 0;
 }
+
 #board-list-table-box table {
   width: 100%;
   text-align: center;
 }
+
 table {
   border-collapse: collapse;
   width: 100%;

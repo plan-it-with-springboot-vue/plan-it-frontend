@@ -66,7 +66,7 @@ const logout = () => {
 
 if (sessionStorage.getItem("accessToken")) {
   userStore.isLogin = true;
-  userStore.userInfo = userStore.getUserInfo(sessionStorage.getItem("accessToken"));
+  userStore.getUserInfo(sessionStorage.getItem("accessToken"));
 }
 </script>
 

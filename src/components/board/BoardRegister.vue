@@ -34,6 +34,9 @@
 import { ref } from "vue";
 import axios from 'axios';
 import { useRouter } from "vue-router";
+import { useUserStore } from "../../stores/user";
+
+const userStore = useUserStore();
 
 const router = useRouter();
 const subject = ref('');
@@ -44,7 +47,7 @@ const registerPost = () => {
   const postData = {
     subject: subject.value,
     content: content.value,
-    userId: "ssafy"
+    userId: userStore.userInfo.userId
   };
 
   if (confirm("게시글을 등록하시겠습니까?")) {
@@ -238,4 +241,5 @@ const goToBoardList = () => {
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-}</style>
+}
+</style>

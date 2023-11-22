@@ -23,8 +23,10 @@
       </div>
       <div id="board-detail-btn-box">
         <div id="board-detail-select-box">
-          <button id="board-detail-modify-btn" @click="modifyBoard(boardDetail.boardId)">수정</button>
-          <button id="board-detail-delete-btn" @click="deleteBoard">삭제</button>
+          <button v-if="userStore.userInfo.userId === boardDetail.userId" id="board-detail-modify-btn"
+            @click="modifyBoard(boardDetail.boardId)">수정</button>
+          <button v-if="userStore.userInfo.userId === boardDetail.userId" id="board-detail-delete-btn"
+            @click="deleteBoard">삭제</button>
         </div>
         <div id="board-detail-list-btn-box">
           <button id="board-detail-btn" @click="goToBoardList">목록</button>
@@ -75,13 +77,13 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { computed } from 'vue';
 import axios from 'axios';
+import { useUserStore } from "../../stores/user";
+
+const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
-const loggedInUserId = ref("ssafy"); //현재 로그인 한 유저 정보
-const boardDetailLoaded = ref(false); // 데이터 로드 상태
 const boardId = route.params.boardId; // URL에서 boardId 가져오기
 const boardDetail = ref({});
 const comments = ref([
@@ -187,22 +189,11 @@ const getBoardDetail = () => {
     })
     .then((response) => {
       boardDetail.value = response.data;
-      boardDetailLoaded.value = true; // 데이터 로딩 완료
-
-      console.log(boardDetailLoaded.value);
-      console.log("Board Detail:", boardDetail.value.userId);
-      console.log("Logged In User ID:", loggedInUserId.value);
-      console.log("Types:", typeof boardDetail.value.userId, typeof loggedInUserId.value);
-      console.log(isUserAuthor);
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
 };
-
-const isUserAuthor = computed(() => {
-  return boardDetail.userId === loggedInUserId.value && boardDetailLoaded;
-});
 
 onMounted(getBoardDetail); // 컴포넌트가 마운트될 때 API 호출
 
