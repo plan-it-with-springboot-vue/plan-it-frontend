@@ -32,17 +32,7 @@ const useFavoriteStores = defineStore("favorites", {
 
 const useMapStore = defineStore("map", {
   state: () => ({
-    selectedLocation: [
-      {
-        contentId: 125266,
-        contentTypeId: 12,
-        title: "",
-        addr1: "",
-        firstImage: "",
-        latitude: 38.51112664,
-        longitude: 128.4191502,
-      },
-    ],
+    selectedLocationList: [],
   }),
   actions: {
     addAttractionList(attractionList) {
@@ -56,15 +46,15 @@ const useMapStore = defineStore("map", {
         longitude: attractionItem.longitude,
       }));
 
-      this.selectedLocation = locations;
+      this.selectedLocationList = locations;
     },
 
     deleteAttractionItem(contentId) {
-      const index = this.selectedLocation.findIndex(
+      const index = this.selectedLocationList.findIndex(
         (item) => item.contentId === contentId
       );
       if (index !== -1) {
-        this.selectedLocation.splice(index, 1);
+        this.selectedLocationList.splice(index, 1);
       }
     },
   },
@@ -72,15 +62,7 @@ const useMapStore = defineStore("map", {
 
 const useLocation = defineStore("location", {
   state: () => ({
-    location: {
-      contentId: 0,
-      contentTypeId: 12,
-      title: "",
-      addr1: "",
-      firstImage: "",
-      latitude: 37.540705,
-      longitude: 126.956764,
-    },
+    location: null,
   }),
   actions: {
     selectLocation(attraction) {
@@ -101,10 +83,10 @@ const useCategoryStore = defineStore("category", {
   state: () => ({
     selectedCategory: {
       contentTypeId: [12, 14, 15, 25, 28, 32, 38, 39],
-      sidoCode: 1,
-      gugunCode: 1,
+      sidoCode: null,
+      gugunCode: null,
     },
-  }), // 0은 전체를 뜻함 // 12: 관광지, 14: 문화시설, 15: 축제공연행사, 25: 여행코스, 28: 레포츠, 32: 숙박, 38: 쇼핑, 39: 음식점
+  }), // 12: 관광지, 14: 문화시설, 15: 축제공연행사, 25: 여행코스, 28: 레포츠, 32: 숙박, 38: 쇼핑, 39: 음식점
   actions: {
     addCategoryCondition(types, sido, gugun) {
       this.selectedCategory = {
