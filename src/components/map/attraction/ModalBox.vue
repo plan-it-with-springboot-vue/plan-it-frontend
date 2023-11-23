@@ -1,9 +1,9 @@
 <template>
   <div class="black-bg">
     <div class="white-bg" @click.stop>
-      <div class="close-button" @click="closeModal"><CloseButton /></div>
       <ModalDetail />
     </div>
+    <div class="close-button" @click="closeModal"><CloseButton /></div>
   </div>
 </template>
 
@@ -15,6 +15,7 @@ import ModalDetail from "./ModalDetail.vue";
 const attractionStore = useAttractionStore();
 
 const closeModal = () => {
+  console.log("click");
   attractionStore.closeModal();
 };
 </script>
@@ -29,25 +30,27 @@ div {
   height: 100%;
   /* background: rgba(0, 0, 0, 0.5); */
   position: fixed;
-  /* padding: 20px; */
   z-index: 6;
   padding-top: 3.75rem;
+  width: 28.8125rem;
 }
 .white-bg {
   width: 25.8125rem;
-  /* height: 56rem; */
-  /* background: white; */
-  /* border-radius: 8px; */
-  /* padding: 1rem; */
-  /* position: relative; */
   background-color: white;
   z-index: 6;
 }
 
 .close-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  position: absolute;
-  right: 20px;
-  top: 77px;
+  background-color: white;
+  padding: 0.4rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+  width: 3rem;
+  height: 3rem;
 }
 </style>

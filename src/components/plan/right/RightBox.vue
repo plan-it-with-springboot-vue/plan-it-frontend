@@ -14,7 +14,7 @@ import CalenderDuration from "./CalenderDuration.vue";
 #right-box-container {
   display: flex;
   flex-direction: column;
-  width: 20.8125rem;
+  width: 25.8125rem;
   height: 40.4375rem;
 }
 </style>

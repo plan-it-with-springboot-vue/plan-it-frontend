@@ -16,14 +16,14 @@
       <div id="ex-profile">
         <div id="user-delete-container">
           <span id="user-id">{{ commentItem.userId }}</span>
-          <div v-if="userStore.userInfo.userId === commentItem.userId">
+          <div v-if="userStore.userInfo?.userId === commentItem.userId">
             <span @click="deleteComment(commentItem)">삭제</span>
           </div>
         </div>
         <p>
           {{ commentItem.content }}
         </p>
-        <span id="timestamp">{{ commentItem.registerTime }}</span>
+        <span id="timestamp">{{ formatDate(commentItem.registerTime) }}</span>
       </div>
     </div>
   </div>
@@ -39,6 +39,12 @@ import { useUserStore } from "../../../stores/user";
 const attractionStore = useAttractionStore();
 const userStore = useUserStore();
 const commentInput = ref("");
+
+const formatDate = (timestamp) => {
+  const date = new Date(timestamp);
+
+  return date.toLocaleDateString("ko-KR");
+};
 
 const submitComment = () => {
   if (userStore.isLogin) {
@@ -80,24 +86,27 @@ const deleteComment = (commentItem) => {
   if (commentItem.userId !== userStore.userInfo?.userId) {
     alert("본인 댓글만 삭제 가능");
   } else {
-    axios
-      .delete(`http://localhost/attraction/review/delete`, {
-        params: {
-          reviewId: commentItem.reviewId,
-        },
-      })
-      .then(() => {
-        const indexToDelete =
-          attractionStore.selectedAttractionReview.findIndex(
-            (comment) => comment.reviewId === commentItem.reviewId
-          );
-        if (indexToDelete !== -1) {
-          attractionStore.selectedAttractionReview.splice(indexToDelete, 1);
-        }
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
+    const confirmation = confirm("정말 삭제하시겠습니까?");
+    if (confirmation) {
+      axios
+        .delete(`http://localhost/attraction/review/delete`, {
+          params: {
+            reviewId: commentItem.reviewId,
+          },
+        })
+        .then(() => {
+          const indexToDelete =
+            attractionStore.selectedAttractionReview.findIndex(
+              (comment) => comment.reviewId === commentItem.reviewId
+            );
+          if (indexToDelete !== -1) {
+            attractionStore.selectedAttractionReview.splice(indexToDelete, 1);
+          }
+        })
+        .catch((error) => {
+          console.error("API Error:", error);
+        });
+    }
   }
 };
 </script>

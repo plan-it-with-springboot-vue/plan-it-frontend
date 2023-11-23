@@ -25,7 +25,8 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useCategoryStore } from "../../../stores/store";
+import { useAttractionStore, useCategoryStore } from "../../../stores/store";
+import { useLocation } from "../../../stores/store";
 
 const sidos = [
   { sidoCode: 1, sidoName: "서울" },
@@ -298,16 +299,20 @@ const filteredGuguns = computed(() => {
 });
 
 const categoryStore = useCategoryStore();
+const attractionStore = useAttractionStore();
+const locationStore = useLocation();
 
 const updateSidoOptions = () => {
-  // 선택한 시도에 해당하는 구군 목록으로 필터링
-  selectedGugun.value = ""; // 선택된 구군 초기화
+  selectedGugun.value = "";
 
   categoryStore.addCategoryCondition(
     categoryStore.selectedCategory.contentTypeId,
     selectedSido.value.sidoCode,
     selectedGugun.value.gugunCode
   );
+
+  attractionStore.closeModal();
+  locationStore.initLocation();
 };
 
 const updateGugunOptions = () => {
@@ -316,6 +321,9 @@ const updateGugunOptions = () => {
     selectedSido.value.sidoCode,
     selectedGugun.value.gugunCode
   );
+
+  attractionStore.closeModal();
+  locationStore.initLocation();
 };
 </script>
 

@@ -13,12 +13,16 @@
     <div id="right-container">
       <KakaoMapVue />
     </div>
-    <!-- <ModalBoxVue v-if="attractionStore.modalVisible" /> -->
   </div>
 </template>
 
 <script setup>
-import { useAttractionStore, useFavoriteStores } from "../stores/store";
+import {
+  useAttractionStore,
+  useFavoriteStores,
+  useLocation,
+  useMapStore,
+} from "../stores/store";
 
 import ConditionBoxVue from "../components/map/condition/ConditionBox.vue";
 import CardBoxVue from "../components/map/attraction/CardBox.vue";
@@ -27,19 +31,16 @@ import ModalBoxVue from "../components/map/attraction/ModalBox.vue";
 import TheHeaderVue from "../components/layout/TheHeader.vue";
 import axios from "axios";
 import { useUserStore } from "../stores/user";
-import { watch } from "vue";
 
 const userStore = useUserStore();
 const attractionStore = useAttractionStore();
 const favoritesStore = useFavoriteStores();
+const mapStore = useMapStore();
+const locationStore = useLocation();
 
-// watch(
-//   () => userStore.isLogin,
-//   () => {
-// userStore.getUserInfo(sessionStorage.getItem("accessToken"));
-// console.log(userStore.userInfo);
-//   }
-// );
+mapStore.selectedLocationList = [];
+locationStore.location = null;
+attractionStore.closeModal();
 
 if (userStore.isLogin) {
   axios
@@ -49,10 +50,8 @@ if (userStore.isLogin) {
       },
     })
     .then((response) => {
-      // console.log("API Response:", response.data);
       favoritesStore.favorites = response.data;
       console.log(favoritesStore.favorites);
-      // console.log(userStore.userInfo.userId);
     })
     .catch((error) => {
       console.error("API Error:", error);
@@ -61,6 +60,9 @@ if (userStore.isLogin) {
 </script>
 
 <style scoped>
+#seconde-second {
+  background-color: black;
+}
 #left-container {
   display: flex;
   /* padding-top: 3.75rem; */
@@ -74,8 +76,9 @@ if (userStore.isLogin) {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  z-index: 6;
+  z-index: 4;
   background-color: white;
+  width: 25.8125rem;
 }
 #left-second {
   display: flex;
