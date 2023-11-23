@@ -28,19 +28,19 @@
               <div>
                 <form>
                   <select class="board-list-select" v-model="search" name="search">
-                    <option value="none">검색</option>
-                    <option value="no">글번호</option>
-                    <option value="title">제목</option>
-                    <option value="writer">작성자</option>
+                    <option value="">검색</option>
+                    <option value="board_id">글번호</option>
+                    <option value="subject">제목</option>
+                    <option value="user_id">작성자</option>
                   </select>
                 </form>
               </div>
             </div>
             <div>
-              <input id="board-list-search-input" />
+              <input id="board-list-search-input" v-model="word" />
             </div>
             <div>
-              <button id="board-list-search-btn">검색</button>
+              <button id="board-list-search-btn" @click="onSearch">검색</button>
             </div>
           </div>
         </div>
@@ -68,16 +68,32 @@
           </table>
         </div>
       </div>
+      <PageNavigation :current-page="currentPage" :total-page="totalPage" @pageChange="onPageChange"></PageNavigation>
     </div>
   </div>
 </template>
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
+import PageNavigation from "./PageNavigation.vue";
 
 const router = useRouter();
+// 셀렉트 박스의 선택된 값을 관리하는 반응형 데이터
+const sort = ref("latest"); // '최신순'이 기본값
+const search = ref(""); // '검색'이 기본값
+const boardList = ref([]); // 게시물 목록을 저장할 배열
+const word = ref(""); //검색어
+
+const currentPage = ref(1);
+const totalPage = ref(0);
+const VITE_ARTICLE_LIST_SIZE = 10;
+
+// 검색 버튼 클릭 시 실행되는 함수
+const onSearch = () => {
+  getBoardList();
+};
 
 // 상세 페이지로 이동
 const goToBoardDetail = (boardId) => {
@@ -89,11 +105,6 @@ const goToRegister = () => {
   router.push("/board/register");
 };
 
-// 셀렉트 박스의 선택된 값을 관리하는 반응형 데이터
-const sort = ref("latest"); // '최신순'이 기본값
-const search = ref("none"); // '검색'이 기본값
-const boardList = ref([]); // 게시물 목록을 저장할 배열
-
 //날짜 형식 변환
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -103,21 +114,42 @@ const formatDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
-//게시판 전체 목록
-const getBoardList = () => {
-  axios
-    .get(`http://localhost/board/list`, {
-    })
-    .then((response) => {
-      console.log(response.data);
-      boardList.value = response.data;
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
+// 게시물 목록 가져오기
+const getBoardList = async () => {
+  try {
+    const response = await axios.get(`http://localhost/board/list`, {
+      params: {
+        pgno: currentPage.value,
+        spp: VITE_ARTICLE_LIST_SIZE,
+        sort: sort.value,
+        key: search.value, // 검색 옵션
+        word: word.value // 검색어
+      }
     });
+    boardList.value = response.data.articles;
+    currentPage.value = response.data.currentPage;
+    totalPage.value = response.data.totalPageCount;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 };
 
 onMounted(getBoardList);
+
+// 검색 옵션이 변경될 때 검색어를 초기화합니다.
+watch(search, () => {
+  word.value = ""; // 검색어 초기화
+});
+
+watch(sort, () => {
+  getBoardList(); // 정렬 옵션이 변경될 때마다 목록을 새로 가져옴
+});
+
+//페이지네이션
+const onPageChange = (newPage) => {
+  currentPage.value = newPage;
+  getBoardList();
+};
 </script>
 
 <style scoped>
