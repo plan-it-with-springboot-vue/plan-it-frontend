@@ -11,11 +11,30 @@
       </div>
       <img
         class="greeting-main-img"
-        src="@/assets/image/greeting-main-img.jpg"
+        src='@/assets/image/greeting_img_5.jpg'
       />
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+
+// const images = [
+//   '@/assets/image/greeting_img_1.jpg',
+//   '@/assets/image/greeting_img_2.jpg',
+//   '@/assets/image/greeting_img_3.jpg',
+//   '@/assets/image/greeting_img_4.jpg',
+//   '@/assets/image/greeting_img_5.jpg',
+// ];
+// const currentImageIndex = ref(0);
+
+// onMounted(() => {
+//   setInterval(() => {
+//     currentImageIndex.value = (currentImageIndex.value + 1) % images.length;
+//   }, 2000); // 2초마다 이미지 변경
+// });
+</script>
 
 <style scoped>
 .greeting-main-background {
