@@ -146,9 +146,9 @@ p {
 img {
   display: flex;
   margin-right: 2rem;
-  border-radius: 1rem;
+  /* border-radius: 0.31rem; */
   width: 100%;
-  height: 15rem;
+  height: 14.42rem;
 }
 #container {
   /* padding: 1rem; */
@@ -200,7 +200,7 @@ img {
 }
 
 #review {
-  height: 22.8rem;
+  height: 23.62rem;
 }
 
 #comment {

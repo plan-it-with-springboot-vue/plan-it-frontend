@@ -13,7 +13,6 @@
     <div id="right-container">
       <KakaoMapVue />
     </div>
-    <!-- <ModalBoxVue v-if="attractionStore.modalVisible" /> -->
   </div>
 </template>
 
@@ -61,6 +60,9 @@ if (userStore.isLogin) {
 </script>
 
 <style scoped>
+#seconde-second {
+  background-color: black;
+}
 #left-container {
   display: flex;
   /* padding-top: 3.75rem; */

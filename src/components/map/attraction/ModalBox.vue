@@ -8,16 +8,15 @@
 </template>
 
 <script setup>
-import { useAttractionStore, useLocation } from "../../../stores/store";
+import { useAttractionStore } from "../../../stores/store";
 import CloseButton from "../../../assets/svg/CloseButton.vue";
 import ModalDetail from "./ModalDetail.vue";
 
 const attractionStore = useAttractionStore();
-const locationStore = useLocation();
 
 const closeModal = () => {
+  console.log("click");
   attractionStore.closeModal();
-  locationStore.initLocation();
 };
 </script>
 
@@ -41,9 +40,16 @@ div {
 }
 
 .close-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  position: absolute;
-  right: 20px;
-  top: 77px;
+  position: fixed;
+  right: calc(50% + 7.1rem);
+  top: 60px;
+  background-color: white;
+  padding: 0.4rem;
+  border-radius: 0 0.5rem 0.5rem 0; /* 오른쪽 상단과 하단에만 border radius 적용 */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* 그림자 추가 */
 }
 </style>
