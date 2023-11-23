@@ -10,6 +10,7 @@
         :value="modelValue"
         @input="updateValue"
         :placeholder="placeholder"
+        :disabled="disabled"
       />
     </div>
   </div>
@@ -32,6 +33,7 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  disabled: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue"]);
