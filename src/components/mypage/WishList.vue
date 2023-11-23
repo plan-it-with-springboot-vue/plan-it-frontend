@@ -6,7 +6,7 @@
             </div>
             <hr />
             <div id="wish-list-card-box">
-                <div class="wish-list-card" v-for="wish in wishlist" :key="wish.favoritesId" @click="openModal">
+                <div class="wish-list-card" v-for="wish in wishlist" :key="wish.favoritesId" @click="openModal(wish)">
                     <div id="wish-list-img-box">
                         <img v-if="wish.firstImage" id="wish-list-img" :src="wish.firstImage">
                         <img v-else id="wish-list-no-img" src="@/assets/image/plan-it-white-logo.png">
@@ -42,7 +42,7 @@
                             </div>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" @click="deleteWish(wish.contentId)">
+                                    fill="none" @click="deleteWish(userStore.userInfo?.userId, wish.contentId)">
                                     <path
                                         d="M3 6H21M19 6V20C19 21 18 22 17 22H7C6 22 5 21 5 20V6M8 6V4C8 3 9 2 10 2H14C15 2 16 3 16 4V6M10 11V17M14 11V17"
                                         stroke="#8C8C8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -62,49 +62,67 @@
                         </div>
                     </div>
                 </div>
+                <ModalComponent :show="showModal" :onClose="closeModal" :selectedWish="selectedWish" :selectedWishDescription="selectedWishDescription"/>
             </div>
-            <ModalComponent :show="showModal" :onClose="closeModal" />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
-// import ModalComponent from './ModalBox.vue';
+import { useUserStore } from "../../stores/user";
+import ModalComponent from "./ModalComponent.vue"
 
+const userStore = useUserStore();
 const wishlist = ref([]);
-// const router = useRouter();
-const showModal = ref(false); // 모달 표시 상태
+const selectedWish = ref({}); // 선택된 관광지 정보
+const selectedWishDescription = ref({});
+const showModal = ref(false);
 
-const openModal = () => {
-    showModal.value = true;
+const openModal = (wish) => {
+    axios.get(`http://localhost/attraction/view?contentId=${wish.contentId}`, {})
+        .then((response) => {
+                selectedWishDescription.value = response.data;
+            }).catch((error) => {
+                console.error("관광지 설명 조회 에러", error);
+            });
+    selectedWish.value = wish;
+  showModal.value = true;
 };
 
 const closeModal = () => {
-    showModal.value = false;
+  showModal.value = false;
 };
 
-//관광지 데이터 가져오기
-const getWishlist = async () => {
+//관심 여행지 목록 데이터 가져오기
+const getWishlist = async (userId) => {
     try {
-        const response = await axios.get('http://localhost/attraction/like?userId=ssafy');
+        const response = await axios.get(`http://localhost/attraction/like?userId=${userId}`);
         wishlist.value = response.data;
     } catch (error) {
         console.error('관광지 데이터 가져오기 오류', error);
     }
 };
 
+watch(() => userStore.userInfo, (newValue) => {
+    if (newValue && newValue.userId) {
+        getWishlist(newValue.userId);
+    }
+}, { immediate: true });
+
 onMounted(() => {
-    getWishlist();
+    if (userStore.userInfo && userStore.userInfo.userId) {
+        getWishlist(userStore.userInfo.userId);
+    }
 });
 
-const deleteWish = async (contentId) => {
+
+const deleteWish = async (userId, contentId) => {
     if (confirm('관심 여행지에서 삭제하시겠습니까?')) {
         try {
-            await axios.delete(`http://localhost/attraction/like?userId=ssafy&contentId=${contentId}`);
-            getWishlist(); // 성공적으로 삭제된 후, 관심 여행지 목록을 다시 불러옵니다.
+            await axios.delete(`http://localhost/attraction/like?userId=${userId}&contentId=${contentId}`);
+            getWishlist(userStore.userInfo.userId); // 성공적으로 삭제된 후, 관심 여행지 목록을 다시 불러옵니다.
         } catch (error) {
             console.error('관심 여행지 삭제 오류:', error);
         }

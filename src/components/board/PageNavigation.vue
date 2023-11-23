@@ -116,8 +116,6 @@ a {
     padding: 0.5rem 0.75rem;
 }
 
-#page-link {}
-
 .page-link:hover {
     color: #6499e9;
     background-color: #e9ecef;
@@ -139,8 +137,8 @@ a {
 }
 
 svg {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.3rem;
+    height: 1.3rem;
     flex-shrink: 0;
 }
 </style>
