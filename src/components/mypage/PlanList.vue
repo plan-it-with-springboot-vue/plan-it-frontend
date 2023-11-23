@@ -9,8 +9,8 @@
                 <div class="plan-list-card" v-for="plan in plans" :key="plan.planId" @click="navigateToPlan(plan.planId)">
                     <label id="plan-list-title-label">{{ plan.title }}</label>
                     <div id="plan-list-date-box">
-                        <label class="plan-list-date-label">{{ plan.startSchedule }}</label>
-                        <label class="plan-list-date-label">~{{ plan.endSchedule }}</label>
+                        <label class="plan-list-date-label">{{ formatDate(plan.startSchedule) }}</label>
+                        <label class="plan-list-date-label">~{{ formatDate(plan.endSchedule) }}</label>
                     </div>
                 </div>
             </div>
@@ -19,56 +19,52 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-// import axios from 'axios';
+import { ref, onMounted, watch } from 'vue';
+import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useUserStore } from "../../stores/user";
 
-const plans = ref([
-    {
-        planId: 1,
-        title: "이싸피와 함께하는 서울 맛집 투어",
-        startSchedule: "2023.11.20",
-        endSchedule: "2023.11.21"
-    },
-    {
-        planId: 2,
-        title: "이싸피와 함께하는 서울 맛집 투어",
-        startSchedule: "2023.11.20",
-        endSchedule: "2023.11.21"
-    },
-    {
-        planId: 3,
-        title: "이싸피와 함께하는 서울 맛집 투어",
-        startSchedule: "2023.11.20",
-        endSchedule: "2023.11.21"
-    },
-    {
-        planId: 4,
-        title: "이싸피와 함께하는 서울 맛집 투어",
-        startSchedule: "2023.11.20",
-        endSchedule: "2023.11.21"
-    },
-    {
-        planId: 5,
-        title: "이싸피와 함께하는 서울 맛집 투어",
-        startSchedule: "2023.11.20",
-        endSchedule: "2023.11.21"
-    },
-]);
+const userStore = useUserStore();
+const plans = ref([]);
 const router = useRouter();
 
 const navigateToPlan = (planId) => {
     router.push(`./planlist/${planId}`);
 };
 
-// onMounted(async () => {
-//     try {
-//         const response = await axios.get('API_ENDPOINT');
-//         plans.value = response.data;
-//     } catch (error) {
-//         console.error('API 요청 중 오류 발생:', error);
-//     }
-// });
+//날짜 형식 변환
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+//여행 계획 목록 가져오기
+const getPlans = async (userId) => {
+    if (!userId) return;
+    axios.get(`http://localhost/plan/list?userId=${userId}`)
+            .then((response) => {
+                console.log(response.data);
+                plans.value = response.data;
+            })
+            .catch((error) => {
+                console.error('Error fetching plans:', error);
+            });
+};
+
+watch(() => userStore.userInfo, (newValue) => {
+    if (newValue && newValue.userId) {
+        getPlans(newValue.userId);
+    }
+}, { immediate: true });
+
+onMounted(() => {
+    if (userStore.userInfo && userStore.userInfo.userId) {
+        getPlans(userStore.userInfo.userId);
+    }
+});
 
 </script>
 
