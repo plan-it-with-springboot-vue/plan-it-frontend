@@ -76,8 +76,9 @@ if (userStore.isLogin) {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  z-index: 6;
+  z-index: 4;
   background-color: white;
+  width: 25.8125rem;
 }
 #left-second {
   display: flex;
