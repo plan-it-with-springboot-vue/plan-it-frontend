@@ -6,6 +6,7 @@
       <div id="map-container"><PlanKakaoMap /></div>
       <RightBox />
     </div>
+    <PlanPreview />
     <button @click="sendPlan">완료</button>
   </div>
 </template>
@@ -17,6 +18,7 @@ import LeftBox from "../components/plan/left/LeftBox.vue";
 import PlanKakaoMap from "../components/plan/PlanKakaoMap.vue";
 import RightBox from "../components/plan/right/RightBox.vue";
 import { useDateStore, usePlanStore } from "../stores/store";
+import PlanPreview from "../components/plan/PlanPreview.vue";
 
 const planStore = usePlanStore();
 const dateStore = useDateStore();

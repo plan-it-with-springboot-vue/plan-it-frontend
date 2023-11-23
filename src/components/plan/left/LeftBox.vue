@@ -95,6 +95,7 @@ input {
   width: 6.1875rem;
   height: 1.25rem;
   background-color: white;
+  text-align: center;
 }
 #left-box-container {
   display: flex;

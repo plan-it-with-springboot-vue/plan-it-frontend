@@ -155,26 +155,30 @@ export default defineComponent({
     const userStore = useUserStore();
 
     const addPlan = () => {
+      const dateStore = useDateStore();
       if (duration.value.from > duration.value.to) {
         alert("기간을 잘못 설정");
+        dateStore.date = "";
       } else if (planTitle.value == "") {
         alert("제목 입력");
-      }
-      if (userStore.isLogin) {
-        dp2.value = new Date(duration.value.from); // 시작 날짜로 picker 설정
-        // plan store 저장
-        const plan = {
-          title: planTitle.value,
-          startSchedule: duration.value.from,
-          endSchedule: duration.value.to,
-          userId: userStore.userInfo.userId,
-          planDetail: [],
-        };
-        planStore.addPlan(plan);
-        planTitle.value = "";
-        // console.log(planStore.plan);
+        dateStore.date = "";
       } else {
-        alert("로그인 후 이용해주세요");
+        if (userStore.isLogin) {
+          dp2.value = new Date(duration.value.from); // 시작 날짜로 picker 설정
+          // plan store 저장
+          const plan = {
+            title: planTitle.value,
+            startSchedule: duration.value.from,
+            endSchedule: duration.value.to,
+            userId: userStore.userInfo.userId,
+            planDetail: [],
+          };
+          planStore.addPlan(plan);
+          planTitle.value = "";
+          // console.log(planStore.plan);
+        } else {
+          alert("로그인 후 이용해주세요");
+        }
       }
     };
 
