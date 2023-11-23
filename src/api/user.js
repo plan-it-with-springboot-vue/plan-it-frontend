@@ -32,8 +32,13 @@ async function tokenRegeneration(user) {
   try {
     const refreshToken = sessionStorage.getItem("refreshToken");
     const response = await axios.post("http://localhost/user/refresh", user, {
-      headers: { refreshToken },
+      headers: {
+        "Content-Type": "application/json",
+        refreshToken: refreshToken,
+      },
     });
+    console.log("토큰 재발급 완료");
+
     return response; // 성공 시 응답 데이터 반환
   } catch (error) {
     throw error; // 실패 시 에러 throw

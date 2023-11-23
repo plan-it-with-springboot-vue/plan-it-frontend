@@ -52,20 +52,18 @@ const submitComment = () => {
           contentId: attractionStore.selectedAttraction.contentId,
         })
         .then(() => {
-          let reviewCnt = attractionStore.selectedAttractionReview.reduce(
-            (maxId, currentObj) => {
-              return currentObj.reviewId > maxId ? currentObj.reviewId : maxId;
-            },
-            attractionStore.selectedAttractionReview[0].reviewId
-          );
-
-          attractionStore.selectedAttractionReview.push({
-            content: commentInput.value,
-            userId: userStore.userInfo.userId,
-            contentId: attractionStore.selectedAttraction.contentId,
-            registerTime: Date(Date.now()),
-            reviewId: ++reviewCnt,
-          });
+          axios
+            .get(`http://localhost/attraction/review`, {
+              params: {
+                contentId: attractionStore.selectedAttraction.contentId,
+              },
+            })
+            .then((response) => {
+              attractionStore.selectedAttractionReview = response.data;
+            })
+            .catch((error) => {
+              console.error("API Error:", error);
+            });
 
           commentInput.value = "";
         })
