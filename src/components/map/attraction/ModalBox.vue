@@ -8,14 +8,16 @@
 </template>
 
 <script setup>
-import { useAttractionStore } from "../../../stores/store";
+import { useAttractionStore, useLocation } from "../../../stores/store";
 import CloseButton from "../../../assets/svg/CloseButton.vue";
 import ModalDetail from "./ModalDetail.vue";
 
 const attractionStore = useAttractionStore();
+const locationStore = useLocation();
 
 const closeModal = () => {
   attractionStore.closeModal();
+  locationStore.initLocation();
 };
 </script>
 
@@ -29,17 +31,11 @@ div {
   height: 100%;
   /* background: rgba(0, 0, 0, 0.5); */
   position: fixed;
-  /* padding: 20px; */
   z-index: 6;
   padding-top: 3.75rem;
 }
 .white-bg {
   width: 25.8125rem;
-  /* height: 56rem; */
-  /* background: white; */
-  /* border-radius: 8px; */
-  /* padding: 1rem; */
-  /* position: relative; */
   background-color: white;
   z-index: 6;
 }

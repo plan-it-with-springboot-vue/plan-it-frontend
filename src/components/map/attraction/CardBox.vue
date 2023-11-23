@@ -169,12 +169,8 @@ const categoryStore = useCategoryStore();
 watch(
   () => categoryStore.selectedCategory,
   (newVal) => {
-    console.log("Selected Category changed:", newVal);
-
     const { contentTypeId, sidoCode, gugunCode } = newVal;
 
-    // Axios를 사용하여 API 호출
-    // const BASE_URL = process.env.VUE_APP_BASE_URL;
     axios
       .get(`http://localhost/attraction/list`, {
         params: {
@@ -184,7 +180,6 @@ watch(
         },
       })
       .then((response) => {
-        // console.log("API Response:", response.data);
         if (Array.isArray(response.data) && response.data.length === 0) {
           attraction.value = [];
         } else {
@@ -203,7 +198,7 @@ const favoritesStore = useFavoriteStores();
 const likeAttraction = async (attractionItem) => {
   if (userStore.isLogin) {
     try {
-      const response = await axios.post("http://localhost/attraction/like", {
+      axios.post("http://localhost/attraction/like", {
         userId: userStore.userInfo.userId,
         contentId: attractionItem.contentId,
       });
@@ -212,7 +207,6 @@ const likeAttraction = async (attractionItem) => {
         userId: userStore.userInfo.userId,
         contentId: attractionItem.contentId,
       });
-      // console.log(favoritesStore.favorites);
     } catch (error) {
       console.error("Error while liking the attraction:", error);
     }
@@ -224,19 +218,17 @@ const likeAttraction = async (attractionItem) => {
 const deleteLike = async (attractionItem) => {
   if (userStore.isLogin) {
     try {
-      const response = await axios
+      axios
         .delete(`http://localhost/attraction/like`, {
           params: {
             userId: userStore.userInfo.userId,
             contentId: attractionItem.contentId,
           },
         })
-        .then((response) => {
+        .then(() => {
           favoritesStore.favorites = favoritesStore.favorites.filter(
             (item) => item.contentId !== attractionItem.contentId
           );
-
-          // console.log(favoritesStore.favorites);
         })
         .catch((error) => {
           console.error("API Error:", error);
@@ -307,9 +299,6 @@ img {
 .scrollable-container {
   height: auto;
   overflow-y: auto;
-  /* height: 34.5rem; */
-  /* height: 80vw; */
-  /* width: 20vw; */
   overflow-x: hidden;
 }
 .scrollable-container::-webkit-scrollbar {

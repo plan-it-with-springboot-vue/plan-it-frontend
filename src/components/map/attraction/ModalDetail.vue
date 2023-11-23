@@ -81,7 +81,7 @@ const userStore = useUserStore();
 const likeAttraction = async (attractionItem) => {
   if (userStore.isLogin) {
     try {
-      const response = await axios.post("http://localhost/attraction/like", {
+      axios.post("http://localhost/attraction/like", {
         userId: userStore.userInfo.userId,
         contentId: attractionItem.contentId,
       });
@@ -90,7 +90,6 @@ const likeAttraction = async (attractionItem) => {
         userId: userStore.userInfo.userId,
         contentId: attractionItem.contentId,
       });
-      // console.log(favoritesStore.favorites);
     } catch (error) {
       console.error("Error while liking the attraction:", error);
     }
@@ -102,19 +101,17 @@ const likeAttraction = async (attractionItem) => {
 const deleteLike = async (attractionItem) => {
   if (userStore.isLogin) {
     try {
-      const response = await axios
+      axios
         .delete(`http://localhost/attraction/like`, {
           params: {
             userId: userStore.userInfo.userId,
             contentId: attractionItem.contentId,
           },
         })
-        .then((response) => {
+        .then(() => {
           favoritesStore.favorites = favoritesStore.favorites.filter(
             (item) => item.contentId !== attractionItem.contentId
           );
-
-          // console.log(favoritesStore.favorites);
         })
         .catch((error) => {
           console.error("API Error:", error);
@@ -140,8 +137,6 @@ h3 {
 span {
   color: #8c8c8c;
   font-size: 1rem;
-  /* margin-left: 1rem; */
-  /* margin-bottom: 1rem; */
 }
 p {
   font-size: 1rem;
@@ -152,7 +147,6 @@ img {
   display: flex;
   margin-right: 2rem;
   border-radius: 1rem;
-  /* width: 20.8125rem; */
   width: 100%;
   height: 15rem;
 }
@@ -183,13 +177,11 @@ img {
 #img-des {
   display: flex;
   flex-direction: column;
-  /* height: 22.9rem; */
   justify-content: center;
   align-content: center;
 }
 #des {
   /* background-color: #6499e916; */
-  /* padding: 1rem 1rem; */
   height: 9rem;
 }
 

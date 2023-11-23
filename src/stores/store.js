@@ -14,7 +14,9 @@ const useAttractionStore = defineStore("attraction", {
     },
     closeModal() {
       this.modalVisible = false;
-      this.selectedAttraction = null;
+      this.selectedAttraction = [];
+      this.selectedAttractionDes = {};
+      this.selectedAttractionReview = [];
     },
   },
 });
@@ -75,6 +77,9 @@ const useLocation = defineStore("location", {
         latitude: attraction.latitude,
         longitude: attraction.longitude,
       };
+    },
+    initLocation() {
+      this.location = null;
     },
   },
 });

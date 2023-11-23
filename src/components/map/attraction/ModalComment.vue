@@ -16,7 +16,7 @@
       <div id="ex-profile">
         <div id="user-delete-container">
           <span id="user-id">{{ commentItem.userId }}</span>
-          <div v-if="userStore.userInfo.userId === commentItem.userId">
+          <div v-if="userStore.userInfo?.userId === commentItem.userId">
             <span @click="deleteComment(commentItem)">삭제</span>
           </div>
         </div>

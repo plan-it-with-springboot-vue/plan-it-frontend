@@ -33,7 +33,6 @@ const types = [
 
 const selectedCategories = ref(new Set(types));
 
-// Convert Set to Array using computed
 const selectedCategoriesArray = computed(() => {
   return Array.from(selectedCategories.value);
 });
@@ -46,19 +45,12 @@ const toggleCategory = (category) => {
   } else {
     selectedCategories.value.add(category);
   }
-
-  // categoryStore.addCategoryCondition(
-  //   selectedCategoriesArray(),
-  //   categoryStore.selectedCategory.sido_code,
-  //   categoryStore.selectedCategory.gugun_code
-  // );
 };
 
 const isSelectedCategory = (category) => {
   return selectedCategories.value.has(category);
 };
 
-// Watch for changes in the selectedCategoriesArray
 watch(
   () => selectedCategoriesArray.value,
   (newVal) => {
