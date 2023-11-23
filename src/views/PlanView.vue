@@ -19,11 +19,14 @@ import TheHeaderVue from "../components/layout/TheHeader.vue";
 import LeftBox from "../components/plan/left/LeftBox.vue";
 import PlanKakaoMap from "../components/plan/PlanKakaoMap.vue";
 import RightBox from "../components/plan/right/RightBox.vue";
-import { useDateStore, usePlanStore } from "../stores/store";
+import { useDateStore, useLocation, usePlanStore } from "../stores/store";
 import PlanPreview from "../components/plan/PlanPreview.vue";
 
 const planStore = usePlanStore();
 const dateStore = useDateStore();
+const locationStore = useLocation();
+
+locationStore.location = null;
 
 const sendPlan = () => {
   if (planStore.plan?.planDetail) {
