@@ -169,8 +169,8 @@ const hasPlan = computed(() => {
 #plus-svg {
   display: flex;
   justify-content: flex-end;
-  margin-right: 0.5rem;
   cursor: pointer;
+  margin-right: 1rem;
 }
 .attraction-card-title {
   font-size: 1.1rem;

@@ -31,7 +31,7 @@
           class="svg"
           v-if="selectedMenu === 1"
           @click="searchAttraction"
-        /><BlockSearchIcon v-else />
+        /><BlockSearchIcon v-else class="svg" />
       </div>
     </div>
 
@@ -138,6 +138,7 @@ input {
   margin: 1.07rem 0 0.7rem 0;
 }
 .svg {
+  margin-right: 1rem;
   cursor: pointer;
 }
 </style>
