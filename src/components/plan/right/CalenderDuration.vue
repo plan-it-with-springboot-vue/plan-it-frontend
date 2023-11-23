@@ -216,7 +216,7 @@ export default defineComponent({
 
 <style scoped>
 #title-date-container {
-  width: 20.8125rem;
+  width: 25.8125rem;
 }
 h2 {
   font-size: 1.25rem;
@@ -244,7 +244,7 @@ input {
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 6.4rem;
+  height: 6.93rem;
 }
 p {
   text-align: center;

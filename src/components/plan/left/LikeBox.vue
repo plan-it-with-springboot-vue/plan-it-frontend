@@ -3,13 +3,17 @@
     <hr />
     <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
       <div class="attraction-card">
-        <div>
-          <!-- <img
-            :src="`/src/assets/image/${attractionItem.first_image}.png`"
-            alt=""
-          /> -->
-          <img :src="`${attractionItem.firstImage}`" alt="" />
-        </div>
+        <img
+          v-if="attractionItem.firstImage"
+          :src="`${attractionItem.firstImage}`"
+          alt=""
+        />
+        <img
+          v-else
+          :src="`/src/assets/image/plan-it-white-logo.png`"
+          alt=""
+          style="background-color: lightgray"
+        />
         <div class="attraction-card-content">
           <div>
             <div
@@ -115,7 +119,10 @@ const clickPlusIcon = (attractionItem) => {
   planStore.addPlanDetail(attractionItem, planDate, time);
 
   // 지도 마커를 위해 저장
-  mapStore.addAttractionList([...mapStore.selectedLocation, attractionItem]);
+  mapStore.addAttractionList([
+    ...mapStore.selectedLocationList,
+    attractionItem,
+  ]);
 
   console.log(attractionItem);
 };
@@ -152,7 +159,7 @@ const hasPlan = computed(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 20.8125rem;
+  width: 25.8125rem;
   height: 5.75rem;
   margin: 0.62rem 0rem;
 }

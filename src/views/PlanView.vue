@@ -41,6 +41,16 @@ const sendPlan = () => {
 </script>
 
 <style scoped>
+button {
+  background-color: #6499e9;
+  border: none;
+  color: white;
+  width: 20rem;
+  height: 2.5rem;
+  border-radius: 0.35rem;
+  font-size: 1.25rem;
+  margin: 1rem 0;
+}
 .flex-box {
   width: 100vw;
   display: flex;
@@ -52,11 +62,11 @@ const sendPlan = () => {
 #plan-container {
   display: flex;
 
-  border-radius: 0.9125rem;
-  border: 1.8px solid #eeeeee;
+  border-radius: 0.3125rem;
+  border: 1.8px solid #c7c7c7;
   /* width: 108.375rem; */
-  width: 95%;
-  box-shadow: 2px 2px 2px #c8c8c8;
+  width: 80%;
+  /* box-shadow: 2px 2px 2px #c8c8c8; */
 }
 #map-container {
   /* width: 42.4375rem; */

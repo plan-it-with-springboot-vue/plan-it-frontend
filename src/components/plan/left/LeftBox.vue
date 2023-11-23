@@ -99,11 +99,11 @@ input {
 #left-box-container {
   display: flex;
   flex-direction: column;
-  width: 20.8125rem;
+  width: 25.8125rem;
   height: 40.4375rem;
 }
 #menu-container {
-  width: 20.8125rem;
+  width: 25.8125rem;
 }
 #menu-btn-container {
   display: flex;
@@ -115,10 +115,10 @@ input {
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 7.925rem;
+  width: 9.925rem;
   height: 1.4525rem;
   border-radius: 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: #c8c8c8;
   border: 0.5px solid #c8c8c8;
   cursor: pointer;

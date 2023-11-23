@@ -6,13 +6,18 @@
       :key="detailItem.attraction.contentId"
     >
       <div class="attraction-card">
-        <div>
-          <!-- <img
-            :src="`/src/assets/image/${attractionItem.first_image}.png`"
-            alt=""
-          /> -->
-          <img :src="`${detailItem.attraction.firstImage}`" alt="" />
-        </div>
+        <img
+          v-if="detailItem.attraction.firstImage"
+          :src="`${detailItem.attraction.firstImage}`"
+          alt=""
+        />
+        <img
+          v-else
+          :src="`/src/assets/image/plan-it-white-logo.png`"
+          alt=""
+          style="background-color: lightgray"
+        />
+
         <div class="attraction-card-content">
           <div>
             <div
@@ -135,12 +140,8 @@ watch(
         (detailItem) => detailItem.planDate === dateStore.date
       );
       currentDatePlanDetail.value = matchingAttractions;
-      // console.log("attract plan box : ");
-      // console.log(currentDatePlanDetail.value);
-      // console.log(planStore.plan);
     }
   },
-  // watch는 shallow임!! deep으로 해주기
   { deep: true }
 );
 </script>
@@ -150,7 +151,8 @@ watch(
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 20.8125rem;
+  justify-content: center;
+  width: 25.8125rem;
   height: 5.75rem;
   margin: 0.62rem 0rem;
 }
@@ -160,7 +162,7 @@ watch(
 #trash-svg {
   display: flex;
   justify-content: flex-end;
-  margin-right: 0.5rem;
+  margin-right: 0.6rem;
   cursor: pointer;
 }
 .attraction-card-title {
@@ -174,7 +176,7 @@ watch(
   flex-direction: column;
   justify-content: space-between;
   height: 4.5rem;
-  width: 20.8125rem;
+  width: 25.8125rem;
 }
 span {
   font-size: 0.75rem;
