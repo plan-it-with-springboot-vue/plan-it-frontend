@@ -6,8 +6,10 @@
       <div id="map-container"><PlanKakaoMap /></div>
       <RightBox />
     </div>
-    <PlanPreview />
-    <button @click="sendPlan">완료</button>
+    <div id="btn"><button @click="sendPlan">완료</button></div>
+    <div id="plan-preview-title"><h2>계획 미리보기</h2></div>
+    <hr />
+    <div id="plan-preview-container"><PlanPreview /></div>
   </div>
 </template>
 
@@ -36,6 +38,7 @@ const sendPlan = () => {
       .catch((error) => {
         console.error("Error sending plan:", error);
       });
+    // 마이페이지로 이동
   } else {
     alert("계획을 만들어 주세요!!");
   }
@@ -43,15 +46,36 @@ const sendPlan = () => {
 </script>
 
 <style scoped>
+hr {
+  width: 80%;
+  margin: 0;
+  color: #c8c8c8;
+}
+#plan-preview-container {
+  margin: 0 0 2rem 0;
+}
+#plan-preview-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 80%;
+  margin-top: 2rem;
+}
+#btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 80%;
+  margin: 1rem 0 0rem 0;
+}
 button {
   background-color: #6499e9;
   border: none;
   color: white;
-  width: 20rem;
+  width: 9rem;
   height: 2.5rem;
   border-radius: 0.35rem;
   font-size: 1.25rem;
-  margin: 1rem 0;
 }
 .flex-box {
   width: 100vw;
