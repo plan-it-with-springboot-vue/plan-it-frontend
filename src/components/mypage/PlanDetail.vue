@@ -1,23 +1,33 @@
 <template>
-  <div class="scrollable-container">
-    <div v-if="filteredDetails.length === 0">
-      <p>상세 계획이 없습니다.</p>
+  <div id="detail-container">
+    <div v-if="planStore.plan">
+      <h1>{{ planStore.plan.title }}</h1>
+      <div id="map-container"><DetailKaKaoMap /></div>
     </div>
-    <div v-else id="preview-container">
-      <div v-for="(detail, index) in filteredDetails" :key="index" class="card">
-        <div class="card-header">
-          <h2>{{ detail.planDate }}</h2>
-        </div>
-        <div class="scrollable-container-col">
-          <div id="card-container">
-            <div class="card-body">
-              <div
-                v-for="attraction in detail.attraction"
-                :key="attraction.attraction.contentId"
-                class="attraction"
-              >
-                <h3>{{ attraction.attraction.title }}</h3>
-                <p>{{ attraction.attraction.addr1 }}</p>
+    <div class="scrollable-container">
+      <div v-if="filteredDetails.length === 0">
+        <p>상세 계획이 없습니다.</p>
+      </div>
+      <div v-else id="preview-container">
+        <div
+          v-for="(detail, index) in filteredDetails"
+          :key="index"
+          class="card"
+        >
+          <div class="card-header">
+            <h2>{{ detail.planDate }}</h2>
+          </div>
+          <div class="scrollable-container-col">
+            <div id="card-container">
+              <div class="card-body">
+                <div
+                  v-for="attraction in detail.attraction"
+                  :key="attraction.attraction.contentId"
+                  class="attraction"
+                >
+                  <h3>{{ attraction.attraction.title }}</h3>
+                  <p>{{ attraction.attraction.addr1 }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -30,18 +40,24 @@
 <script setup>
 import axios from "axios";
 import { ref, watch } from "vue";
-import { usePlanStore } from "../../stores/store";
+import { useMapStore, usePlanStore } from "../../stores/store";
+import DetailKaKaoMap from "../../components/mypage/DetailKaKaoMap.vue";
 
 const planStore = usePlanStore();
+const mapStore = useMapStore();
 
 axios
   .get(`http://localhost/plan/view`, {
     params: {
-      planId: 3,
+      planId: 9,
     },
   })
   .then((response) => {
     planStore.plan = response.data;
+    console.log(response.data);
+    response.data.planDetail.forEach((detail) => {
+      mapStore.selectedLocationList.push(detail.attraction);
+    });
   })
   .catch((error) => {
     console.error("API Error:", error);
@@ -86,6 +102,16 @@ watch(
 </script>
 
 <style scoped>
+#detail-container {
+  display: flex;
+  margin: 2rem 0;
+  flex-direction: column;
+}
+#map-container {
+  /* width: 42.4375rem; */
+  width: 100%;
+  height: 26.4375rem;
+}
 h2 {
   margin: 0;
   font-size: 1rem;
