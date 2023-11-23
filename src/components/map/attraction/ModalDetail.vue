@@ -3,8 +3,15 @@
     <div id="des-container">
       <div class="img-container">
         <img
+          v-if="attractionStore.selectedAttraction?.firstImage"
           :src="`${attractionStore.selectedAttraction?.firstImage}`"
           alt=""
+        />
+        <img
+          v-else
+          :src="`/src/assets/image/plan-it-white-logo.png`"
+          alt=""
+          style="background-color: lightgray"
         />
       </div>
 

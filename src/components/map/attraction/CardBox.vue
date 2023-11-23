@@ -6,11 +6,17 @@
     <div v-for="attractionItem in attraction" :key="attractionItem.contentId">
       <div class="attraction-card">
         <div>
-          <!-- <img
-            :src="`/src/assets/image/${attractionItem.first_image}.png`"
+          <img
+            v-if="attractionItem.firstImage"
+            :src="`${attractionItem.firstImage}`"
             alt=""
-          /> -->
-          <img :src="`${attractionItem.firstImage}`" alt="" />
+          />
+          <img
+            v-else
+            :src="`/src/assets/image/plan-it-white-logo.png`"
+            alt=""
+            style="background-color: lightgray"
+          />
         </div>
         <div class="attraction-card-content">
           <div>
