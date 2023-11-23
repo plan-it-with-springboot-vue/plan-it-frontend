@@ -15,9 +15,9 @@
         </li>
       </ul>
       <ul>
-        <li :class="{ 'nav-active': activeRoute === '/login' }" class="nav-content-login" v-if="!userStore.isLogin"
+        <li v-if="!userStore.isLogin" :class="{ 'nav-active': activeRoute === '/login' }" class="nav-content-login"
           @click="navigateTo('/login')">로그인</li>
-        <li :class="{ 'nav-active': activeRoute === '/signup' }" class="nav-content-sign-up" v-if="!userStore.isLogin"
+        <li v-if="!userStore.isLogin" :class="{ 'nav-active': activeRoute === '/signup' }" class="nav-content-sign-up"
           @click="navigateTo('/signup')">회원가입</li>
         <li v-else class="dropdown">
           <div id="nav-name-box">
@@ -60,8 +60,14 @@ const navigateTo = (path) => {
 };
 
 const logout = () => {
-  userStore.userLogout(userStore.userInfo.userId);
-  router.push("/login");
+  userStore.userLogout(userStore.userInfo.userId)
+    .then(() => {
+      userStore.isLogin = false; // 로그아웃 후 로그인 상태를 false로 설정
+      router.push("/login");
+    })
+    .catch((error) => {
+      console.error("Error logging out:", error);
+    });
 }
 
 if (sessionStorage.getItem("accessToken")) {
