@@ -6,10 +6,10 @@
             </div>
             <div id="find-id-box">
                 <label>{{ userName }}님의 아이디는</label>
-                <label>{{ userId }}입니다.</label>
+                <label>{{ userId }} 입니다.</label>
             </div>
             <div>
-                 <button id="move-login-btn" @click="moveToLogin">로그인 이동</button>
+                <button id="move-login-btn" @click="moveToLogin">로그인 이동</button>
             </div>
         </div>
     </div>
@@ -17,15 +17,18 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from "vue-router";
 
-const userName = ref('김싸피');
-const userId = ref('ssa**');
 const router = useRouter();
+const route = useRoute();
+const userId = ref(route.query.id);
+const userName = ref(route.query.name);
 
 function moveToLogin() {
-  router.push('/login');
+    router.push('/login');
 }
+
+
 </script>
 
 <style scoped>
@@ -36,6 +39,7 @@ function moveToLogin() {
     flex-direction: column;
     margin-bottom: 4.13rem;
 }
+
 #find-id-result-label {
     display: flex;
     justify-content: center;
@@ -43,6 +47,7 @@ function moveToLogin() {
     font-size: 1.5rem;
     font-weight: 700;
 }
+
 #find-id-box {
     width: 26.875rem;
     height: 8.1875rem;
@@ -55,6 +60,7 @@ function moveToLogin() {
     border: 1px solid var(--light-gray, #C8C8C8);
     background: #FFF;
 }
+
 #move-login-btn {
     cursor: pointer;
     width: 26.875rem;
