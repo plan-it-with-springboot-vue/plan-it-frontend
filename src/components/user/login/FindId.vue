@@ -6,15 +6,15 @@
             </div>
 
             <form @submit.prevent="findId">
-                <FindIdInput label="이름" type="text" v-model="name"/>
+                <FindIdInput label="이름" type="text" v-model="name" />
                 <p v-if="fieldErrors.name" class="error-message">{{ fieldErrors.name }}</p>
-                
-                <FindIdInput label="이메일" type="email" v-model="email" placeholder="example@example.com"/>
+
+                <FindIdInput label="이메일" type="email" v-model="email" placeholder="example@example.com" />
                 <p v-if="fieldErrors.email" class="error-message">{{ fieldErrors.email }}</p>
-                
-                <FindIdInput label="생년월일" type="text" v-model="birth" placeholder="ex) 20001225"/>
+
+                <FindIdInput label="생년월일" type="text" v-model="birth" placeholder="ex) 20001225" />
                 <p v-if="fieldErrors.birth" class="error-message">{{ fieldErrors.birth }}</p>
-            
+
                 <div>
                     <button id="find-id-btn" type="submit">완료</button>
                 </div>
@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import FindIdInput from '../login/InputComponents.vue';
@@ -68,18 +69,19 @@ const findId = async () => {
     }
 
     try {
-        // const response = await axios.post('https://example.com/api/findid', {
-        //     name: name.value,
-        //     email: email.value,
-        //     birth: birth.value
-        // });
-        // console.log('아이디 찾기 성공:', response.data);
-        // 아이디 찾기 성공 후 처리 로직 작성 (페이지 이동)
-        console.log(name.value);
-        router.push('/findid/result');
+        const response = await axios.post('http://localhost/user/findUserId', {
+            userEmail: email.value,
+            userBirth: birth.value
+        });
+        console.log(response.data);
+        if (response.data) {
+            // 성공하면 결과 페이지로 이동
+            router.push({ path: '/findid/result', query: { name: name.value, id: response.data } });
+        } else {
+            alert("존재하지 않는 회원입니다.");
+        }
     } catch (error) {
         console.error('아이디 찾기 실패:', error);
-        // 오류 처리 로직 작성
     }
 };
 </script>
@@ -92,6 +94,7 @@ const findId = async () => {
     flex-direction: column;
     margin-bottom: 4.13rem;
 }
+
 #find-id-label {
     display: flex;
     justify-content: center;
@@ -99,6 +102,7 @@ const findId = async () => {
     font-size: 1.5rem;
     font-weight: 700;
 }
+
 #find-id-btn {
     cursor: pointer;
     width: 26.875rem;
@@ -111,6 +115,7 @@ const findId = async () => {
     background: var(--main, #6499E9);
     margin-top: 2.57rem;
 }
+
 .error-message {
     color: red;
     font-size: 0.75rem;
