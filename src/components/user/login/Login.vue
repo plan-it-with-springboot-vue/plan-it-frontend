@@ -111,6 +111,8 @@ function login() {
     background: #FFF;
     margin-bottom: 1rem;
     box-sizing: border-box;
+    padding: 0 1rem;
+    font-size: 1rem;
 }
 
 #login-etc {
