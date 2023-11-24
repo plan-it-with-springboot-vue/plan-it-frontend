@@ -34,6 +34,9 @@
         </div>
       </div>
     </div>
+    <div class="btn">
+      <button @click="handleDelete">삭제</button>
+    </div>
   </div>
 </template>
 
@@ -42,13 +45,14 @@ import axios from "axios";
 import { ref, watch } from "vue";
 import { useMapStore, usePlanStore } from "../../stores/store";
 import DetailKaKaoMap from "../../components/mypage/DetailKaKaoMap.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const planStore = usePlanStore();
 const mapStore = useMapStore();
 
 const route = useRoute();
 const planId = ref(route.params.planId);
+const router = useRouter();
 
 axios
   .get(`http://localhost/plan/view`, {
@@ -66,6 +70,28 @@ axios
   .catch((error) => {
     console.error("API Error:", error);
   });
+const handleDelete = () => {
+  const confirmed = confirm("정말로 삭제하시겠습니까?");
+  if (confirmed) {
+    axios
+      .delete(`http://localhost/plan/delete`, {
+        params: {
+          planId: planId.value,
+        },
+      })
+      .then((response) => {
+        planStore.plan = null;
+        console.log(response.data);
+        mapStore.selectedLocationList = [];
+
+        // Redirect to /mypage/planlist after successful deletion
+        router.push("/mypage/planlist");
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+  }
+};
 
 const filteredDetails = ref([]);
 
@@ -106,10 +132,28 @@ watch(
 </script>
 
 <style scoped>
+.btn {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.25rem;
+  text-align: center;
+  cursor: pointer;
+}
+button {
+  width: 5.7rem;
+  height: 2.2rem;
+  font-size: 1rem;
+  color: white;
+  border: none;
+  background-color: rgb(231, 49, 49);
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
 #detail-container {
   display: flex;
   margin: 2rem 0;
   flex-direction: column;
+  justify-content: center;
 }
 #map-container {
   /* width: 42.4375rem; */
