@@ -20,6 +20,7 @@ import NoticeModifyView from "../views/NoticeModifyView.vue";
 import MyPageView from "../views/MyPageView.vue";
 import PlanListView from "../views/PlanListView.vue";
 import WishListView from "../views/WishListView.vue";
+import PlanDetailView from "../views/PlanDetailView.vue";
 
 const onlyAuthUser = async (to, from, next) => {
   const userStore = useUserStore();
@@ -152,6 +153,11 @@ const router = createRouter({
       path: "/mypage/wishlist",
       name: "WishListView",
       component: WishListView,
+    },
+    {
+      path: "/mypage/planlist/:planId",
+      name: "PlanDetail",
+      component: PlanDetailView,
     },
 
     // {

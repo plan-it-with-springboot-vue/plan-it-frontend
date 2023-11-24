@@ -42,14 +42,18 @@ import axios from "axios";
 import { ref, watch } from "vue";
 import { useMapStore, usePlanStore } from "../../stores/store";
 import DetailKaKaoMap from "../../components/mypage/DetailKaKaoMap.vue";
+import { useRoute } from "vue-router";
 
 const planStore = usePlanStore();
 const mapStore = useMapStore();
 
+const route = useRoute();
+const planId = ref(route.params.planId);
+
 axios
   .get(`http://localhost/plan/view`, {
     params: {
-      planId: 9,
+      planId: planId.value,
     },
   })
   .then((response) => {
@@ -129,7 +133,6 @@ p {
   margin: 0;
   padding: 0;
   margin: 0.6rem 0;
-  /* margin: 0.84rem; */
   font-size: 1rem;
 }
 .card {
@@ -139,7 +142,6 @@ p {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 0.8rem;
-  /* margin-bottom: 10px; */
   width: 22rem;
   margin: 0.7rem;
 }
