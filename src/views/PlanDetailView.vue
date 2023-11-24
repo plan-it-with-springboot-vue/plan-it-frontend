@@ -16,7 +16,6 @@ import PlanDetail from "../components/mypage/PlanDetail.vue";
 
 <style scoped>
 #plan-detail-container {
-  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
