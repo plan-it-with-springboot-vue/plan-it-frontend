@@ -9,10 +9,9 @@
           세상을 발견하는<br />가장 쉬운 방법,<br />당신만의 여행을 계획하세요.
         </p>
       </div>
-      <img
-        class="greeting-main-img"
-        src='@/assets/image/greeting_img_5.jpg'
-      />
+      <div class="greeting-img-container">
+        <img class="greeting-main-img" :src="currentImageUrl" />
+      </div>
     </div>
   </div>
 </template>
@@ -20,20 +19,26 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-// const images = [
-//   '@/assets/image/greeting_img_1.jpg',
-//   '@/assets/image/greeting_img_2.jpg',
-//   '@/assets/image/greeting_img_3.jpg',
-//   '@/assets/image/greeting_img_4.jpg',
-//   '@/assets/image/greeting_img_5.jpg',
-// ];
-// const currentImageIndex = ref(0);
+const images = ref([
+  '/greeting_img_1.jpg',
+  '/greeting_img_2.jpg',
+  '/greeting_img_3.jpg',
+  '/greeting_img_4.jpg',
+  '/greeting_img_5.jpg',
+]);
+const currentImageIndex = ref(0);
+const currentImageUrl = ref(images.value[0]); // 현재 이미지 URL
 
-// onMounted(() => {
-//   setInterval(() => {
-//     currentImageIndex.value = (currentImageIndex.value + 1) % images.length;
-//   }, 2000); // 2초마다 이미지 변경
-// });
+const updateImage = () => {
+  currentImageUrl.value = images.value[currentImageIndex.value];
+};
+
+onMounted(() => {
+  setInterval(() => {
+    currentImageIndex.value = (currentImageIndex.value + 1) % images.value.length;
+    updateImage(); // 이미지 URL 업데이트
+  }, 2000); // 2초마다 이미지 변경
+});
 </script>
 
 <style scoped>
@@ -91,13 +96,21 @@ import { ref, onMounted } from 'vue';
   line-height: normal;
 }
 
-.greeting-main-img {
-  width: 65rem;
+.greeting-img-container {
+  width: 45.9375rem;
   height: 28rem;
-  border-radius: 0.625rem;
-  background: lightgray -20.542px 0px / 138.787% 145.802% no-repeat;
+  flex-shrink: 0;
+}
+
+.greeting-main-img {
+  width: 100%;
+  /* 컨테이너의 폭에 맞게 */
+  height: 100%;
+  /* 컨테이너의 높이에 맞게 */
+  object-fit: cover;
+  /* 이미지 비율을 유지하면서 컨테이너를 완전히 채움 */
+  border-radius: 0.3em;
   box-shadow: 4px 4px 4px 3px rgba(0, 0, 0, 0.03);
-  margin-left: 5rem;
 }
 
 @media (max-width: 1024px) {
@@ -111,7 +124,8 @@ import { ref, onMounted } from 'vue';
   }
 
   .greeting-main-img {
-    display: none; /* 이미지 숨기기 */
+    display: none;
+    /* 이미지 숨기기 */
     /* width: 100%;
         height: auto;
         margin-top: 20px; */

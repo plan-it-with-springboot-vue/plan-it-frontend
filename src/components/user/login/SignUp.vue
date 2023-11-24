@@ -5,14 +5,14 @@
         <label id="sign-up-label">회원가입</label>
       </div>
 
-      <SignUpInput label="아이디" type="text" v-model="id" :disabled="isIdDuplicated"/>
+      <SignUpInput label="아이디" type="text" v-model="id" :disabled="isIdDuplicated" />
       <p v-if="fieldErrors.id" class="error-message">{{ fieldErrors.id }}</p>
       <p v-if="duplicationConfirmed" class="ok-message">{{ duplicationConfirmed }}</p>
       <div id="sign-up-idcheck-box-btn">
         <button id="sign-up-idcheck-btn" @click="duplicationCheck">중복확인</button>
       </div>
 
-      <SignUpInput label="비밀번호" type="password" v-model="password" placeholder="특수문자를 포함한 8~15자리" />
+      <SignUpInput label="비밀번호" type="password" v-model="password" placeholder="비밀번호를 입력해주세요." />
       <p v-if="fieldErrors.password" class="error-message">{{ fieldErrors.password }}</p>
 
       <SignUpInput label="비밀번호 확인" type="password" v-model="password_check" placeholder="비밀번호를 다시 입력해주세요." />
@@ -22,7 +22,8 @@
       <span v-else-if="isNewPasswordEntered && isConfirmPasswordEntered && isNewPasswordMatching" class="ok-message">비밀번호가
         일치합니다.</span>
 
-      <SignUpInput label="이메일" type="email" v-model="email" :disabled="isEmailAuthenticated" placeholder="example@example.com" />
+      <SignUpInput label="이메일" type="email" v-model="email" :disabled="isEmailAuthenticated"
+        placeholder="example@example.com" />
       <p v-if="fieldErrors.email" class="error-message">{{ fieldErrors.email }}</p>
       <div id="sign-up-email-box-btn">
         <button id="sign-up-email-btn" @click="sendEmail">확인</button>
@@ -243,7 +244,7 @@ const signUp = async () => {
   try {
     // 회원가입 API 호출
     const response = await axios.post('http://localhost/user/join', {
-      userId : id.value,
+      userId: id.value,
       userPassword: password.value,
       userName: name.value,
       userPhoneNumber: phonenumber.value,
