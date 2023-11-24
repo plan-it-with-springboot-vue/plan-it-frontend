@@ -21,10 +21,12 @@ import PlanKakaoMap from "../components/plan/PlanKakaoMap.vue";
 import RightBox from "../components/plan/right/RightBox.vue";
 import { useDateStore, useLocation, usePlanStore } from "../stores/store";
 import PlanPreview from "../components/plan/PlanPreview.vue";
+import { useRouter } from "vue-router";
 
 const planStore = usePlanStore();
 const dateStore = useDateStore();
 const locationStore = useLocation();
+const router = useRouter();
 
 locationStore.location = null;
 
@@ -42,6 +44,7 @@ const sendPlan = () => {
         console.error("Error sending plan:", error);
       });
     // 마이페이지로 이동
+    router.push(`./mypage/planlist`);
   } else {
     alert("계획을 만들어 주세요!!");
   }
@@ -70,6 +73,7 @@ hr {
   align-items: center;
   width: 80%;
   margin: 1rem 0 0rem 0;
+  cursor: pointer;
 }
 button {
   background-color: #6499e9;
@@ -79,6 +83,7 @@ button {
   height: 2.5rem;
   border-radius: 0.35rem;
   font-size: 1.25rem;
+  cursor: pointer;
 }
 .flex-box {
   width: 100vw;
